@@ -1,0 +1,8 @@
+{
+  "name": "vk-tunes-mobile",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Manage and download audio from your vk.com account to your device.",
+  "author": "rd-dev.net",
+  "license": "MIT"
+}
