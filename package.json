@@ -4,5 +4,10 @@
   "version": "1.0.0",
   "description": "Manage and download audio from your vk.com account to your device.",
   "author": "rd-dev.net",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gulp-sass": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "node-sass": "^3.4.2"
+  }
 }
