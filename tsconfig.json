@@ -1,9 +1,13 @@
 {
-    "compilerOptions": {
-        "module": "amd",
+    "compilerOptions": {        
+        "outFile": "www/js/app.js",
         "pretty": true,
         "sourceMap": true,
-        "target": "es6",        
-        "watch": true
-    }
+        "target": "es6"
+    },"exclude": [
+        "typings",
+        "node_modules",
+        "www",
+        "bower_components" 
+    ]
 }
