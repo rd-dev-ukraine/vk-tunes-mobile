@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "pretty": true,
+        "sourceMap": true,
+        "target": "es6",        
+        "watch": true
+    }
+}
