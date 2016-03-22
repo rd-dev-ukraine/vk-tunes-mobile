@@ -301,18 +301,29 @@ define("filesys/Directory", ["require", "exports"], function (require, exports) 
     Directory.PathDependency = "path";
     return Directory;
 });
+define("components/AppComponent", ["require", "exports"], function (require, exports) {
+    "use strict";
+    class AppComponent {
+    }
+    return AppComponent;
+});
 /// <references path="../typings/main.d.ts" />
-define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "filesys/Directory"], function (require, exports, VkApi, VkService, Queue, Directory) {
+define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "filesys/Directory", "components/AppComponent"], function (require, exports, VkApi, VkService, Queue, Directory, AppComponent) {
     "use strict";
     function onDeviceReady() {
+        console.log("Device ready called");
         angular.module("vk-tunes", ["ngComponentRouter"])
             .service(VkApi.ServiceName, VkApi)
             .service(VkService.ServiceName, VkService)
             .service(Queue.ServiceName, Queue)
             .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
-            .service(Directory.ServiceName, Directory);
+            .service(Directory.ServiceName, Directory)
+            .component("app", AppComponent)
+            .config(function ($locationProvider) {
+            $locationProvider.html5Mode(true);
+        });
         angular.bootstrap(document.getElementsByTagName("body")[0], ["vk-tunes"]);
     }
+    exports.onDeviceReady = onDeviceReady;
     document.addEventListener("deviceready", onDeviceReady, false);
 });
-//# sourceMappingURL=app.js.map
