@@ -1,9 +1,10 @@
 {
-    "compilerOptions": {        
+    "compilerOptions": {
+        "module": "amd",        
         "outFile": "www/js/app.js",
         "pretty": true,
         "sourceMap": true,
-        "target": "es6"
+        "target": "es6"        
     },"exclude": [
         "typings",
         "node_modules",
