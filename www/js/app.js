@@ -303,22 +303,23 @@ define("filesys/Directory", ["require", "exports"], function (require, exports) 
 });
 define("components/AppComponent", ["require", "exports"], function (require, exports) {
     "use strict";
-    class AppComponent {
-    }
-    return AppComponent;
+    var appComponent = {
+        templateUrl: "/templates/AppComponent.html"
+    };
+    return appComponent;
 });
 /// <references path="../typings/main.d.ts" />
-define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "filesys/Directory", "components/AppComponent"], function (require, exports, VkApi, VkService, Queue, Directory, AppComponent) {
+define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "filesys/Directory", "components/AppComponent"], function (require, exports, VkApi, VkService, Queue, Directory, appComponent) {
     "use strict";
     function onDeviceReady() {
         console.log("Device ready called");
-        angular.module("vk-tunes", ["ngComponentRouter"])
+        angular.module("vk-tunes", [])
             .service(VkApi.ServiceName, VkApi)
             .service(VkService.ServiceName, VkService)
             .service(Queue.ServiceName, Queue)
             .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
             .service(Directory.ServiceName, Directory)
-            .component("app", AppComponent)
+            .component("app", appComponent)
             .config(function ($locationProvider) {
             $locationProvider.html5Mode(true);
         });

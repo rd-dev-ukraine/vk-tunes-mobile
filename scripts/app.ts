@@ -5,18 +5,18 @@ import VkService = require("vk/VkService");
 import Queue = require("vk/Queue");
 import Directory = require("filesys/Directory");
 
-import AppComponent = require("components/AppComponent");
+import appComponent = require("components/AppComponent");
 
 export function onDeviceReady() {
     console.log("Device ready called");
     
-    angular.module("vk-tunes", ["ngComponentRouter"])
+    angular.module("vk-tunes", [])
            .service(VkApi.ServiceName, VkApi)
            .service(VkService.ServiceName, VkService)
            .service(Queue.ServiceName, Queue)
            .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
            .service(Directory.ServiceName, Directory)
-           .component("app", AppComponent)
+           .component("app", appComponent)
            .config(function($locationProvider) {
                $locationProvider.html5Mode(true);
            });
