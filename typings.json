@@ -6,9 +6,7 @@
     "angular": "registry:dt/angular#1.5.0+20160318102130",
     "angular-component-router": "registry:dt/angular-component-router#1.5.0+20160317120654",
     "cordova/plugins/filesystem": "registry:dt/cordova/plugins/filesystem#0.0.0+20160316155526",
-    "cordova/plugins/filetransfer": "registry:dt/cordova/plugins/filetransfer#0.0.0+20160316155526"
-  },
-  "ambientDevDependencies": {
+    "cordova/plugins/filetransfer": "registry:dt/cordova/plugins/filetransfer#0.0.0+20160316155526",
     "cordova": "registry:dt/cordova#0.0.0+20160316155526",
     "jquery": "registry:dt/jquery#1.10.0+20160316155526"
   }
