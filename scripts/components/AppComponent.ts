@@ -1,6 +1,25 @@
 /// <reference path="../../typings/browser.d.ts" />
-var appComponent : ng.IComponentOptions = {
-    templateUrl: "/templates/AppComponent.html"
+import PS = require("../pub-sub/Decorators");
+import AudioListMessages = require("../handlers/AudioListMessages");
+
+@PS.Subscriber
+export class AppComponentController {
+    static ControllerName = "AppComponentController";    
+    audio: AudioRecord[];
+    
+    constructor() {
+        this.publish(new AudioListMessages.MyAudioLoad());
+    }
+    
+    @PS.Handle(AudioListMessages.MyAudioLoaded)
+    audioLoaded(message: AudioListMessages.MyAudioLoaded) {
+        this.audio = message.audio;
+    }
+    
+    publish(message: any) {}    
 }
 
-export = appComponent; 
+export var componentConfiguration : ng.IComponentOptions = {
+    controller: AppComponentController.ControllerName,
+    templateUrl: "/templates/AppComponent.html"
+}

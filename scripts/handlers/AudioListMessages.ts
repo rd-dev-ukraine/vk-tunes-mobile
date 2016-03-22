@@ -4,6 +4,6 @@ export class MyAudioLoad {
 }
 
 export class MyAudioLoaded {
-    constructor(public myAudio: AudioRecord[]) {        
+    constructor(public audio: AudioRecord[]) {        
     }
 }

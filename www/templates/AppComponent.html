@@ -1,4 +1,8 @@
 <div>
     <h1>VK-Tunes mobile app</h1>
-    <ng-outlet></ng-outlet>
+    <ul>
+        <li ng-repeat="audio in $ctrl.audio">
+            {{audio.artist}} - {{audio.title}}
+        </li>
+    </ul>
 </div>

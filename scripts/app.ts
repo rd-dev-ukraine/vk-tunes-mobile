@@ -7,7 +7,7 @@ import Directory = require("filesys/Directory");
 
 import EventBus = require("pub-sub/EventBus");
 
-import appComponent = require("components/AppComponent");
+import App = require("components/AppComponent");
 import AudioListHandler = require("handlers/AudioListHandler");
 
 export function onDeviceReady() {
@@ -20,7 +20,8 @@ export function onDeviceReady() {
            .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
            .service(Directory.ServiceName, Directory)           
            .service(AudioListHandler.ServiceName, AudioListHandler)
-           .component("app", appComponent)
+           .controller(App.AppComponentController.ControllerName, App.AppComponentController)
+           .component("app", App.componentConfiguration)
            .config(function($locationProvider) {
                $locationProvider.html5Mode(true);
            })

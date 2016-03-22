@@ -1,6 +1,6 @@
 import EventBus = require("EventBus");
 
-class EventBusDecoratorMetadata {
+class EventBusDecoratorMetadata { 
     private messageHandlerInfo: MessageHandlerInfo[] = [];
            
     registerMessageHandler(messageType: any, subscriberType: any, handlerMethod: (message: any) => void) {
@@ -24,11 +24,12 @@ class EventBusDecoratorMetadata {
             
        eventBus = eventBus || EventBus.Root;
        
+       subscriber.publish = message => eventBus.publish(message);
+       
        this.messageHandlerInfo
            .filter(info => subscriber instanceof info.subscriberType)
            .forEach(info => {
-               eventBus.subscribe(info.messageType, message => info.handlerMethod.call(subscriber, message));
-               subscriber.publish = message => eventBus.publish(message); 
+               eventBus.subscribe(info.messageType, message => info.handlerMethod.call(subscriber, message));                
            });
     }
 }

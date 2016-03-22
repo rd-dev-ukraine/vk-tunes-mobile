@@ -340,27 +340,6 @@ define("pub-sub/EventBus", ["require", "exports"], function (require, exports) {
     EventBus.Root = new EventBus();
     return EventBus;
 });
-define("components/AppComponent", ["require", "exports"], function (require, exports) {
-    "use strict";
-    /// <reference path="../../typings/browser.d.ts" />
-    var appComponent = {
-        templateUrl: "/templates/AppComponent.html"
-    };
-    return appComponent;
-});
-define("handlers/AudioListMessages", ["require", "exports"], function (require, exports) {
-    "use strict";
-    /// <reference path="../../typings/browser.d.ts" />
-    class MyAudioLoad {
-    }
-    exports.MyAudioLoad = MyAudioLoad;
-    class MyAudioLoaded {
-        constructor(myAudio) {
-            this.myAudio = myAudio;
-        }
-    }
-    exports.MyAudioLoaded = MyAudioLoaded;
-});
 define("pub-sub/EventBusDecoratorMetadata", ["require", "exports", "pub-sub/EventBus"], function (require, exports, EventBus) {
     "use strict";
     class EventBusDecoratorMetadata {
@@ -384,6 +363,7 @@ define("pub-sub/EventBusDecoratorMetadata", ["require", "exports", "pub-sub/Even
             if (!subscriber)
                 throw "Subscriber is required.";
             eventBus = eventBus || EventBus.Root;
+            subscriber.publish = message => eventBus.publish(message);
             this.messageHandlerInfo
                 .filter(info => subscriber instanceof info.subscriberType)
                 .forEach(info => {
@@ -398,33 +378,59 @@ define("pub-sub/Decorators", ["require", "exports", "pub-sub/EventBus", "pub-sub
     "use strict";
     function Handle(messageType) {
         return function (target, key, value) {
-            Metadata.registerMessageHandler(messageType, target, target[key]);
+            Metadata.registerMessageHandler(messageType, target.constructor, target[key]);
         };
     }
     exports.Handle = Handle;
-    function Subscriber(target) {
-        // save a reference to the original constructor
-        var original = target;
-        // a utility function to generate instances of a class
-        function construct(constructor, args) {
-            var c = function () {
-                return constructor.apply(this, args);
-            };
-            c.prototype = constructor.prototype;
-            var result = new c();
-            Metadata.subscribe(result, EventBus.Root);
-            return result;
-        }
-        // the new constructor behaviour
-        var f = function (...args) {
-            return construct(original, args);
+    function Subscriber(ctor) {
+        var newCtor = function (...args) {
+            var instance = new ctor(...args);
+            Metadata.subscribe(instance, EventBus.Root);
+            return instance;
         };
-        // copy prototype so intanceof operator still works
-        f.prototype = original.prototype;
-        // return new constructor (will override original)
-        return f;
+        Object.getOwnPropertyNames(ctor)
+            .filter(prop => Object.getOwnPropertyDescriptor(ctor, prop).writable)
+            .forEach(prop => newCtor[prop] = ctor[prop]);
+        return newCtor;
     }
     exports.Subscriber = Subscriber;
+});
+define("handlers/AudioListMessages", ["require", "exports"], function (require, exports) {
+    "use strict";
+    /// <reference path="../../typings/browser.d.ts" />
+    class MyAudioLoad {
+    }
+    exports.MyAudioLoad = MyAudioLoad;
+    class MyAudioLoaded {
+        constructor(audio) {
+            this.audio = audio;
+        }
+    }
+    exports.MyAudioLoaded = MyAudioLoaded;
+});
+define("components/AppComponent", ["require", "exports", "pub-sub/Decorators", "handlers/AudioListMessages"], function (require, exports, PS, AudioListMessages) {
+    "use strict";
+    let AppComponentController = class AppComponentController {
+        constructor() {
+            this.publish(new AudioListMessages.MyAudioLoad());
+        }
+        audioLoaded(message) {
+            this.audio = message.audio;
+        }
+        publish(message) { }
+    };
+    AppComponentController.ControllerName = "AppComponentController";
+    __decorate([
+        PS.Handle(AudioListMessages.MyAudioLoaded)
+    ], AppComponentController.prototype, "audioLoaded", null);
+    AppComponentController = __decorate([
+        PS.Subscriber
+    ], AppComponentController);
+    exports.AppComponentController = AppComponentController;
+    exports.componentConfiguration = {
+        controller: AppComponentController.ControllerName,
+        templateUrl: "/templates/AppComponent.html"
+    };
 });
 /// <reference path="../../typings/browser.d.ts" />
 define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "handlers/AudioListMessages", "pub-sub/Decorators"], function (require, exports, VkService, Messages, PS) {
@@ -434,6 +440,19 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "hand
             this.vk = vk;
         }
         loadMyAudio(message) {
+            this.publish(new Messages.MyAudioLoaded([
+                {
+                    album_id: 0,
+                    artist: "Queen",
+                    duration: 233,
+                    genre_id: 1,
+                    id: 2344234,
+                    lyrics_id: -1,
+                    owner_id: 3424,
+                    title: "Too much love will kill you",
+                    url: "http://vk.com/audio-files/asdasd.asdasdlad123234..34234"
+                }
+            ]));
         }
         publish(message) {
         }
@@ -449,7 +468,7 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "hand
     return AudioListHandler;
 });
 /// <references path="../typings/main.d.ts" />
-define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "filesys/Directory", "components/AppComponent", "handlers/AudioListHandler"], function (require, exports, VkApi, VkService, Queue, Directory, appComponent, AudioListHandler) {
+define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "filesys/Directory", "components/AppComponent", "handlers/AudioListHandler"], function (require, exports, VkApi, VkService, Queue, Directory, App, AudioListHandler) {
     "use strict";
     function onDeviceReady() {
         console.log("Device ready called");
@@ -460,7 +479,8 @@ define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "fi
             .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
             .service(Directory.ServiceName, Directory)
             .service(AudioListHandler.ServiceName, AudioListHandler)
-            .component("app", appComponent)
+            .controller(App.AppComponentController.ControllerName, App.AppComponentController)
+            .component("app", App.componentConfiguration)
             .config(function ($locationProvider) {
             $locationProvider.html5Mode(true);
         })
