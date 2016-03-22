@@ -411,7 +411,7 @@ define("handlers/AudioListMessages", ["require", "exports"], function (require, 
 define("components/AppComponent", ["require", "exports", "pub-sub/Decorators", "handlers/AudioListMessages"], function (require, exports, PS, AudioListMessages) {
     "use strict";
     let AppComponentController = class AppComponentController {
-        constructor() {
+        $onInit() {
             this.publish(new AudioListMessages.MyAudioLoad());
         }
         audioLoaded(message) {

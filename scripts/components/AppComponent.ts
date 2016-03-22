@@ -7,7 +7,7 @@ export class AppComponentController {
     static ControllerName = "AppComponentController";    
     audio: AudioRecord[];
     
-    constructor() {
+    $onInit() {
         this.publish(new AudioListMessages.MyAudioLoad());
     }
     
