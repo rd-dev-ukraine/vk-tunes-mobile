@@ -12,9 +12,7 @@ gulp.task("sass", function () {
             outFile: "app.css"
         }))
         .on("error", function(err) { console.log(err) })
-        .pipe(sourcemaps.write("../maps", {
-            sourceRoot: "../styles"
-        }))
+        .pipe(sourcemaps.write("./"))
         .pipe(gulp.dest("./www/css"));
 });    
 
