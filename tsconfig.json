@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "experimentalDecorators": true,
         "module": "amd", 
         "outFile": "www/js/app.js",
         "pretty": true,

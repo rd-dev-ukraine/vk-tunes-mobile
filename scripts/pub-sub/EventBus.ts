@@ -1,6 +1,6 @@
 class EventBus {
     private handlers: RegisteredHandler[] = [];
-    static Root = new EventBus();
+    public static Root = new EventBus();    
     
     // Subscribe to message of specified type. 
     // Executes a handler when a message of given type published.

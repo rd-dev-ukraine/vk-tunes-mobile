@@ -1,3 +1,9 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 /// <reference path="../../typings/browser.d.ts"/>
 define("vk/VkApi", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -301,15 +307,149 @@ define("filesys/Directory", ["require", "exports"], function (require, exports) 
     Directory.PathDependency = "path";
     return Directory;
 });
+define("pub-sub/EventBus", ["require", "exports"], function (require, exports) {
+    "use strict";
+    class EventBus {
+        constructor() {
+            this.handlers = [];
+        }
+        // Subscribe to message of specified type. 
+        // Executes a handler when a message of given type published.
+        // Message is compared with its type using instanceof operator.
+        subscribe(messageType, handler) {
+            if (!messageType)
+                throw "Message Type is required.";
+            if (!handler)
+                throw "Handler is required";
+            if (!this.handlers.some(h => h.handler === handler)) {
+                this.handlers.push({
+                    messageType: messageType,
+                    handler: handler
+                });
+            }
+        }
+        // Publishes a message to the event bus. All registered handlers will be called. 
+        publish(message) {
+            if (!message)
+                throw "Message is required.";
+            this.handlers
+                .filter(f => message instanceof f.messageType)
+                .forEach(h => h.handler(message));
+        }
+    }
+    EventBus.Root = new EventBus();
+    return EventBus;
+});
 define("components/AppComponent", ["require", "exports"], function (require, exports) {
     "use strict";
+    /// <reference path="../../typings/browser.d.ts" />
     var appComponent = {
         templateUrl: "/templates/AppComponent.html"
     };
     return appComponent;
 });
+define("handlers/AudioListMessages", ["require", "exports"], function (require, exports) {
+    "use strict";
+    /// <reference path="../../typings/browser.d.ts" />
+    class MyAudioLoad {
+    }
+    exports.MyAudioLoad = MyAudioLoad;
+    class MyAudioLoaded {
+        constructor(myAudio) {
+            this.myAudio = myAudio;
+        }
+    }
+    exports.MyAudioLoaded = MyAudioLoaded;
+});
+define("pub-sub/EventBusDecoratorMetadata", ["require", "exports", "pub-sub/EventBus"], function (require, exports, EventBus) {
+    "use strict";
+    class EventBusDecoratorMetadata {
+        constructor() {
+            this.messageHandlerInfo = [];
+        }
+        registerMessageHandler(messageType, subscriberType, handlerMethod) {
+            if (!messageType)
+                throw "Message type is required.";
+            if (!subscriberType)
+                throw "Subscriber type is required";
+            if (!handlerMethod)
+                throw "Handler method is required.";
+            this.messageHandlerInfo.push({
+                messageType: messageType,
+                subscriberType: subscriberType,
+                handlerMethod: handlerMethod
+            });
+        }
+        subscribe(subscriber, eventBus) {
+            if (!subscriber)
+                throw "Subscriber is required.";
+            eventBus = eventBus || EventBus.Root;
+            this.messageHandlerInfo
+                .filter(info => subscriber instanceof info.subscriberType)
+                .forEach(info => {
+                eventBus.subscribe(info.messageType, message => info.handlerMethod.call(subscriber, message));
+            });
+        }
+    }
+    var instance = new EventBusDecoratorMetadata();
+    return instance;
+});
+define("pub-sub/Decorators", ["require", "exports", "pub-sub/EventBus", "pub-sub/EventBusDecoratorMetadata"], function (require, exports, EventBus, Metadata) {
+    "use strict";
+    function Handle(messageType) {
+        return function (target, key, value) {
+            Metadata.registerMessageHandler(messageType, target, target[key]);
+        };
+    }
+    exports.Handle = Handle;
+    function Subscriber(target) {
+        // save a reference to the original constructor
+        var original = target;
+        // a utility function to generate instances of a class
+        function construct(constructor, args) {
+            var c = function () {
+                return constructor.apply(this, args);
+            };
+            c.prototype = constructor.prototype;
+            var result = new c();
+            Metadata.subscribe(result, EventBus.Root);
+            return result;
+        }
+        // the new constructor behaviour
+        var f = function (...args) {
+            return construct(original, args);
+        };
+        // copy prototype so intanceof operator still works
+        f.prototype = original.prototype;
+        // return new constructor (will override original)
+        return f;
+    }
+    exports.Subscriber = Subscriber;
+});
+/// <reference path="../../typings/browser.d.ts" />
+define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "handlers/AudioListMessages", "pub-sub/Decorators"], function (require, exports, VkService, Messages, PS) {
+    "use strict";
+    let AudioListHandler = class AudioListHandler {
+        constructor(vk) {
+            this.vk = vk;
+        }
+        loadMyAudio(message) {
+        }
+        publish(message) {
+        }
+    };
+    AudioListHandler.ServiceName = "AudioListHandler";
+    AudioListHandler.$inject = [VkService.ServiceName];
+    __decorate([
+        PS.Handle(Messages.MyAudioLoad)
+    ], AudioListHandler.prototype, "loadMyAudio", null);
+    AudioListHandler = __decorate([
+        PS.Subscriber
+    ], AudioListHandler);
+    return AudioListHandler;
+});
 /// <references path="../typings/main.d.ts" />
-define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "filesys/Directory", "components/AppComponent"], function (require, exports, VkApi, VkService, Queue, Directory, appComponent) {
+define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "filesys/Directory", "components/AppComponent", "handlers/AudioListHandler"], function (require, exports, VkApi, VkService, Queue, Directory, appComponent, AudioListHandler) {
     "use strict";
     function onDeviceReady() {
         console.log("Device ready called");
@@ -319,10 +459,17 @@ define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "fi
             .service(Queue.ServiceName, Queue)
             .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
             .service(Directory.ServiceName, Directory)
+            .service(AudioListHandler.ServiceName, AudioListHandler)
             .component("app", appComponent)
             .config(function ($locationProvider) {
             $locationProvider.html5Mode(true);
-        });
+        })
+            .run([
+            AudioListHandler.ServiceName,
+                (audioListHandler) => {
+                // Do nothing, just to ensure AudioListHandler is instantiated.
+            }
+        ]);
         angular.bootstrap(document.getElementsByTagName("body")[0], ["vk-tunes"]);
     }
     exports.onDeviceReady = onDeviceReady;
