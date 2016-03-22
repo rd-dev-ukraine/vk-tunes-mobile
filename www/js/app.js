@@ -3,9 +3,8 @@ function onDeviceReady() {
 }
 document.addEventListener("deviceready", onDeviceReady, false);
 /// <reference path="../../typings/browser.d.ts"/>
-/// <reference path="filesys.d.ts"/>
-var FileSys;
-(function (FileSys) {
+define("filesys/Directory", ["require", "exports"], function (require, exports) {
+    "use strict";
     class Directory {
         constructor($q, path) {
             this.$q = $q;
@@ -81,21 +80,10 @@ var FileSys;
     Directory.$inject = ["$q", Directory.PathDependency];
     Directory.ServiceName = "directory";
     Directory.PathDependency = "path";
-    FileSys.Directory = Directory;
-})(FileSys || (FileSys = {}));
+    return Directory;
+});
 /// <reference path="../../typings/browser.d.ts"/>
-/// <reference path="filesys.d.ts"/>
-/// <reference path="directory.ts"/>
-var FileSys;
-(function (FileSys) {
-    FileSys.module_name = "file-sys-module";
-    angular.module(FileSys.module_name, [])
-        .value(FileSys.Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
-        .service(FileSys.Directory.ServiceName, FileSys.Directory);
-})(FileSys || (FileSys = {}));
-/// <reference path="../../typings/browser.d.ts"/>
-/// <reference path="vk.d.ts"/>
-define("vk/vk-api", ["require", "exports"], function (require, exports) {
+define("vk/VkApi", ["require", "exports"], function (require, exports) {
     "use strict";
     class VkApi {
         constructor($q, $http) {
@@ -194,7 +182,8 @@ define("vk/vk-api", ["require", "exports"], function (require, exports) {
     VkApi.$inject = ["$q", "$http"];
     return VkApi;
 });
-define("vk/vk-service", ["require", "exports", "vk/vk-api"], function (require, exports, VkApi) {
+/// <reference path="../../typings/browser.d.ts"/>
+define("vk/VkService", ["require", "exports", "vk/VkApi"], function (require, exports, VkApi) {
     "use strict";
     class VkService {
         constructor($q, $http, api) {
@@ -238,12 +227,5 @@ define("vk/vk-service", ["require", "exports", "vk/vk-api"], function (require, 
     VkService.$inject = ["$q", "$http", VkApi.ServiceName];
     VkService.ServiceName = "vk-service";
     return VkService;
-});
-define("vk/vk-module", ["require", "exports", "vk/vk-api", "vk/vk-service"], function (require, exports, VkApi, VkService) {
-    "use strict";
-    exports.module_name = "vk";
-    angular.module(exports.module_name, [])
-        .service(VkApi.ServiceName, VkApi)
-        .service(VkService.ServiceName, VkService);
 });
 //# sourceMappingURL=app.js.map

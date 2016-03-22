@@ -6,4 +6,4 @@
 /// <reference path="browser/ambient/jquery/index.d.ts" />
 /// <reference path="browser/definitions/requirejs/index.d.ts" />
 /// <reference path="app/vk.d.ts" />
-/// <reference path="filesys.d.ts" />
+/// <reference path="app/filesys.d.ts" />

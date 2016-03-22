@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../typings/browser.d.ts"/>
 
-import VkApi = require("vk-api");
+import VkApi = require("VkApi");
 
 class VkService implements IVkApiService {
     static $inject = ["$q", "$http", VkApi.ServiceName];
