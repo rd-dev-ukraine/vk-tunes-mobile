@@ -610,7 +610,7 @@ define("components/AppComponent", ["require", "exports", "pub-sub/Decorators", "
     exports.AppComponentController = AppComponentController;
     exports.componentConfiguration = {
         controller: AppComponentController.ControllerName,
-        templateUrl: "/templates/AppComponent.html"
+        templateUrl: "templates/AppComponent.html"
     };
 });
 /// <reference path="../../typings/browser.d.ts" />

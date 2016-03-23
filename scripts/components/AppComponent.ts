@@ -21,5 +21,5 @@ export class AppComponentController {
 
 export var componentConfiguration : ng.IComponentOptions = {
     controller: AppComponentController.ControllerName,
-    templateUrl: "/templates/AppComponent.html"
+    templateUrl: "templates/AppComponent.html"
 }
