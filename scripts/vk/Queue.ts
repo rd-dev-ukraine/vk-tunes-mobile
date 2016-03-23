@@ -1,5 +1,7 @@
 /// <reference path="../../typings/browser.d.ts"/>
 
+import LinkedList = require("../task-queue/LinkedList");
+
 // Queue operations includes requests api.vk.com which has 3 calls per second restriction.
 // All request in high-priority queue are executed before normal anytime its appear in queue.
 class Queue {

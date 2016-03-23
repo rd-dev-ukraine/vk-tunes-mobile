@@ -20,6 +20,7 @@ export function Subscriber(ctor: any):any {
           .filter(prop => Object.getOwnPropertyDescriptor(ctor, prop).writable)
           .forEach(prop => newCtor[prop] = ctor[prop]);
     
+    newCtor.prototype = ctor.prototype;
     
     return newCtor;    
 }
