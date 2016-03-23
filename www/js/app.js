@@ -104,9 +104,9 @@ define("vk/VkApi", ["require", "exports"], function (require, exports) {
     return VkApi;
 });
 /// <reference path="../../typings/browser.d.ts"/>
-define("vk/VkService", ["require", "exports", "vk/VkApi"], function (require, exports, VkApi) {
+define("vk/VkTypedApi", ["require", "exports", "vk/VkApi"], function (require, exports, VkApi) {
     "use strict";
-    class VkService {
+    class VkTypedApi {
         constructor() {
             this.api = new VkApi();
         }
@@ -141,8 +141,7 @@ define("vk/VkService", ["require", "exports", "vk/VkApi"], function (require, ex
             });
         }
     }
-    VkService.ServiceName = "VkService";
-    return VkService;
+    return VkTypedApi;
 });
 define("task-queue/LinkedList", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -341,6 +340,34 @@ define("task-queue/PriorityQueue", ["require", "exports", "task-queue/LinkedList
         }
     }
     return PriorityQueue;
+});
+/// <reference path="../../typings/browser.d.ts"/>
+define("vk/VkService", ["require", "exports", "vk/VkTypedApi", "task-queue/PriorityQueue"], function (require, exports, VkTypedApi, PriorityQueue) {
+    "use strict";
+    class VkService {
+        constructor() {
+            this.vk = new VkTypedApi();
+            this.queue = new PriorityQueue();
+        }
+        myAudio() {
+            return this.queue
+                .enqueueFirst(() => this.vk.myAudio(), 100 /* ApiCall */);
+        }
+        searchAudio(query) {
+            return this.queue
+                .enqueueFirst(() => this.vk.searchAudio(query), 100 /* ApiCall */);
+        }
+        getAudioSize(audio, callback) {
+            this.queue.clear(3 /* GetFileSize */);
+            audio.forEach(record => {
+                this.queue
+                    .enqueueLast(() => this.vk.getFileSize(record.id, record.url), 3 /* GetFileSize */)
+                    .then(fileSize => callback(record, fileSize));
+            });
+        }
+    }
+    VkService.ServiceName = "VkQueued";
+    return VkService;
 });
 /// <reference path="../../typings/browser.d.ts"/>
 define("filesys/Directory", ["require", "exports"], function (require, exports) {

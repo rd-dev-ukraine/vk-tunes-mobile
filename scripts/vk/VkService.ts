@@ -1,48 +1,43 @@
-﻿/// <reference path="../../typings/browser.d.ts"/>
+/// <reference path="../../typings/browser.d.ts"/>
 
-import VkApi = require("VkApi");
+import VkTypedApi = require("VkTypedApi");
+import PriorityQueue = require("../task-queue/PriorityQueue");
 
 class VkService {
-    static ServiceName = "VkService";
-    private api = new VkApi();
+    static ServiceName = "VkQueued";
     
-    currentUser() {
-        return this.api.currentUser();
-    }
-
+    private vk = new VkTypedApi();
+    private queue = new PriorityQueue();
+    
     myAudio(): Promise<AudioRecord[]> {
-        return this.api
-                   .requestApi<UserAudioResponse>("audio.get", {})
-                   .then((r: UserAudioResponse) => r.items);
+        return this.queue
+                   .enqueueFirst(() => this.vk.myAudio(), 
+                                 VkOperationPriority.ApiCall);
     }
-
+    
     searchAudio(query: string): Promise<AudioRecord[]> {
-        return this.api
-                   .requestApi<UserAudioResponse>(
-                       "audio.search", 
-                       {
-                           q: query,
-                           search_own: 1,
-                           count: 100
-                       })
-            .then((r: UserAudioResponse) => r.items);
+        return this.queue
+                   .enqueueFirst(() => this.vk.searchAudio(query),
+                                 VkOperationPriority.ApiCall);
     }
+    
+    getAudioSize(audio: AudioRecord[], callback: (audio: AudioRecord, fileSize:number) => void) {
+        this.queue.clear(VkOperationPriority.GetFileSize);
+        
+        
+        audio.forEach(record => {        
+            this.queue
+                .enqueueLast(() => this.vk.getFileSize(record.id, record.url),
+                             VkOperationPriority.GetFileSize)
+                .then(fileSize => callback(record, fileSize));
+        });
+    }
+}
 
-    getFileSize(audioId: number, fileUrl: string): Promise<number> {
-        return fetch(fileUrl, 
-                     { 
-                        method: "HEAD"
-                     })
-                     .then(r => parseFloat( r.headers.get("Content-Length")));
-    }
-
-    addAudio(audioId: number, ownerId: number): Promise<any> {
-        return this.api
-                   .requestApi<any>("audio.add", {
-                                        audio_id: audioId,
-                                        owner_id: ownerId
-                                    });
-    }
+const enum VkOperationPriority {
+    ApiCall = 100,
+    DownloadFile = 10,
+    GetFileSize = 3
 }
 
 export = VkService;

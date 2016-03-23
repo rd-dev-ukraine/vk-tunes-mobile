@@ -9,12 +9,12 @@ class AudioListHandler {
     static ServiceName = "AudioListHandler";
     static $inject = [VkService.ServiceName];
     
-    constructor(private vk: VkService) {
-        
+    constructor(private vk: VkService) {        
     }
     
     @PS.Handle(Messages.MyAudioLoad)
     loadMyAudio(message: Messages.MyAudioLoad) {
+        
         this.publish(new Messages.MyAudioLoaded([
             {
                 album_id: 0,

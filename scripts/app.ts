@@ -1,8 +1,6 @@
 /// <references path="../typings/main.d.ts" />
 
-import VkApi = require("vk/VkApi");
 import VkService = require("vk/VkService");
-import PriorityQueue = require("task-queue/PriorityQueue");
 import Directory = require("filesys/Directory");
 
 import EventBus = require("pub-sub/EventBus");
