@@ -19,11 +19,14 @@ class AudioListHandler {
             .myAudio()
             .then(audio => {              
                 
+                console.log("Audio loaded");
+                console.log(audio);
+                
                 this.publish(new Messages.MyAudioLoaded(audio));
                 
-                this.vk.getAudioSize(audio, (record, size) => {
-                    this.publish(new Messages.AudioSizeLoaded(record, size));
-                });
+                // this.vk.getAudioSize(audio, (record, size) => {
+                //     this.publish(new Messages.AudioSizeLoaded(record, size));
+                // });
             });
     }
     

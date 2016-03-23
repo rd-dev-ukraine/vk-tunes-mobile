@@ -625,10 +625,12 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "hand
             this.vk
                 .myAudio()
                 .then(function (audio) {
+                console.log("Audio loaded");
+                console.log(audio);
                 _this.publish(new Messages.MyAudioLoaded(audio));
-                _this.vk.getAudioSize(audio, function (record, size) {
-                    _this.publish(new Messages.AudioSizeLoaded(record, size));
-                });
+                // this.vk.getAudioSize(audio, (record, size) => {
+                //     this.publish(new Messages.AudioSizeLoaded(record, size));
+                // });
             });
         };
         AudioListHandler.prototype.publish = function (message) { };
