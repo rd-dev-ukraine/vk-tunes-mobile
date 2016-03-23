@@ -150,112 +150,6 @@ define("vk/VkService", ["require", "exports", "vk/VkApi"], function (require, ex
     VkService.ServiceName = "vk-service";
     return VkService;
 });
-define("task-queue/LinkedList", ["require", "exports"], function (require, exports) {
-    "use strict";
-    class LinkedList {
-        constructor() {
-            this.length = 0;
-        }
-        first() {
-            return this.head;
-        }
-        addFirst(value) {
-            this.addAfter(null, value);
-        }
-        addBefore(node, value) {
-            if (!node)
-                throw "Node is missing.";
-            this.addAfter(node.prev, value);
-        }
-        addAfter(node, value) {
-            if (!node)
-                throw "Node is missing.";
-            var newNode = {
-                value: value,
-                prev: null,
-                next: null,
-                ownList: this
-            };
-            // If node is null append to the start of list
-            if (!node) {
-                newNode.next = this.head;
-                if (this.head) {
-                    this.head.prev = newNode;
-                }
-                this.head = newNode;
-            }
-            else {
-                var nextNode = node.next;
-                newNode.prev = node;
-                node.next = newNode;
-                if (nextNode)
-                    nextNode.prev = newNode;
-            }
-            this.length += 1;
-        }
-        addAfterMatched(predicate, value) {
-            for (let node of this.nodes())
-                if (predicate(node.value)) {
-                    this.addAfter(node, value);
-                    return true;
-                }
-            return false;
-        }
-        addBeforeMatched(predicate, value) {
-            for (let node of this.nodes())
-                if (predicate(node.value)) {
-                    this.addBefore(node, value);
-                    return true;
-                }
-            return false;
-        }
-        remove(node) {
-            if (!node)
-                throw "Node is missing.";
-            if (node.ownList != this)
-                throw "Node does not belong to the list.";
-            var next = node.next;
-            var prev = node.prev;
-            if (next)
-                next.prev = prev;
-            if (prev)
-                prev.next = next;
-            if (!prev)
-                this.head = next;
-            this.length -= 1;
-        }
-        removeAll(predicate) {
-            var nodesToRemove = [];
-            for (let node of this.nodes())
-                if (predicate(node.value))
-                    nodesToRemove.push(node);
-            for (let node of nodesToRemove)
-                this.remove(node);
-        }
-        *nodes() {
-            var node = this.head;
-            while (node) {
-                yield node;
-                node = node.next;
-            }
-        }
-        *values() {
-            for (var node of this.nodes()) {
-                yield node.value;
-            }
-        }
-        *[Symbol.iterator]() {
-            var node = this.first();
-            if (node) {
-                do {
-                    yield node.value;
-                    node = node.next;
-                } while (node);
-            }
-        }
-    }
-    return LinkedList;
-});
 /// <reference path="../../typings/browser.d.ts"/>
 define("vk/Queue", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -332,6 +226,204 @@ define("vk/Queue", ["require", "exports"], function (require, exports) {
     Queue.ServiceName = "queue";
     Queue.$inject = ["$q"];
     return Queue;
+});
+define("task-queue/LinkedList", ["require", "exports"], function (require, exports) {
+    "use strict";
+    class LinkedList {
+        constructor() {
+            this.head = null;
+            this.length = 0;
+        }
+        count() {
+            return this.length;
+        }
+        first() {
+            return this.head;
+        }
+        last() {
+            for (let node of this.nodes())
+                if (!node.next)
+                    return node;
+            return null;
+        }
+        addFirst(value) {
+            this.addAfter(null, value);
+        }
+        addLast(value) {
+            this.addAfter(this.last(), value);
+        }
+        addBefore(node, value) {
+            if (!node)
+                throw "Node is missing.";
+            this.addAfter(node.prev, value);
+        }
+        addAfter(node, value) {
+            if (!node)
+                throw "Node is missing.";
+            var newNode = {
+                value: value,
+                prev: null,
+                next: null,
+                ownList: this
+            };
+            // If node is null append to the start of list
+            if (!node) {
+                newNode.next = this.head;
+                if (this.head) {
+                    this.head.prev = newNode;
+                }
+                this.head = newNode;
+            }
+            else {
+                var nextNode = node.next;
+                newNode.prev = node;
+                node.next = newNode;
+                if (nextNode)
+                    nextNode.prev = newNode;
+            }
+            this.length += 1;
+        }
+        // Adds value after last matched node.
+        addAfterMatched(predicate, value) {
+            var matchedNode = null;
+            for (let node of this.nodes())
+                if (predicate(node.value)) {
+                    matchedNode = node;
+                }
+            if (matchedNode) {
+                this.addAfter(matchedNode, value);
+                return true;
+            }
+            return false;
+        }
+        addBeforeMatched(predicate, value) {
+            for (let node of this.nodes())
+                if (predicate(node.value)) {
+                    this.addBefore(node, value);
+                    return true;
+                }
+            return false;
+        }
+        remove(node) {
+            if (!node)
+                throw "Node is missing.";
+            if (node.ownList != this)
+                throw "Node does not belong to the list.";
+            var next = node.next;
+            var prev = node.prev;
+            if (next)
+                next.prev = prev;
+            if (prev)
+                prev.next = next;
+            if (!prev)
+                this.head = next;
+            this.length -= 1;
+        }
+        removeAll(predicate) {
+            var nodesToRemove = [];
+            for (let node of this.nodes())
+                if (predicate(node.value))
+                    nodesToRemove.push(node);
+            for (let node of nodesToRemove)
+                this.remove(node);
+        }
+        pop() {
+            if (this.head) {
+                let result = this.head.value;
+                this.remove(this.head);
+                return result;
+            }
+            return null;
+        }
+        *nodes() {
+            var node = this.head;
+            while (node) {
+                yield node;
+                node = node.next;
+            }
+        }
+        *values() {
+            for (var node of this.nodes()) {
+                yield node.value;
+            }
+        }
+        *[Symbol.iterator]() {
+            yield* this.values();
+        }
+    }
+    return LinkedList;
+});
+define("task-queue/PriorityQueue", ["require", "exports", "task-queue/LinkedList"], function (require, exports, LinkedList) {
+    "use strict";
+    class PriorityQueue {
+        constructor() {
+            this.isRunning = false;
+            this.queue = new LinkedList();
+        }
+        /// Puts function which performs request into queue after all elements with greater or equal priority.
+        /// Returns a promise is resolved when operation completes with the value returned to request's promise.
+        enqueueLast(workload, priority) {
+            return new Promise((resolve, reject) => {
+                var element = {
+                    priority: priority,
+                    workload: workload,
+                    resolve: resolve,
+                    reject: reject
+                };
+                if (!this.queue.addAfterMatched(q => q.priority >= priority, element))
+                    this.queue.addLast(element);
+                this.startExecuting();
+            });
+        }
+        /// Puts function which performs request into queue before elements with less or equal priority.
+        /// Returns a promise is resolved when operation completes with the value returned to request's promise.
+        enqueueFirst(workload, priority) {
+            return new Promise((resolve, reject) => {
+                var element = {
+                    priority: priority,
+                    workload: workload,
+                    resolve: resolve,
+                    reject: reject
+                };
+                if (!this.queue.addBeforeMatched(q => q.priority <= priority, element))
+                    this.queue.addFirst(element);
+                this.startExecuting();
+            });
+        }
+        clear(priority) {
+            this.queue.removeAll(q => q.priority == priority);
+        }
+        startExecuting() {
+            if (this.isRunning)
+                return;
+            this.isRunning = true;
+            var startExecutingTime = new Date().getTime();
+            if (this.queue.count()) {
+                var request = this.queue.pop();
+                var continueExecuting = () => {
+                    var endExecutingTime = new Date().getTime();
+                    var timeDifference = endExecutingTime - startExecutingTime;
+                    var delay = Math.max(0, 300 - timeDifference);
+                    window.setTimeout(() => {
+                        this.isRunning = false;
+                        this.startExecuting();
+                    }, delay);
+                };
+                request.workload()
+                    .then(result => {
+                    request.resolve(result);
+                    continueExecuting();
+                })
+                    .catch(error => {
+                    request.reject(error);
+                    continueExecuting();
+                });
+            }
+            else
+                this.isRunning = false;
+        }
+    }
+    return PriorityQueue;
 });
 /// <reference path="../../typings/browser.d.ts"/>
 define("filesys/Directory", ["require", "exports"], function (require, exports) {

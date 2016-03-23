@@ -1,14 +1,30 @@
 /// Linked list with some extra methods for maintaining ordered lists.
 class LinkedList<T> {
-    private head: INode<T>;    
+    private head: INode<T> = null;    
     private length: number = 0;
+    
+    count() {
+        return this.length;
+    }
     
     first(): INode<T> {
         return this.head;
     }
     
+    last(): INode<T> {
+        for(let node of this.nodes()) 
+            if (!node.next)
+                return node;
+                
+        return null;
+    }
+    
     addFirst(value: T) {
         this.addAfter(null, value);
+    }
+    
+    addLast(value: T) {
+        this.addAfter(this.last(), value);
     }
     
     addBefore(node: INode<T>, value: T) {
@@ -50,12 +66,20 @@ class LinkedList<T> {
         this.length += 1;
     }
     
+    // Adds value after last matched node.
     addAfterMatched(predicate: (value: T) => boolean, value: T): boolean {
+        var matchedNode: INode<T> = null;
+        
         for(let node of this.nodes()) 
             if (predicate(node.value)) {
-                this.addAfter(node, value);
-                return true;
+                matchedNode = node;
             }
+            
+        if (matchedNode) {
+            this.addAfter(matchedNode, value);
+            return true;
+        }
+        
         return false;  
     }
     
@@ -67,7 +91,7 @@ class LinkedList<T> {
             }
         return false;
     }
-    
+
     remove(node: INode<T>) {
         if (!node)
             throw "Node is missing.";
@@ -98,6 +122,17 @@ class LinkedList<T> {
             this.remove(node);
     }
     
+    pop(): T {
+        if (this.head) {
+            let result = this.head.value;
+            this.remove(this.head);
+            
+            return result;
+        }
+        
+        return null;
+    }
+    
     *nodes() {
         var node = this.head;
         
@@ -114,13 +149,7 @@ class LinkedList<T> {
     }
     
     *[Symbol.iterator]() {
-        var node = this.first();
-        if (node) {
-            do {
-                yield node.value;
-                node = node.next;              
-            } while(node);
-        }
+        yield *this.values();
     }
 }
 

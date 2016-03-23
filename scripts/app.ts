@@ -3,6 +3,7 @@
 import VkApi = require("vk/VkApi");
 import VkService = require("vk/VkService");
 import Queue = require("vk/Queue");
+import PriorityQueue = require("task-queue/PriorityQueue");
 import Directory = require("filesys/Directory");
 
 import EventBus = require("pub-sub/EventBus");
