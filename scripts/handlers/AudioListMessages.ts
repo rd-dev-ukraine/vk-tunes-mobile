@@ -7,3 +7,8 @@ export class MyAudioLoaded {
     constructor(public audio: AudioRecord[]) {        
     }
 }
+
+export class AudioSizeLoaded {
+    constructor(public audio: AudioRecord, fileSize: number) {        
+    }
+}

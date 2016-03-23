@@ -15,23 +15,19 @@ class AudioListHandler {
     @PS.Handle(Messages.MyAudioLoad)
     loadMyAudio(message: Messages.MyAudioLoad) {
         
-        this.publish(new Messages.MyAudioLoaded([
-            {
-                album_id: 0,
-                artist: "Queen",
-                duration: 233,
-                genre_id: 1,
-                id: 2344234,
-                lyrics_id: -1,
-                owner_id: 3424,
-                title: "Too much love will kill you",
-                url: "http://vk.com/audio-files/asdasd.asdasdlad123234..34234"
-            }
-        ]));
+        this.vk
+            .myAudio()
+            .then(audio => {              
+                
+                this.publish(new Messages.MyAudioLoaded(audio));
+                
+                this.vk.getAudioSize(audio, (record, size) => {
+                    this.publish(new Messages.AudioSizeLoaded(record, size));
+                });
+            });
     }
     
-    public publish(message: any) {        
-    }
+    public publish(message: any) { }
 }
 
 export = AudioListHandler;

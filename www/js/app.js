@@ -174,8 +174,6 @@ define("task-queue/LinkedList", ["require", "exports"], function (require, expor
             this.addAfter(node.prev, value);
         }
         addAfter(node, value) {
-            if (!node)
-                throw "Node is missing.";
             var newNode = {
                 value: value,
                 prev: null,
@@ -550,6 +548,12 @@ define("handlers/AudioListMessages", ["require", "exports"], function (require, 
         }
     }
     exports.MyAudioLoaded = MyAudioLoaded;
+    class AudioSizeLoaded {
+        constructor(audio, fileSize) {
+            this.audio = audio;
+        }
+    }
+    exports.AudioSizeLoaded = AudioSizeLoaded;
 });
 define("components/AppComponent", ["require", "exports", "pub-sub/Decorators", "handlers/AudioListMessages"], function (require, exports, PS, AudioListMessages) {
     "use strict";
@@ -583,22 +587,16 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "hand
             this.vk = vk;
         }
         loadMyAudio(message) {
-            this.publish(new Messages.MyAudioLoaded([
-                {
-                    album_id: 0,
-                    artist: "Queen",
-                    duration: 233,
-                    genre_id: 1,
-                    id: 2344234,
-                    lyrics_id: -1,
-                    owner_id: 3424,
-                    title: "Too much love will kill you",
-                    url: "http://vk.com/audio-files/asdasd.asdasdlad123234..34234"
-                }
-            ]));
+            this.vk
+                .myAudio()
+                .then(audio => {
+                this.publish(new Messages.MyAudioLoaded(audio));
+                this.vk.getAudioSize(audio, (record, size) => {
+                    this.publish(new Messages.AudioSizeLoaded(record, size));
+                });
+            });
         }
-        publish(message) {
-        }
+        publish(message) { }
     };
     AudioListHandler.ServiceName = "AudioListHandler";
     AudioListHandler.$inject = [VkService.ServiceName];

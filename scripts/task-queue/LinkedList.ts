@@ -35,9 +35,7 @@ class LinkedList<T> {
     }
     
     addAfter(node: INode<T>, value: T) {
-        if (!node)
-            throw "Node is missing.";
-        
+                
         var newNode: INode<T> = {
             value: value,
             prev: null,
