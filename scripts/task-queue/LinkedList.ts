@@ -131,23 +131,17 @@ class LinkedList<T> {
         return null;
     }
     
-    *nodes() {
+    nodes(): INode<T>[] {
+        var result: INode<T>[] = [];
+        
         var node = this.head;
         
         while(node) {
-            yield node;
+            result.push(node);            
             node = node.next;
         }
-    }
-    
-    *values() {
-        for(var node of this.nodes()) {
-            yield node.value;
-        }
-    }
-    
-    *[Symbol.iterator]() {
-        yield *this.values();
+        
+        return result;
     }
 }
 

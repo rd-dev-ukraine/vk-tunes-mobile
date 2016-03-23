@@ -264,20 +264,13 @@ define("task-queue/LinkedList", ["require", "exports"], function (require, expor
             return null;
         };
         LinkedList.prototype.nodes = function () {
+            var result = [];
             var node = this.head;
             while (node) {
-                yield node;
+                result.push(node);
                 node = node.next;
             }
-        };
-        LinkedList.prototype.values = function () {
-            for (var _i = 0, _a = this.nodes(); _i < _a.length; _i++) {
-                var node = _a[_i];
-                yield node.value;
-            }
-        };
-        LinkedList.prototype[Symbol.iterator] = function () {
-            yield* this.values();
+            return result;
         };
         return LinkedList;
     }());
