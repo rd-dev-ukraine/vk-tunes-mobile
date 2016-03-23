@@ -2,7 +2,6 @@
 
 import VkApi = require("vk/VkApi");
 import VkService = require("vk/VkService");
-import Queue = require("vk/Queue");
 import PriorityQueue = require("task-queue/PriorityQueue");
 import Directory = require("filesys/Directory");
 
@@ -14,12 +13,10 @@ import AudioListHandler = require("handlers/AudioListHandler");
 export function onDeviceReady() {
     console.log("Device ready called");
     
-    angular.module("vk-tunes", [])
-           .service(VkApi.ServiceName, VkApi)
-           .service(VkService.ServiceName, VkService)
-           .service(Queue.ServiceName, Queue)
+    angular.module("vk-tunes", [])           
            .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
            .service(Directory.ServiceName, Directory)           
+           .service(VkService.ServiceName, VkService)
            .service(AudioListHandler.ServiceName, AudioListHandler)
            .controller(App.AppComponentController.ControllerName, App.AppComponentController)
            .component("app", App.componentConfiguration)

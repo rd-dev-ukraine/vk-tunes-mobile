@@ -2,9 +2,7 @@
 
 class VkApi {
     private static validReturnUri = "https://oauth.vk.com/blank.html"
-    static ServiceName = "vk-api";
-    static $inject = ["$q", "$http"];
-
+    
     private authroizationInfo = {
         client_id: "3201403",
         scope: "audio",
@@ -14,11 +12,6 @@ class VkApi {
     };
 
     private accessInfo: IAuthorizationInfo;
-
-    constructor(
-        private $q: ng.IQService,
-        private $http: ng.IHttpService) {
-    }
 
     private authorizationUrl() {
         var result = "https://oauth.vk.com/authorize?v=5.21";
@@ -30,26 +23,23 @@ class VkApi {
     }
 
     /// Executes authorization if needded and defers access token
-    private authorize(): ng.IPromise<IAuthorizationInfo> {
-        var deferred = this.$q.defer();
-
-        if (this.accessInfo) {
-            deferred.resolve(this.accessInfo);
-        } else {
-
-            var authorizationWindow = window.open(this.authorizationUrl(), "_blank", "location=no");
-            authorizationWindow.addEventListener("loaderror", (event: any) => deferred.reject(event.message));
-            authorizationWindow.addEventListener("loadstop", (event: any) => {
-                var info = this.authorizationInfoFromUrl(event.url);                    
-                if (!info)
-                    return;                        
-                authorizationWindow.close();                    
-                this.accessInfo = info;
-                deferred.resolve(this.accessInfo);                    
-            });
-        }
-
-        return deferred.promise;
+    private authorize(): Promise<IAuthorizationInfo> {
+        return new Promise<IAuthorizationInfo>((resolve, reject) => {
+            if (this.accessInfo) {
+                resolve(this.accessInfo);
+            } else {
+                var authorizationWindow = window.open(this.authorizationUrl(), "_blank", "location=no");
+                authorizationWindow.addEventListener("loaderror", (event: any) => reject(event.message));
+                authorizationWindow.addEventListener("loadstop", (event: any) => {
+                    var info = this.authorizationInfoFromUrl(event.url);                    
+                    if (!info)
+                        return;                        
+                    authorizationWindow.close();                    
+                    this.accessInfo = info;
+                    resolve(this.accessInfo);                    
+                });
+            }            
+        });
     }
     
     authorizationInfoFromUrl(url: string): IAuthorizationInfo {
@@ -89,19 +79,22 @@ class VkApi {
     }
 
     // Requests vk.com api with performing authorization if required.
-    requestApi<TResponse>(method: string, request: any): ng.IPromise<TResponse> {           
+    requestApi<TResponse>(method: string, request: any): Promise<TResponse> {           
 
         return this.authorize()
                     .then((info: IAuthorizationInfo) => {
-
+                        
                             request.access_token = info.token;
                             request.v = "5.21";
-
                             var param = this.param(request);
                             var url = "https://api.vk.com/method/" + method + "?" + param;
-                            return this.$http
-                                        .post(url, request)
-                                        .then(r => (<ApiResponse<TResponse>> r.data).response);
+                            
+                            return fetch(url, { 
+                                            method: "POST", 
+                                            body: JSON.stringify(request) 
+                                        })
+                                       .then(response => response.json())
+                                       .then((r: ApiResponse<TResponse>) => r.response);
                 });
     }
 

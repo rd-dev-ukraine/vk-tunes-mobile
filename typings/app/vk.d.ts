@@ -21,14 +21,6 @@ interface AudioRecord {
     genre_id: number;
 }
 
-interface IVkApiService {
-    currentUser(): number;
-    myAudio(): ng.IPromise<AudioRecord[]>;
-    searchAudio(query: string): ng.IPromise<AudioRecord[]>;
-    getFileSize(audioId: number, fileUrl: string): ng.IPromise<number>;
-    addAudio(audioId: number, ownerId: number): ng.IPromise<any>;
-}
-
 interface UserAudioResponse {
     count: number;
     items: AudioRecord[];

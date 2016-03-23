@@ -4,4 +4,5 @@
 /// <reference path="main/ambient/cordova/plugins/filesystem/index.d.ts" />
 /// <reference path="main/ambient/cordova/plugins/filetransfer/index.d.ts" />
 /// <reference path="main/ambient/jquery/index.d.ts" />
+/// <reference path="main/ambient/whatwg-fetch/index.d.ts" />
 /// <reference path="main/definitions/requirejs/index.d.ts" />

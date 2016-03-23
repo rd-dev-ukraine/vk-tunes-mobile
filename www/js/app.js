@@ -8,9 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define("vk/VkApi", ["require", "exports"], function (require, exports) {
     "use strict";
     class VkApi {
-        constructor($q, $http) {
-            this.$q = $q;
-            this.$http = $http;
+        constructor() {
             this.authroizationInfo = {
                 client_id: "3201403",
                 scope: "audio",
@@ -29,23 +27,23 @@ define("vk/VkApi", ["require", "exports"], function (require, exports) {
         }
         /// Executes authorization if needded and defers access token
         authorize() {
-            var deferred = this.$q.defer();
-            if (this.accessInfo) {
-                deferred.resolve(this.accessInfo);
-            }
-            else {
-                var authorizationWindow = window.open(this.authorizationUrl(), "_blank", "location=no");
-                authorizationWindow.addEventListener("loaderror", (event) => deferred.reject(event.message));
-                authorizationWindow.addEventListener("loadstop", (event) => {
-                    var info = this.authorizationInfoFromUrl(event.url);
-                    if (!info)
-                        return;
-                    authorizationWindow.close();
-                    this.accessInfo = info;
-                    deferred.resolve(this.accessInfo);
-                });
-            }
-            return deferred.promise;
+            return new Promise((resolve, reject) => {
+                if (this.accessInfo) {
+                    resolve(this.accessInfo);
+                }
+                else {
+                    var authorizationWindow = window.open(this.authorizationUrl(), "_blank", "location=no");
+                    authorizationWindow.addEventListener("loaderror", (event) => reject(event.message));
+                    authorizationWindow.addEventListener("loadstop", (event) => {
+                        var info = this.authorizationInfoFromUrl(event.url);
+                        if (!info)
+                            return;
+                        authorizationWindow.close();
+                        this.accessInfo = info;
+                        resolve(this.accessInfo);
+                    });
+                }
+            });
         }
         authorizationInfoFromUrl(url) {
             if (!url)
@@ -82,9 +80,12 @@ define("vk/VkApi", ["require", "exports"], function (require, exports) {
                 request.v = "5.21";
                 var param = this.param(request);
                 var url = "https://api.vk.com/method/" + method + "?" + param;
-                return this.$http
-                    .post(url, request)
-                    .then(r => r.data.response);
+                return fetch(url, {
+                    method: "POST",
+                    body: JSON.stringify(request)
+                })
+                    .then(response => response.json())
+                    .then((r) => r.response);
             });
         }
         param(a) {
@@ -100,18 +101,14 @@ define("vk/VkApi", ["require", "exports"], function (require, exports) {
         }
     }
     VkApi.validReturnUri = "https://oauth.vk.com/blank.html";
-    VkApi.ServiceName = "vk-api";
-    VkApi.$inject = ["$q", "$http"];
     return VkApi;
 });
 /// <reference path="../../typings/browser.d.ts"/>
 define("vk/VkService", ["require", "exports", "vk/VkApi"], function (require, exports, VkApi) {
     "use strict";
     class VkService {
-        constructor($q, $http, api) {
-            this.$q = $q;
-            this.$http = $http;
-            this.api = api;
+        constructor() {
+            this.api = new VkApi();
         }
         currentUser() {
             return this.api.currentUser();
@@ -131,101 +128,21 @@ define("vk/VkService", ["require", "exports", "vk/VkApi"], function (require, ex
                 .then((r) => r.items);
         }
         getFileSize(audioId, fileUrl) {
-            return this.$http
-                .head(fileUrl, {
-                timeout: 3000
+            return fetch(fileUrl, {
+                method: "HEAD"
             })
-                .then(r => {
-                return parseFloat(r.headers("Content-Length"));
-            });
+                .then(r => parseFloat(r.headers.get("Content-Length")));
         }
         addAudio(audioId, ownerId) {
-            return this.api.requestApi("audio.add", {
+            return this.api
+                .requestApi("audio.add", {
                 audio_id: audioId,
                 owner_id: ownerId
             });
         }
     }
-    VkService.$inject = ["$q", "$http", VkApi.ServiceName];
-    VkService.ServiceName = "vk-service";
+    VkService.ServiceName = "VkService";
     return VkService;
-});
-/// <reference path="../../typings/browser.d.ts"/>
-define("vk/Queue", ["require", "exports"], function (require, exports) {
-    "use strict";
-    // Queue operations includes requests api.vk.com which has 3 calls per second restriction.
-    // All request in high-priority queue are executed before normal anytime its appear in queue.
-    class Queue {
-        constructor($q) {
-            this.$q = $q;
-            this.isRunning = false;
-            this.queue = [];
-        }
-        /// Puts function which performs request into queue with specified priority.
-        /// Returns a promise is resolved when operation completes with the value returned to request's promise.
-        enqueue(requestFn) {
-            var deferred = this.$q.defer();
-            var element = {
-                priority: Queue.LowPriority,
-                request: requestFn,
-                deferred: deferred
-            };
-            this.queue.push(element);
-            this.startExecuting();
-            return deferred.promise;
-        }
-        /// Puts request at start of request executing queue.
-        enqueuePriore(requestFn) {
-            var deferred = this.$q.defer();
-            var element = {
-                priority: Queue.HiPriority,
-                request: requestFn,
-                deferred: deferred
-            };
-            this.queue.unshift(element);
-            this.startExecuting();
-            return deferred.promise;
-        }
-        /// Clears queue with specified priority.
-        clearAll() {
-            this.queue = [];
-        }
-        clearNonPriore() {
-            this.queue = this.queue.filter(e => e.priority !== Queue.LowPriority);
-        }
-        clearHiPriore() {
-            this.queue = this.queue.filter(e => e.priority !== Queue.HiPriority);
-        }
-        startExecuting() {
-            if (this.isRunning)
-                return;
-            this.isRunning = true;
-            var startExecutingTime = new Date().getTime();
-            if (this.queue.length) {
-                var request = this.queue.splice(0, 1)[0];
-                var continueExecuting = () => {
-                    var endExecutingTime = new Date().getTime();
-                    var timeDifference = endExecutingTime - startExecutingTime;
-                    var delay = Math.max(0, 300 - timeDifference);
-                    window.setTimeout(() => {
-                        this.isRunning = false;
-                        this.startExecuting();
-                    }, delay);
-                };
-                request.request()
-                    .then(result => request.deferred.resolve(result))
-                    .catch(error => request.deferred.reject(error))
-                    .finally(() => continueExecuting());
-            }
-            else
-                this.isRunning = false;
-        }
-    }
-    Queue.LowPriority = 1;
-    Queue.HiPriority = 10;
-    Queue.ServiceName = "queue";
-    Queue.$inject = ["$q"];
-    return Queue;
 });
 define("task-queue/LinkedList", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -667,16 +584,14 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "hand
     return AudioListHandler;
 });
 /// <references path="../typings/main.d.ts" />
-define("app", ["require", "exports", "vk/VkApi", "vk/VkService", "vk/Queue", "filesys/Directory", "components/AppComponent", "handlers/AudioListHandler"], function (require, exports, VkApi, VkService, Queue, Directory, App, AudioListHandler) {
+define("app", ["require", "exports", "vk/VkService", "filesys/Directory", "components/AppComponent", "handlers/AudioListHandler"], function (require, exports, VkService, Directory, App, AudioListHandler) {
     "use strict";
     function onDeviceReady() {
         console.log("Device ready called");
         angular.module("vk-tunes", [])
-            .service(VkApi.ServiceName, VkApi)
-            .service(VkService.ServiceName, VkService)
-            .service(Queue.ServiceName, Queue)
             .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
             .service(Directory.ServiceName, Directory)
+            .service(VkService.ServiceName, VkService)
             .service(AudioListHandler.ServiceName, AudioListHandler)
             .controller(App.AppComponentController.ControllerName, App.AppComponentController)
             .component("app", App.componentConfiguration)
