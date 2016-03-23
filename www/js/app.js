@@ -193,6 +193,22 @@ define("task-queue/LinkedList", ["require", "exports"], function (require, expor
             }
             this.length += 1;
         }
+        addAfterMatched(predicate, value) {
+            for (let node of this.nodes())
+                if (predicate(node.value)) {
+                    this.addAfter(node, value);
+                    return true;
+                }
+            return false;
+        }
+        addBeforeMatched(predicate, value) {
+            for (let node of this.nodes())
+                if (predicate(node.value)) {
+                    this.addBefore(node, value);
+                    return true;
+                }
+            return false;
+        }
         remove(node) {
             if (!node)
                 throw "Node is missing.";
@@ -207,6 +223,14 @@ define("task-queue/LinkedList", ["require", "exports"], function (require, expor
             if (!prev)
                 this.head = next;
             this.length -= 1;
+        }
+        removeAll(predicate) {
+            var nodesToRemove = [];
+            for (let node of this.nodes())
+                if (predicate(node.value))
+                    nodesToRemove.push(node);
+            for (let node of nodesToRemove)
+                this.remove(node);
         }
         *nodes() {
             var node = this.head;

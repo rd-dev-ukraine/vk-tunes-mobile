@@ -50,6 +50,24 @@ class LinkedList<T> {
         this.length += 1;
     }
     
+    addAfterMatched(predicate: (value: T) => boolean, value: T): boolean {
+        for(let node of this.nodes()) 
+            if (predicate(node.value)) {
+                this.addAfter(node, value);
+                return true;
+            }
+        return false;  
+    }
+    
+    addBeforeMatched(predicate: (value: T) => boolean, value: T): boolean {
+        for(let node of this.nodes()) 
+            if (predicate(node.value)) {
+                this.addBefore(node, value);
+                return true;
+            }
+        return false;
+    }
+    
     remove(node: INode<T>) {
         if (!node)
             throw "Node is missing.";
@@ -68,6 +86,16 @@ class LinkedList<T> {
             this.head = next;
         
         this.length -= 1;
+    }
+    
+    removeAll(predicate: (value:T) => boolean) {
+        var nodesToRemove = [];
+        for(let node of this.nodes())
+            if (predicate(node.value))
+                nodesToRemove.push(node);
+                
+        for(let node of nodesToRemove)
+            this.remove(node);
     }
     
     *nodes() {
