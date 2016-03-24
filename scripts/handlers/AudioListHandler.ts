@@ -12,8 +12,8 @@ class AudioListHandler {
     constructor(private vk: VkService) {        
     }
     
-    @PS.Handle(Messages.MyAudioLoad)
-    loadMyAudio(message: Messages.MyAudioLoad) {
+    @PS.Handle(Messages.LoadMyAudio)
+    loadMyAudio(message: Messages.LoadMyAudio) {
         
         this.vk
             .myAudio()

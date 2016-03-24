@@ -1,11 +1,4 @@
 <div>
     <h1>VK-Tunes mobile app</h1>
-    <div>
-        <button ng-click="$ctrl.reloadAudio()">Reload</button>
-    </div>
-    <ul>
-        <li ng-repeat="audio in $ctrl.audio">
-            {{audio.artist}} - {{audio.title}}
-        </li>
-    </ul>
+    <my-audio></my-audio>
 </div>

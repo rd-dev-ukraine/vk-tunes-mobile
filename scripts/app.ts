@@ -5,7 +5,12 @@ import Directory = require("filesys/Directory");
 
 import EventBus = require("pub-sub/EventBus");
 
+import List = require("components/ListComponent");
+
 import App = require("components/AppComponent");
+import MyAudio = require("components/MyAudioComponent");
+import AudioRecord = require("components/AudioRecordComponent");
+
 import AudioListHandler = require("handlers/AudioListHandler");
 
 export function onDeviceReady() {
@@ -17,7 +22,13 @@ export function onDeviceReady() {
            .service(VkService.ServiceName, VkService)
            .service(AudioListHandler.ServiceName, AudioListHandler)
            .controller(App.AppComponentController.ControllerName, App.AppComponentController)
-           .component("app", App.componentConfiguration)
+           .component("app", App.Component)
+           .controller(List.ListComponentController.ControllerName, List.ListComponentController)
+           .component("list", List.Component)  
+           .controller(MyAudio.MyAudioController.ControllerName, MyAudio.MyAudioController)
+           .component("myAudio", MyAudio.Configuration)
+           .controller(AudioRecord.AudioRecordController.ControllerName, AudioRecord.AudioRecordController)
+           .component("audioRecord", AudioRecord.Configuration)
            .config(function($locationProvider) {
                $locationProvider.html5Mode(true);
            })
