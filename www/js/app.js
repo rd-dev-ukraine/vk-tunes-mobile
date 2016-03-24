@@ -589,16 +589,23 @@ define("handlers/AudioListMessages", ["require", "exports"], function (require, 
 define("components/AppComponent", ["require", "exports", "pub-sub/Decorators", "handlers/AudioListMessages"], function (require, exports, PS, AudioListMessages) {
     "use strict";
     var AppComponentController = (function () {
-        function AppComponentController() {
+        function AppComponentController($scope) {
+            this.$scope = $scope;
         }
         AppComponentController.prototype.$onInit = function () {
-            this.publish(new AudioListMessages.MyAudioLoad());
+            console.log("$onInit");
+            this.reloadAudio();
         };
         AppComponentController.prototype.audioLoaded = function (message) {
             this.audio = message.audio;
+            this.$scope.$$phase || this.$scope.$digest();
         };
         AppComponentController.prototype.publish = function (message) { };
+        AppComponentController.prototype.reloadAudio = function () {
+            this.publish(new AudioListMessages.MyAudioLoad());
+        };
         AppComponentController.ControllerName = "AppComponentController";
+        AppComponentController.$inject = ["$scope"];
         __decorate([
             PS.Handle(AudioListMessages.MyAudioLoaded)
         ], AppComponentController.prototype, "audioLoaded", null);
@@ -625,8 +632,6 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "hand
             this.vk
                 .myAudio()
                 .then(function (audio) {
-                console.log("Audio loaded");
-                console.log(audio);
                 _this.publish(new Messages.MyAudioLoaded(audio));
                 // this.vk.getAudioSize(audio, (record, size) => {
                 //     this.publish(new Messages.AudioSizeLoaded(record, size));

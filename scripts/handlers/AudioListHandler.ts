@@ -17,10 +17,7 @@ class AudioListHandler {
         
         this.vk
             .myAudio()
-            .then(audio => {              
-                
-                console.log("Audio loaded");
-                console.log(audio);
+            .then(audio => {             
                 
                 this.publish(new Messages.MyAudioLoaded(audio));
                 

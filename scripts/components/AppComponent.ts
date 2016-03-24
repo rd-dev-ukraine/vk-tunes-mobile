@@ -4,19 +4,29 @@ import AudioListMessages = require("../handlers/AudioListMessages");
 
 @PS.Subscriber
 export class AppComponentController {
-    static ControllerName = "AppComponentController";    
+    static ControllerName = "AppComponentController";
+    static $inject = ["$scope"];    
     audio: AudioRecord[];
     
+    constructor(private $scope: ng.IScope) {        
+    }
+    
     $onInit() {
-        this.publish(new AudioListMessages.MyAudioLoad());
+        console.log("$onInit");
+        this.reloadAudio();
     }
     
     @PS.Handle(AudioListMessages.MyAudioLoaded)
     audioLoaded(message: AudioListMessages.MyAudioLoaded) {
         this.audio = message.audio;
+        this.$scope.$$phase || this.$scope.$digest();
     }
     
-    publish(message: any) {}    
+    publish(message: any) {}
+    
+    reloadAudio() {
+        this.publish(new AudioListMessages.MyAudioLoad());
+    }    
 }
 
 export var componentConfiguration : ng.IComponentOptions = {
