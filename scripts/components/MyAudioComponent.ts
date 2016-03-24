@@ -13,10 +13,9 @@ export class MyAudioController {
     }   
         
     $onInit() {
-        
-    }   
-    
-    
+        this.reloadAudio();
+    }
+
     reloadAudio() {
         this.publish(new Messages.LoadMyAudio());
     }
@@ -32,5 +31,5 @@ export class MyAudioController {
 
 export var Configuration: ng.IComponentOptions = {
     controller: MyAudioController.ControllerName,
-    template: "templates/MyAudioComponent.html"
+    templateUrl: "templates/MyAudioComponent.html"
 };

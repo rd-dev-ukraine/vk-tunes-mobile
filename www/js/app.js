@@ -634,6 +634,7 @@ define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators
             this.$scope = $scope;
         }
         MyAudioController.prototype.$onInit = function () {
+            this.reloadAudio();
         };
         MyAudioController.prototype.reloadAudio = function () {
             this.publish(new Messages.LoadMyAudio());
@@ -656,7 +657,7 @@ define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators
     exports.MyAudioController = MyAudioController;
     exports.Configuration = {
         controller: MyAudioController.ControllerName,
-        template: "templates/MyAudioComponent.html"
+        templateUrl: "templates/MyAudioComponent.html"
     };
 });
 define("components/AudioRecordComponent", ["require", "exports"], function (require, exports) {
@@ -675,7 +676,7 @@ define("components/AudioRecordComponent", ["require", "exports"], function (requ
             audio: "<"
         },
         controller: AudioRecordController.ControllerName,
-        template: "templates/AudioRecordComponent.html"
+        templateUrl: "templates/AudioRecordComponent.html"
     };
 });
 /// <reference path="../../typings/browser.d.ts" />

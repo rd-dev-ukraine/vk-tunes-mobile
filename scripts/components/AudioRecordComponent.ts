@@ -17,5 +17,5 @@ export var Configuration: ng.IComponentOptions = {
         audio: "<"  
     },
     controller: AudioRecordController.ControllerName,
-    template: "templates/AudioRecordComponent.html"        
+    templateUrl: "templates/AudioRecordComponent.html"        
 };
