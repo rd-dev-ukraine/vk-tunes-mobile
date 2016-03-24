@@ -4,7 +4,7 @@ import VkApi = require("VkApi");
 
 class VkTypedApi {
     private api = new VkApi();
-    
+
     currentUser() {
         return this.api.currentUser();
     }
@@ -18,7 +18,7 @@ class VkTypedApi {
     searchAudio(query: string): Promise<AudioRecord[]> {
         return this.api
                    .requestApi<UserAudioResponse>(
-                       "audio.search", 
+                       "audio.search",
                        {
                            q: query,
                            search_own: 1,
@@ -28,11 +28,16 @@ class VkTypedApi {
     }
 
     getFileSize(audioId: number, fileUrl: string): Promise<number> {
-        return fetch(fileUrl, 
-                     { 
+        return fetch(fileUrl,
+                     {
                         method: "HEAD"
                      })
-                     .then(r => parseFloat( r.headers.get("Content-Length")));
+                     .then(r => {
+                         console.log(r);
+
+                         let contentLength = r.headers.get("Content-Length");
+                         return parseFloat(contentLength);
+                     });
     }
 
     addAudio(audioId: number, ownerId: number): Promise<any> {

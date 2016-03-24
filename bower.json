@@ -19,6 +19,7 @@
     "angular-component-router": "^0.2.1",
     "requirejs": "^2.2.0",
     "angular": "^1.5.2",
-    "es6-promise": "^3.2.1"
+    "es6-promise": "^3.2.1",
+    "fetch": "^0.11.0"
   }
 }

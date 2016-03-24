@@ -21,9 +21,9 @@ class AudioListHandler {
                 
                 this.publish(new Messages.MyAudioLoaded(audio));
                 
-                // this.vk.getAudioSize(audio, (record, size) => {
-                //     this.publish(new Messages.AudioSizeLoaded(record, size));
-                // });
+                this.vk.getAudioSize(audio, (record, size) => {
+                    this.publish(new Messages.AudioSizeLoaded(record, size));
+                });
             });
     }
     

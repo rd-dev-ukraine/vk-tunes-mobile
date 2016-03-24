@@ -6,12 +6,12 @@ import Messages = require("../handlers/AudioListMessages");
 export class MyAudioController {
     static ControllerName = "MyAudioController";
     static $inject = ["$scope"];
-    
+
     audio: AudioRecord[];
-            
-    constructor(private $scope: ng.IScope) {        
-    }   
-        
+
+    constructor(private $scope: ng.IScope) {
+    }
+
     $onInit() {
         this.reloadAudio();
     }
@@ -19,13 +19,13 @@ export class MyAudioController {
     reloadAudio() {
         this.publish(new Messages.LoadMyAudio());
     }
-    
+
     @PS.Handle(Messages.MyAudioLoaded)
     onAudioLoaded(message: Messages.MyAudioLoaded) {
         this.audio = message.audio;
         this.$scope.$$phase || this.$scope.$digest();
     }
-    
+
     publish(message: any) {}
 }
 

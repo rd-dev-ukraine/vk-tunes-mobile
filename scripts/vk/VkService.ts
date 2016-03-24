@@ -5,27 +5,26 @@ import PriorityQueue = require("../task-queue/PriorityQueue");
 
 class VkService {
     static ServiceName = "VkQueued";
-    
+
     private vk = new VkTypedApi();
     private queue = new PriorityQueue();
-    
+
     myAudio(): Promise<AudioRecord[]> {
         return this.queue
-                   .enqueueFirst(() => this.vk.myAudio(), 
+                   .enqueueFirst(() => this.vk.myAudio(),
                                  VkOperationPriority.ApiCall);
     }
-    
+
     searchAudio(query: string): Promise<AudioRecord[]> {
         return this.queue
                    .enqueueFirst(() => this.vk.searchAudio(query),
                                  VkOperationPriority.ApiCall);
     }
-    
+
     getAudioSize(audio: AudioRecord[], callback: (audio: AudioRecord, fileSize:number) => void) {
         this.queue.clear(VkOperationPriority.GetFileSize);
-        
-        
-        audio.forEach(record => {        
+
+        audio.forEach(record => {
             this.queue
                 .enqueueLast(() => this.vk.getFileSize(record.id, record.url),
                              VkOperationPriority.GetFileSize)

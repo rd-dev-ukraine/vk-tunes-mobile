@@ -134,7 +134,11 @@ define("vk/VkTypedApi", ["require", "exports", "vk/VkApi"], function (require, e
             return fetch(fileUrl, {
                 method: "HEAD"
             })
-                .then(function (r) { return parseFloat(r.headers.get("Content-Length")); });
+                .then(function (r) {
+                console.log(r);
+                var contentLength = r.headers.get("Content-Length");
+                return parseFloat(contentLength);
+            });
         };
         VkTypedApi.prototype.addAudio = function (audioId, ownerId) {
             return this.api
@@ -603,6 +607,7 @@ define("handlers/AudioListMessages", ["require", "exports"], function (require, 
     var AudioSizeLoaded = (function () {
         function AudioSizeLoaded(audio, fileSize) {
             this.audio = audio;
+            this.fileSize = fileSize;
         }
         return AudioSizeLoaded;
     }());
@@ -660,14 +665,26 @@ define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators
         templateUrl: "templates/MyAudioComponent.html"
     };
 });
-define("components/AudioRecordComponent", ["require", "exports"], function (require, exports) {
+define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decorators", "handlers/AudioListMessages"], function (require, exports, PS, Messages) {
     "use strict";
     var AudioRecordController = (function () {
         function AudioRecordController($scope) {
             this.$scope = $scope;
         }
+        AudioRecordController.prototype.onAudioSizeGot = function (message) {
+            if (this.audio && this.audio.id === message.audio.id) {
+                this.fileSize = message.fileSize;
+                this.$scope.$$phase || this.$scope.$digest();
+            }
+        };
         AudioRecordController.ControllerName = "AudioRecordController";
         AudioRecordController.$inject = ["$scope"];
+        __decorate([
+            PS.Handle(Messages.AudioSizeLoaded)
+        ], AudioRecordController.prototype, "onAudioSizeGot", null);
+        AudioRecordController = __decorate([
+            PS.Subscriber
+        ], AudioRecordController);
         return AudioRecordController;
     }());
     exports.AudioRecordController = AudioRecordController;
@@ -692,9 +709,9 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "hand
                 .myAudio()
                 .then(function (audio) {
                 _this.publish(new Messages.MyAudioLoaded(audio));
-                // this.vk.getAudioSize(audio, (record, size) => {
-                //     this.publish(new Messages.AudioSizeLoaded(record, size));
-                // });
+                _this.vk.getAudioSize(audio, function (record, size) {
+                    _this.publish(new Messages.AudioSizeLoaded(record, size));
+                });
             });
         };
         AudioListHandler.prototype.publish = function (message) { };
