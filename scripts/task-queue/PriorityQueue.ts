@@ -73,12 +73,13 @@ class PriorityQueue {
             request.workload()
                 .then(result => { 
                     request.resolve(result);
-                    continueExecuting(); 
                 })
                 .catch(error => {
                     request.reject(error);
-                    continueExecuting(); 
                 });
+                
+            continueExecuting();
+             
         } else
             this.isRunning = false;
     }

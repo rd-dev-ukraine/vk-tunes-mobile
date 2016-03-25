@@ -394,12 +394,11 @@ define("task-queue/PriorityQueue", ["require", "exports", "task-queue/LinkedList
                 request.workload()
                     .then(function (result) {
                     request.resolve(result);
-                    continueExecuting();
                 })
                     .catch(function (error) {
                     request.reject(error);
-                    continueExecuting();
                 });
+                continueExecuting();
             }
             else
                 this.isRunning = false;
