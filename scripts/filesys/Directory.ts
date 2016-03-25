@@ -10,21 +10,22 @@ class Directory {
     }
 
     files(): Promise<FileInfo[]> {        
-        return this.init().then(() => {
-            if (this.directoryContent != null)
-                return this.directoryContent;
-            else {
-                return this.readDirectory()
-                           .then(result => {
-                               this.directoryContent = result;
-                                this.directoryContent;
-                           });
-            }
-        });
+        return this.init()
+                   .then(_ => {
+                       if (this.directoryContent != null)
+                           return this.directoryContent;
+                       else {
+                           return this.readDirectory()
+                                      .then(result => {
+                                          this.directoryContent = result;
+                                          return this.directoryContent;
+                                      });
+                       }
+                   });
     }
 
     downloadFile(fromUrl: string, fileName: string, notify: (progressInfo: IFileDownloadingProgress) => void): Promise<any> {
-        var deferred = this.$q.defer();
+        
         var folder = this.path;
         var targetPath = folder + "/" + fileName + ".mp3";
 
@@ -58,7 +59,7 @@ class Directory {
                                                 reject(error);
                                             },
                                             true);
-                   });
+                   }));
     }
 
     private init(): Promise<any> {        

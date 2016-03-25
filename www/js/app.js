@@ -392,13 +392,13 @@ define("vk/VkService", ["require", "exports", "vk/VkTypedApi", "task-queue/Prior
 define("filesys/Directory", ["require", "exports"], function (require, exports) {
     "use strict";
     var Directory = (function () {
-        function Directory($q, path) {
-            this.$q = $q;
+        function Directory(path) {
             this.path = path;
         }
         Directory.prototype.files = function () {
             var _this = this;
-            return this.init().then(function () {
+            return this.init()
+                .then(function (_) {
                 if (_this.directoryContent != null)
                     return _this.directoryContent;
                 else {
@@ -410,12 +410,12 @@ define("filesys/Directory", ["require", "exports"], function (require, exports) 
                 }
             });
         };
-        Directory.prototype.downloadFile = function (fromUrl, fileName) {
+        Directory.prototype.downloadFile = function (fromUrl, fileName, notify) {
             var _this = this;
-            var deferred = this.$q.defer();
             var folder = this.path;
             var targetPath = folder + "/" + fileName + ".mp3";
-            this.init().then(function () {
+            return this.init()
+                .then(function () { return new Promise(function (resolve, reject) {
                 var transfer = new FileTransfer();
                 transfer.onprogress = function (event) {
                     if (event.lengthComputable) {
@@ -424,47 +424,47 @@ define("filesys/Directory", ["require", "exports"], function (require, exports) 
                             bytesLoaded: event.loaded,
                             bytesTotal: event.total
                         };
-                        deferred.notify(progressInfo);
+                        if (notify)
+                            notify(progressInfo);
                     }
                 };
                 transfer.download(fromUrl, targetPath, function (file) {
                     _this.directoryContent = null;
-                    deferred.resolve({
+                    resolve({
                         path: file.fullPath,
                         name: file.name
                     });
                 }, function (error) {
-                    deferred.reject(error);
+                    reject(error);
                 }, true);
-            });
-            return deferred.promise;
+            }); });
         };
         Directory.prototype.init = function () {
-            var deferred = this.$q.defer();
-            window.requestFileSystem(1, 0, function (fs) { return deferred.resolve(fs); }, function (error) { return deferred.reject(error); });
-            return deferred.promise;
+            return new Promise(function (resolve, reject) {
+                window.requestFileSystem(1, 0, function (fs) { return resolve(fs); }, function (error) { return reject(error); });
+            });
         };
         Directory.prototype.readDirectory = function () {
-            var deferred = this.$q.defer();
-            window.resolveLocalFileSystemURI(this.path, function (dirEntry) {
-                dirEntry.createReader()
-                    .readEntries(function (entries) {
-                    var result = [];
-                    for (var i in entries) {
-                        var entry = entries[i];
-                        if (entry.isFile) {
-                            result.push({
-                                path: entry.fullPath,
-                                name: entry.name
-                            });
+            var _this = this;
+            return new Promise(function (resolve, reject) {
+                window.resolveLocalFileSystemURI(_this.path, function (dirEntry) {
+                    dirEntry.createReader()
+                        .readEntries(function (entries) {
+                        var result = [];
+                        for (var i in entries) {
+                            var entry = entries[i];
+                            if (entry.isFile) {
+                                result.push({
+                                    path: entry.fullPath,
+                                    name: entry.name
+                                });
+                            }
                         }
-                    }
-                    deferred.resolve(result);
-                }, function (error) { return deferred.reject(error); });
-            }, function (error) { return deferred.reject(error); });
-            return deferred.promise;
+                        resolve(result);
+                    }, function (error) { return reject(error); });
+                }, function (error) { return reject(error); });
+            });
         };
-        Directory.$inject = ["$q", Directory.PathDependency];
         Directory.ServiceName = "directory";
         Directory.PathDependency = "path";
         return Directory;
