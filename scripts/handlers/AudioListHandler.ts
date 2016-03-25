@@ -33,6 +33,25 @@ class AudioListHandler {
             });
         });
     }
+
+    @PS.Handle(Messages.SearchAudio)
+    searchAudio(message: Messages.SearchAudio) {
+
+        Promise.all<any>([
+                this.vk.searchAudio(message.query),
+                this.storage.load()
+            ])
+            .then(([remote, local ]) => {
+                var list = this.audio(remote, local);
+
+                this.publish(new Messages.SearchAudioResultLoaded(list));
+
+                this.vk.getAudioSize(list, (record, size) => {
+                    record.fileSize = size;
+                    this.publish(new Messages.AudioInfoUpdated(record));
+                });
+            });
+    }
     
     public publish(message: any) { }
     

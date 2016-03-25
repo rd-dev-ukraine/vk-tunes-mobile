@@ -618,6 +618,52 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
         transclude: true
     };
 });
+/// <reference path="../../typings/browser.d.ts" />
+define("components/TabComponent", ["require", "exports"], function (require, exports) {
+    "use strict";
+    var TabComponentController = (function () {
+        function TabComponentController() {
+            this.tabs = [];
+        }
+        TabComponentController.prototype.addTab = function (tab) {
+            this.tabs.push(tab);
+            if (this.tabs.length === 0)
+                this.select(tab);
+        };
+        TabComponentController.prototype.select = function (tab) {
+            this.tabs.forEach(function (t) { return t.selected = false; });
+            var added = this.tabs.some(function (t) { return t == tab; });
+            if (added) {
+                tab.selected = true;
+            }
+        };
+        return TabComponentController;
+    }());
+    exports.TabComponentController = TabComponentController;
+    var TabItemController = (function () {
+        function TabItemController() {
+            this.selected = false;
+            this.title = "";
+        }
+        return TabItemController;
+    }());
+    exports.TabItemController = TabItemController;
+    exports.TabConfiguration = {
+        transclude: true,
+        controller: TabComponentController,
+        template: "\n        <div class=\"tab\">\n            <ul class=\"tab-header\">\n                <li class=\"tab-header__item\"\n                    ng-repeat=\"tab in $ctrl.tabs\"\n                    ng-class=\"{ active: tab.selected }\">\n                    <a ng-click=\"$ctrl.select(tab)\"\n                       href=\"javascript:void(0)\">\n                        {{tab.title}}\n                    </a>\n                </li>\n            </ul>\n            <div class=\"tab-content\" ng-transclude></div>\n        </div>\n    "
+    };
+    exports.TabItemConfiguration = {
+        bindings: {
+            title: "@"
+        },
+        require: {
+            tab: "^tab"
+        },
+        transclude: true,
+        template: "<div ng-show=\"$ctrl.selected\" ng-transclude></div>"
+    };
+});
 define("components/AppComponent", ["require", "exports", "pub-sub/Decorators"], function (require, exports, PS) {
     "use strict";
     var AppComponentController = (function () {
@@ -652,6 +698,20 @@ define("handlers/Messages", ["require", "exports"], function (require, exports) 
         return MyAudioLoaded;
     }());
     exports.MyAudioLoaded = MyAudioLoaded;
+    var SearchAudio = (function () {
+        function SearchAudio(query) {
+            this.query = query;
+        }
+        return SearchAudio;
+    }());
+    exports.SearchAudio = SearchAudio;
+    var SearchAudioResultLoaded = (function () {
+        function SearchAudioResultLoaded(audio) {
+            this.audio = audio;
+        }
+        return SearchAudioResultLoaded;
+    }());
+    exports.SearchAudioResultLoaded = SearchAudioResultLoaded;
     var AudioInfoUpdated = (function () {
         function AudioInfoUpdated(audio) {
             this.audio = audio;
@@ -691,6 +751,39 @@ define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators
     exports.Configuration = {
         controller: MyAudioController.ControllerName,
         templateUrl: "templates/MyAudioComponent.html"
+    };
+});
+define("components/SearchAudioComponent", ["require", "exports", "pub-sub/Decorators", "handlers/Messages"], function (require, exports, PS, Messages) {
+    "use strict";
+    var SearchAudioController = (function () {
+        function SearchAudioController($scope) {
+            this.$scope = $scope;
+        }
+        SearchAudioController.prototype.$onInit = function () {
+            this.reloadAudio();
+        };
+        SearchAudioController.prototype.reloadAudio = function () {
+            this.publish(new Messages.SearchAudio(this.query));
+        };
+        SearchAudioController.prototype.onAudioLoaded = function (message) {
+            this.audio = message.audio;
+            this.$scope.$$phase || this.$scope.$digest();
+        };
+        SearchAudioController.prototype.publish = function (message) { };
+        SearchAudioController.ControllerName = "SearchAudioController";
+        SearchAudioController.$inject = ["$scope"];
+        __decorate([
+            PS.Handle(Messages.SearchAudioResultLoaded)
+        ], SearchAudioController.prototype, "onAudioLoaded", null);
+        SearchAudioController = __decorate([
+            PS.Subscriber
+        ], SearchAudioController);
+        return SearchAudioController;
+    }());
+    exports.SearchAudioController = SearchAudioController;
+    exports.Configuration = {
+        controller: SearchAudioController.ControllerName,
+        templateUrl: "templates/SearchAudioComponent.html"
     };
 });
 define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decorators", "handlers/Messages"], function (require, exports, PS, Messages) {
@@ -748,6 +841,22 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", 
                 });
             });
         };
+        AudioListHandler.prototype.searchAudio = function (message) {
+            var _this = this;
+            Promise.all([
+                this.vk.searchAudio(message.query),
+                this.storage.load()
+            ])
+                .then(function (_a) {
+                var remote = _a[0], local = _a[1];
+                var list = _this.audio(remote, local);
+                _this.publish(new Messages.SearchAudioResultLoaded(list));
+                _this.vk.getAudioSize(list, function (record, size) {
+                    record.fileSize = size;
+                    _this.publish(new Messages.AudioInfoUpdated(record));
+                });
+            });
+        };
         AudioListHandler.prototype.publish = function (message) { };
         AudioListHandler.prototype.audio = function (remote, local) {
             var storedAudioIndex = {};
@@ -763,6 +872,9 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", 
         __decorate([
             PS.Handle(Messages.LoadMyAudio)
         ], AudioListHandler.prototype, "loadMyAudio", null);
+        __decorate([
+            PS.Handle(Messages.SearchAudio)
+        ], AudioListHandler.prototype, "searchAudio", null);
         AudioListHandler = __decorate([
             PS.Subscriber
         ], AudioListHandler);
@@ -771,7 +883,7 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", 
     return AudioListHandler;
 });
 /// <references path="../typings/main.d.ts" />
-define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "vk/StoredAudioService", "components/ListComponent", "components/AppComponent", "components/MyAudioComponent", "components/AudioRecordComponent", "handlers/AudioListHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, App, MyAudio, AudioRecord, AudioListHandler) {
+define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "vk/StoredAudioService", "components/ListComponent", "components/TabComponent", "components/AppComponent", "components/MyAudioComponent", "components/SearchAudioComponent", "components/AudioRecordComponent", "handlers/AudioListHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, App, MyAudio, SearchAudio, AudioRecord, AudioListHandler) {
     "use strict";
     function onDeviceReady() {
         console.log("Device ready called");
@@ -785,8 +897,12 @@ define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "
             .component("app", App.Component)
             .controller(List.ListComponentController.ControllerName, List.ListComponentController)
             .component("list", List.Component)
+            .component("tab", Tabs.TabConfiguration)
+            .component("tabItem", Tabs.TabItemConfiguration)
             .controller(MyAudio.MyAudioController.ControllerName, MyAudio.MyAudioController)
             .component("myAudio", MyAudio.Configuration)
+            .controller(SearchAudio.SearchAudioController.ControllerName, SearchAudio.SearchAudioController)
+            .component("searchAudio", SearchAudio.Configuration)
             .controller(AudioRecord.AudioRecordController.ControllerName, AudioRecord.AudioRecordController)
             .component("audioRecord", AudioRecord.Configuration)
             .config(function ($locationProvider) {
