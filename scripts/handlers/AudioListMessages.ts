@@ -4,12 +4,9 @@ export class LoadMyAudio {
 }
 
 export class MyAudioLoaded {
-    constructor(public audio: AudioRecord[]) {
-    }
+    constructor(public audio: AudioInfo[]) { }
 }
 
 export class AudioSizeLoaded {
-    constructor(public audio: AudioRecord,
-                public fileSize: number) {
-    }
+    constructor(public audio: AudioInfo) { }
 }

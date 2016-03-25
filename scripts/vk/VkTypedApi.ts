@@ -9,13 +9,13 @@ class VkTypedApi {
         return this.api.currentUser();
     }
 
-    myAudio(): Promise<AudioRecord[]> {
+    myAudio(): Promise<VkAudioRecord[]> {
         return this.api
                    .requestApi<UserAudioResponse>("audio.get", {})
                    .then((r: UserAudioResponse) => r.items);
     }
 
-    searchAudio(query: string): Promise<AudioRecord[]> {
+    searchAudio(query: string): Promise<VkAudioRecord[]> {
         return this.api
                    .requestApi<UserAudioResponse>(
                        "audio.search",
@@ -47,6 +47,11 @@ class VkTypedApi {
                                         owner_id: ownerId
                                     });
     }
+}
+
+interface UserAudioResponse {
+    count: number;
+    items: VkAudioRecord[];
 }
 
 export = VkTypedApi;

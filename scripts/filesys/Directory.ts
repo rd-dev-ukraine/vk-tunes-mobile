@@ -12,7 +12,7 @@ class Directory {
                    .then(_ =>  this.readDirectory());
     }
 
-    downloadFile(fromUrl: string, fileName: string, notify: (progressInfo: IFileDownloadingProgress) => void): Promise<FileI nfo> {
+    downloadFile(fromUrl: string, fileName: string, notify: (progressInfo: IFileDownloadingProgress) => void): Promise<FileInfo> {
 
         var folder = this.path;
         var targetPath = folder + "/" + fileName + ".mp3";

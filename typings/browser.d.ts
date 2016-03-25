@@ -1,5 +1,6 @@
 /// <reference path="app/filesys.d.ts" />
 /// <reference path="app/vk.d.ts" />
+/// <reference path="app/app.d.ts" />
 /// <reference path="browser/ambient/angular-component-router/index.d.ts" />
 /// <reference path="browser/ambient/angular/index.d.ts" />
 /// <reference path="browser/ambient/cordova/index.d.ts" />

@@ -7,7 +7,7 @@ export class MyAudioController {
     static ControllerName = "MyAudioController";
     static $inject = ["$scope"];
 
-    audio: AudioRecord[];
+    audio: AudioInfo[]
 
     constructor(private $scope: ng.IScope) {
     }

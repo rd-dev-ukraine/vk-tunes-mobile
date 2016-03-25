@@ -9,7 +9,7 @@ interface IAuthorizationInfo {
     userId: number;
 }
 
-interface AudioRecord {
+interface VkAudioRecord {
     id: number;
     owner_id: number;
     artist: string;
@@ -20,11 +20,6 @@ interface AudioRecord {
     album_id: number;
     genre_id: number;
 }
-
-interface UserAudioResponse {
-    count: number;
-    items: AudioRecord[];
-} 
 
 interface StoredAudioRecord {
     id: number;

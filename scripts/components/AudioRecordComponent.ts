@@ -7,15 +7,15 @@ export class AudioRecordController {
     static ControllerName = "AudioRecordController";
     static $inject = ["$scope"];
     
-    audio: AudioRecord;
-    fileSize: number;
+    audio: AudioInfo;
     
     constructor(private $scope: ng.IScope) { }
     
     @PS.Handle(Messages.AudioSizeLoaded)
     onAudioSizeGot(message: Messages.AudioSizeLoaded) {
-        if (this.audio && this.audio.id === message.audio.id) {
-            this.fileSize = message.fileSize;
+        
+        if (this.audio && this.audio.remote.id === message.audio.remote.id) {            
+            this.audio.fileSize = message.audio.fileSize;
             this.$scope.$$phase || this.$scope.$digest();
         }
     }

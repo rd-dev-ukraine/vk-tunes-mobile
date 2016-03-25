@@ -416,7 +416,7 @@ define("task-queue/PriorityQueue", ["require", "exports", "task-queue/LinkedList
     return PriorityQueue;
 });
 /// <reference path="../../typings/browser.d.ts"/>
-define("vk/VkService", ["require", "exports", "vk/VkTypedApi", "task-queue/PriorityQueue"], function (require, exports, VkTypedApi, PriorityQueue) {
+define("vk/VkAudioService", ["require", "exports", "vk/VkTypedApi", "task-queue/PriorityQueue"], function (require, exports, VkTypedApi, PriorityQueue) {
     "use strict";
     var VkService = (function () {
         function VkService() {
@@ -438,8 +438,11 @@ define("vk/VkService", ["require", "exports", "vk/VkTypedApi", "task-queue/Prior
             this.queue.clear(3 /* GetFileSize */);
             audio.forEach(function (record) {
                 _this.queue
-                    .enqueueLast(function () { return _this.vk.getFileSize(record.id, record.url); }, 3 /* GetFileSize */)
-                    .then(function (fileSize) { return callback(record, fileSize); });
+                    .enqueueLast(function () { return _this.vk.getFileSize(record.remote.id, record.remote.url); }, 3 /* GetFileSize */)
+                    .then(function (fileSize) {
+                    record.fileSize = fileSize;
+                    callback(record, fileSize);
+                });
             });
         };
         VkService.ServiceName = "VkQueued";
@@ -463,6 +466,10 @@ define("vk/StoredAudioService", ["require", "exports", "filesys/Directory"], fun
             });
         };
         StoredAudioService.prototype.download = function (audio, progress) {
+            var fileName = this.buildFileName(audio);
+            this.fs
+                .downloadFile(audio.url, fileName, function (p) { return progress({ audio_id: audio.id, bytesLoaded: p.bytesLoaded, bytesTotal: p.bytesTotal, percent: p.percent }); })
+                .then(function (f) { return ({}); });
             return null;
         };
         StoredAudioService.prototype.parseFileName = function (path) {
@@ -477,7 +484,7 @@ define("vk/StoredAudioService", ["require", "exports", "filesys/Directory"], fun
             };
         };
         StoredAudioService.prototype.buildFileName = function (audio) {
-            return audio.id + " - " + this.sanitize(audio.artist) + " - " + this.sanitize(audio.title) + ".mp3";
+            return audio.id + " - " + this.sanitize(audio.artist) + " - " + this.sanitize(audio.title);
         };
         StoredAudioService.prototype.getFileName = function (path) {
             if (!path)
@@ -627,9 +634,8 @@ define("handlers/AudioListMessages", ["require", "exports"], function (require, 
     }());
     exports.MyAudioLoaded = MyAudioLoaded;
     var AudioSizeLoaded = (function () {
-        function AudioSizeLoaded(audio, fileSize) {
+        function AudioSizeLoaded(audio) {
             this.audio = audio;
-            this.fileSize = fileSize;
         }
         return AudioSizeLoaded;
     }());
@@ -694,8 +700,8 @@ define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decora
             this.$scope = $scope;
         }
         AudioRecordController.prototype.onAudioSizeGot = function (message) {
-            if (this.audio && this.audio.id === message.audio.id) {
-                this.fileSize = message.fileSize;
+            if (this.audio && this.audio.remote.id === message.audio.remote.id) {
+                this.audio.fileSize = message.audio.fileSize;
                 this.$scope.$$phase || this.$scope.$digest();
             }
         };
@@ -719,26 +725,40 @@ define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decora
     };
 });
 /// <reference path="../../typings/browser.d.ts" />
-define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "handlers/AudioListMessages", "pub-sub/Decorators"], function (require, exports, VkService, Messages, PS) {
+define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", "vk/StoredAudioService", "handlers/AudioListMessages", "pub-sub/Decorators"], function (require, exports, VkAudioService, StoredAudioService, Messages, PS) {
     "use strict";
     var AudioListHandler = (function () {
-        function AudioListHandler(vk) {
+        function AudioListHandler(vk, storage) {
             this.vk = vk;
+            this.storage = storage;
         }
         AudioListHandler.prototype.loadMyAudio = function (message) {
             var _this = this;
-            this.vk
-                .myAudio()
-                .then(function (audio) {
-                _this.publish(new Messages.MyAudioLoaded(audio));
-                _this.vk.getAudioSize(audio, function (record, size) {
-                    _this.publish(new Messages.AudioSizeLoaded(record, size));
+            Promise.all([
+                this.vk.myAudio(),
+                this.storage.load()
+            ])
+                .then(function (_a) {
+                var remote = _a[0], local = _a[1];
+                var list = _this.audio(remote, local);
+                _this.publish(new Messages.MyAudioLoaded(list));
+                _this.vk.getAudioSize(list, function (record, size) {
+                    _this.publish(new Messages.AudioSizeLoaded(record));
                 });
             });
         };
         AudioListHandler.prototype.publish = function (message) { };
+        AudioListHandler.prototype.audio = function (remote, local) {
+            var storedAudioIndex = {};
+            local.forEach(function (l) { return storedAudioIndex[l.id] = l; });
+            return remote.map(function (r) { return ({
+                remote: r,
+                local: storedAudioIndex[r.id],
+                fileSize: null
+            }); });
+        };
         AudioListHandler.ServiceName = "AudioListHandler";
-        AudioListHandler.$inject = [VkService.ServiceName];
+        AudioListHandler.$inject = [VkAudioService.ServiceName, StoredAudioService.ServiceName];
         __decorate([
             PS.Handle(Messages.LoadMyAudio)
         ], AudioListHandler.prototype, "loadMyAudio", null);
@@ -750,14 +770,14 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "hand
     return AudioListHandler;
 });
 /// <references path="../typings/main.d.ts" />
-define("app", ["require", "exports", "filesys/Directory", "vk/VkService", "vk/StoredAudioService", "components/ListComponent", "components/AppComponent", "components/MyAudioComponent", "components/AudioRecordComponent", "handlers/AudioListHandler"], function (require, exports, Directory, VkService, StoredAudioService, List, App, MyAudio, AudioRecord, AudioListHandler) {
+define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "vk/StoredAudioService", "components/ListComponent", "components/AppComponent", "components/MyAudioComponent", "components/AudioRecordComponent", "handlers/AudioListHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, App, MyAudio, AudioRecord, AudioListHandler) {
     "use strict";
     function onDeviceReady() {
         console.log("Device ready called");
         angular.module("vk-tunes", [])
             .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
             .service(Directory.ServiceName, Directory)
-            .service(VkService.ServiceName, VkService)
+            .service(VkAudioService.ServiceName, VkAudioService)
             .service(StoredAudioService.ServiceName, StoredAudioService)
             .service(AudioListHandler.ServiceName, AudioListHandler)
             .controller(App.AppComponentController.ControllerName, App.AppComponentController)

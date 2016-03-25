@@ -18,11 +18,11 @@ class StoredAudioService {
                    });
     }
     
-    download(audio: AudioRecord, progress: (progress: IAudioDownloadingProgress) => void) : Promise<StoredAudioRecord> {
+    download(audio: VkAudioRecord, progress: (progress: IAudioDownloadingProgress) => void) : Promise<StoredAudioRecord> {
         var fileName = this.buildFileName(audio);
         
         this.fs
-            .downloadFile(audioRecord, fileName, p => progress({ audio_id: audio.id, bytesLoaded: p.bytesLoaded, bytesTotal: p.bytesTotal, percent: p.percent }))
+            .downloadFile(audio.url, fileName, p => progress({ audio_id: audio.id, bytesLoaded: p.bytesLoaded, bytesTotal: p.bytesTotal, percent: p.percent }))
             .then(f => ({
                 
             }));
@@ -46,7 +46,7 @@ class StoredAudioService {
         };
     }
 
-    private buildFileName(audio: AudioRecord) : string {
+    private buildFileName(audio: VkAudioRecord) : string {
         return `${audio.id} - ${this.sanitize(audio.artist)} - ${this.sanitize(audio.title)}`;
     }
 

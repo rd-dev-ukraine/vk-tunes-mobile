@@ -9,26 +9,29 @@ class VkService {
     private vk = new VkTypedApi();
     private queue = new PriorityQueue();
 
-    myAudio(): Promise<AudioRecord[]> {
+    myAudio(): Promise<VkAudioRecord[]> {
         return this.queue
                    .enqueueFirst(() => this.vk.myAudio(),
                                  VkOperationPriority.ApiCall);
     }
 
-    searchAudio(query: string): Promise<AudioRecord[]> {
+    searchAudio(query: string): Promise<VkAudioRecord[]> {
         return this.queue
                    .enqueueFirst(() => this.vk.searchAudio(query),
                                  VkOperationPriority.ApiCall);
     }
 
-    getAudioSize(audio: AudioRecord[], callback: (audio: AudioRecord, fileSize:number) => void) {
+    getAudioSize(audio: AudioInfo[], callback: (audio: AudioInfo, fileSize:number) => void) {
         this.queue.clear(VkOperationPriority.GetFileSize);
 
         audio.forEach(record => {
             this.queue
-                .enqueueLast(() => this.vk.getFileSize(record.id, record.url),
+                .enqueueLast(() => this.vk.getFileSize(record.remote.id, record.remote.url),
                              VkOperationPriority.GetFileSize)
-                .then(fileSize => callback(record, fileSize));
+                .then(fileSize => {
+                    record.fileSize = fileSize;
+                    callback(record, fileSize);
+                });
         });
     }
 }

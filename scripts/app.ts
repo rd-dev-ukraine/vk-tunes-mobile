@@ -1,7 +1,7 @@
 /// <references path="../typings/main.d.ts" />
 
 import Directory = require("filesys/Directory");
-import VkService = require("vk/VkService");
+import VkAudioService = require("vk/VkAudioService");
 import StoredAudioService = require("vk/StoredAudioService");
 
 import EventBus = require("pub-sub/EventBus");
@@ -20,7 +20,7 @@ export function onDeviceReady() {
     angular.module("vk-tunes", [])           
            .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
            .service(Directory.ServiceName, Directory)           
-           .service(VkService.ServiceName, VkService)
+           .service(VkAudioService.ServiceName, VkAudioService)
            .service(StoredAudioService.ServiceName, StoredAudioService)
            .service(AudioListHandler.ServiceName, AudioListHandler)
            .controller(App.AppComponentController.ControllerName, App.AppComponentController)
