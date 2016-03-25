@@ -306,16 +306,10 @@ define("task-queue/LinkedList", ["require", "exports"], function (require, expor
             this.length -= 1;
         };
         LinkedList.prototype.removeAll = function (predicate) {
-            var nodesToRemove = [];
-            for (var _i = 0, _a = this.nodes(); _i < _a.length; _i++) {
-                var node = _a[_i];
-                if (predicate(node.value))
-                    nodesToRemove.push(node);
-            }
-            for (var _b = 0, nodesToRemove_1 = nodesToRemove; _b < nodesToRemove_1.length; _b++) {
-                var node = nodesToRemove_1[_b];
-                this.remove(node);
-            }
+            var _this = this;
+            this.nodes()
+                .filter(function (n) { return predicate(n.value); })
+                .forEach(function (n) { return _this.remove(n); });
         };
         LinkedList.prototype.pop = function () {
             if (this.head) {
@@ -356,7 +350,7 @@ define("task-queue/PriorityQueue", ["require", "exports", "task-queue/LinkedList
                     resolve: resolve,
                     reject: reject
                 };
-                if (!_this.queue.addAfterMatched(function (q) { return q.priority >= priority; }, element))
+                if (!_this.queue.addBeforeMatched(function (q) { return q.priority < priority; }, element))
                     _this.queue.addLast(element);
                 _this.startExecuting();
             });
@@ -372,7 +366,7 @@ define("task-queue/PriorityQueue", ["require", "exports", "task-queue/LinkedList
                     resolve: resolve,
                     reject: reject
                 };
-                if (!_this.queue.addBeforeMatched(function (q) { return q.priority <= priority; }, element))
+                if (!_this.queue.addAfterMatched(function (q) { return q.priority > priority; }, element))
                     _this.queue.addFirst(element);
                 _this.startExecuting();
             });
@@ -614,7 +608,7 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
             items: "<"
         },
         controller: ListComponentController.ControllerName,
-        templateUrl: "templates/ListComponent.html",
+        template: "\n    <ul>\n        <li ng-repeat=\"$item in $ctrl.items\">\n            <div ng-transclude></div>\n            <hr />\n        <li>\n    </ul>\n    ",
         transclude: true
     };
 });

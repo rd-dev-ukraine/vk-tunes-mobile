@@ -13,6 +13,13 @@ export var Component: ng.IComponentOptions = {
         items: "<"        
     }, 
     controller: ListComponentController.ControllerName,    
-    templateUrl: "templates/ListComponent.html",
+    template: `
+    <ul>
+        <li ng-repeat="$item in $ctrl.items">
+            <div ng-transclude></div>
+            <hr />
+        <li>
+    </ul>
+    `,
     transclude: true
 };

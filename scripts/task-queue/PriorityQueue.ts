@@ -17,7 +17,7 @@ class PriorityQueue {
                 reject: reject
             };
             
-            if (!this.queue.addAfterMatched(q => q.priority >= priority, element))
+            if (!this.queue.addBeforeMatched(q => q.priority < priority, element))
                 this.queue.addLast(element);            
             
             this.startExecuting();            
@@ -37,7 +37,7 @@ class PriorityQueue {
                 reject: reject
             };
             
-            if (!this.queue.addBeforeMatched(q => q.priority <= priority, element))
+            if (!this.queue.addAfterMatched(q => q.priority > priority, element))
                 this.queue.addFirst(element);            
             
             this.startExecuting();            

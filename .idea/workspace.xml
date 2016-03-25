@@ -2,18 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1576320d-2083-4e1a-ae72-8d8173bfb9c6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sass.cmd" afterPath="$PROJECT_DIR$/sass.cmd" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/app.ts" afterPath="$PROJECT_DIR$/scripts/app.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/components/SearchAudioComponent.ts" afterPath="$PROJECT_DIR$/scripts/components/SearchAudioComponent.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/components/TabComponent.ts" afterPath="$PROJECT_DIR$/scripts/components/TabComponent.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/filesys/Directory.ts" afterPath="$PROJECT_DIR$/scripts/filesys/Directory.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/vk/StoredAudioService.ts" afterPath="$PROJECT_DIR$/scripts/vk/StoredAudioService.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/vk/VkAudioService.ts" afterPath="$PROJECT_DIR$/scripts/vk/VkAudioService.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/vk/VkTypedApi.ts" afterPath="$PROJECT_DIR$/scripts/vk/VkTypedApi.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/css/app.css" afterPath="$PROJECT_DIR$/www/css/app.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/index.html" afterPath="$PROJECT_DIR$/www/index.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/www/templates/ListComponent.html" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/components/ListComponent.ts" afterPath="$PROJECT_DIR$/scripts/components/ListComponent.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/task-queue/LinkedList.ts" afterPath="$PROJECT_DIR$/scripts/task-queue/LinkedList.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/task-queue/PriorityQueue.ts" afterPath="$PROJECT_DIR$/scripts/task-queue/PriorityQueue.ts" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/app.js" afterPath="$PROJECT_DIR$/www/js/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/templates/SearchAudioComponent.html" afterPath="$PROJECT_DIR$/www/templates/SearchAudioComponent.html" />
     </list>
     <ignored path="vk-tunes-mobile.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,21 +48,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VkApi.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/vk/VkApi.ts">
+      <file leaf-file-name="VkAudioService.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/vk/VkAudioService.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="80" column="21" selection-start-line="80" selection-start-column="19" selection-end-line="80" selection-end-column="21" />
+            <state relative-caret-position="267">
+              <caret line="28" column="33" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VkAudioService.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/vk/VkAudioService.ts">
+      <file leaf-file-name="PriorityQueue.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/task-queue/PriorityQueue.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="34" column="47" selection-start-line="34" selection-start-column="47" selection-end-line="34" selection-end-column="47" />
+            <state relative-caret-position="238">
+              <caret line="47" column="27" selection-start-line="47" selection-start-column="27" selection-end-line="47" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LinkedList.ts" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/scripts/task-queue/LinkedList.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="413">
+              <caret line="87" column="28" selection-start-line="87" selection-start-column="28" selection-end-line="87" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -87,48 +91,18 @@
       <file leaf-file-name="AudioListHandler.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/handlers/AudioListHandler.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="572">
-              <caret line="61" column="8" selection-start-line="61" selection-start-column="8" selection-end-line="61" selection-end-column="8" />
+            <state relative-caret-position="402">
+              <caret line="48" column="29" selection-start-line="48" selection-start-column="29" selection-end-line="48" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VkTypedApi.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/vk/VkTypedApi.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="457">
-              <caret line="38" column="5" selection-start-line="38" selection-start-column="5" selection-end-line="38" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Decorators.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/pub-sub/Decorators.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="25" column="1" selection-start-line="25" selection-start-column="1" selection-end-line="25" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StoredAudioService.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/vk/StoredAudioService.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TabComponent.ts" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TabComponent.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/components/TabComponent.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="29" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+            <state relative-caret-position="-52">
+              <caret line="21" column="32" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
               <folding>
                 <marker date="1458935371202" expanded="true" signature="720:1183" placeholder="..." />
                 <marker date="1458935371202" expanded="true" signature="720:1186" placeholder="..." />
@@ -136,6 +110,30 @@
                 <marker date="1458935371202" expanded="true" signature="802:1095" placeholder="..." />
                 <marker date="1458935371202" expanded="true" signature="961:1073" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ListComponent.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/components/ListComponent.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="19" column="15" selection-start-line="19" selection-start-column="15" selection-end-line="19" selection-end-column="15" />
+              <folding>
+                <marker date="1458935628700" expanded="true" signature="420:546" placeholder="..." />
+                <marker date="1458935628700" expanded="true" signature="466:532" placeholder="..." />
+                <marker date="1458935628700" expanded="true" signature="536:541" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SearchAudioComponent.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/components/SearchAudioComponent.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -171,6 +169,10 @@
         <option value="$PROJECT_DIR$/scripts/vk/VkAudioService.ts" />
         <option value="$PROJECT_DIR$/www/templates/SearchAudioComponent.html" />
         <option value="$PROJECT_DIR$/scripts/components/TabComponent.ts" />
+        <option value="$PROJECT_DIR$/www/templates/ListComponent.html" />
+        <option value="$PROJECT_DIR$/scripts/components/ListComponent.ts" />
+        <option value="$PROJECT_DIR$/scripts/task-queue/PriorityQueue.ts" />
+        <option value="$PROJECT_DIR$/scripts/task-queue/LinkedList.ts" />
       </list>
     </option>
   </component>
@@ -290,6 +292,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="vk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vk-tunes-mobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vk-tunes-mobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="task-queue" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -427,21 +447,21 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1458931504032</updated>
-      <workItem from="1458931505634" duration="3881000" />
+      <workItem from="1458931505634" duration="5378000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3881000" />
+    <option name="totallyTimeSpent" value="5378000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18020834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25264272" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -455,6 +475,14 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -536,14 +564,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/components/SearchAudioComponent.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/pub-sub/Decorators.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
@@ -576,34 +596,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/handlers/AudioListHandler.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="572">
-          <caret line="61" column="8" selection-start-line="61" selection-start-column="8" selection-end-line="61" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/vk/VkAudioService.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="34" column="47" selection-start-line="34" selection-start-column="47" selection-end-line="34" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/www/templates/SearchAudioComponent.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/templates/MyAudioComponent.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
           <folding />
         </state>
       </provider>
@@ -616,10 +612,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/MyAudioComponent.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/components/TabComponent.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="29" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+        <state relative-caret-position="-52">
+          <caret line="21" column="32" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
           <folding>
             <marker date="1458935371202" expanded="true" signature="720:1183" placeholder="..." />
             <marker date="1458935371202" expanded="true" signature="720:1186" placeholder="..." />
@@ -627,6 +631,66 @@
             <marker date="1458935371202" expanded="true" signature="802:1095" placeholder="..." />
             <marker date="1458935371202" expanded="true" signature="961:1073" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/ListComponent.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/components/ListComponent.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="15" selection-start-line="19" selection-start-column="15" selection-end-line="19" selection-end-column="15" />
+          <folding>
+            <marker date="1458935628700" expanded="true" signature="420:546" placeholder="..." />
+            <marker date="1458935628700" expanded="true" signature="466:532" placeholder="..." />
+            <marker date="1458935628700" expanded="true" signature="536:541" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/components/SearchAudioComponent.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/handlers/AudioListHandler.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="48" column="29" selection-start-line="48" selection-start-column="29" selection-end-line="48" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/vk/VkAudioService.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="267">
+          <caret line="28" column="33" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/task-queue/PriorityQueue.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="47" column="27" selection-start-line="47" selection-start-column="27" selection-end-line="47" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/task-queue/LinkedList.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="413">
+          <caret line="87" column="28" selection-start-line="87" selection-start-column="28" selection-end-line="87" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>

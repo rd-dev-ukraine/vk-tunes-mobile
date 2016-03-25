@@ -111,13 +111,9 @@ class LinkedList<T> {
     }
     
     removeAll(predicate: (value:T) => boolean) {
-        var nodesToRemove = [];
-        for(let node of this.nodes())
-            if (predicate(node.value))
-                nodesToRemove.push(node);
-                
-        for(let node of nodesToRemove)
-            this.remove(node);
+        this.nodes()
+            .filter(n => predicate(n.value))
+            .forEach(n => this.remove(n));
     }
     
     pop(): T {
