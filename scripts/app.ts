@@ -1,7 +1,8 @@
 /// <references path="../typings/main.d.ts" />
 
-import VkService = require("vk/VkService");
 import Directory = require("filesys/Directory");
+import VkService = require("vk/VkService");
+import StoredAudioService = require("vk/StoredAudioService");
 
 import EventBus = require("pub-sub/EventBus");
 
@@ -20,6 +21,7 @@ export function onDeviceReady() {
            .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
            .service(Directory.ServiceName, Directory)           
            .service(VkService.ServiceName, VkService)
+           .service(StoredAudioService.ServiceName, StoredAudioService)
            .service(AudioListHandler.ServiceName, AudioListHandler)
            .controller(App.AppComponentController.ControllerName, App.AppComponentController)
            .component("app", App.Component)

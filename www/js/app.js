@@ -5,6 +5,65 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 /// <reference path="../../typings/browser.d.ts"/>
+define("filesys/Directory", ["require", "exports"], function (require, exports) {
+    "use strict";
+    var Directory = (function () {
+        function Directory(path) {
+            this.path = path;
+        }
+        Directory.prototype.files = function () {
+            var _this = this;
+            return this.init()
+                .then(function (_) { return _this.readDirectory(); });
+        };
+        Directory.prototype.downloadFile = function (fromUrl, fileName, notify) {
+            var folder = this.path;
+            var targetPath = folder + "/" + fileName + ".mp3";
+            return this.init()
+                .then(function () { return new Promise(function (resolve, reject) {
+                var transfer = new FileTransfer();
+                transfer.onprogress = function (event) {
+                    if (event.lengthComputable) {
+                        var progressInfo = {
+                            percent: Math.round(event.loaded / event.total * 100),
+                            bytesLoaded: event.loaded,
+                            bytesTotal: event.total
+                        };
+                        if (notify)
+                            notify(progressInfo);
+                    }
+                };
+                transfer.download(fromUrl, targetPath, function (file) {
+                    resolve({
+                        path: file.fullPath,
+                        name: file.name
+                    });
+                }, function (error) { return reject(error); }, true);
+            }); });
+        };
+        Directory.prototype.init = function () {
+            return new Promise(function (resolve, reject) {
+                window.requestFileSystem(1, 0, function (fs) { return resolve(fs); }, function (error) { return reject(error); });
+            });
+        };
+        Directory.prototype.readDirectory = function () {
+            var _this = this;
+            return new Promise(function (resolve, reject) {
+                window.resolveLocalFileSystemURI(_this.path, function (dirEntry) {
+                    dirEntry.createReader()
+                        .readEntries(function (entries) {
+                        resolve(entries.map(function (e) { return ({ path: e.fullPath, name: e.name }); }));
+                    }, function (error) { return reject(error); });
+                }, function (error) { return reject(error); });
+            });
+        };
+        Directory.ServiceName = "directory";
+        Directory.PathDependency = "path";
+        return Directory;
+    }());
+    return Directory;
+});
+/// <reference path="../../typings/browser.d.ts"/>
 define("vk/VkApi", ["require", "exports"], function (require, exports) {
     "use strict";
     var VkApi = (function () {
@@ -389,63 +448,51 @@ define("vk/VkService", ["require", "exports", "vk/VkTypedApi", "task-queue/Prior
     return VkService;
 });
 /// <reference path="../../typings/browser.d.ts"/>
-define("filesys/Directory", ["require", "exports"], function (require, exports) {
+define("vk/StoredAudioService", ["require", "exports", "filesys/Directory"], function (require, exports, Directory) {
     "use strict";
-    var Directory = (function () {
-        function Directory(path) {
-            this.path = path;
+    var StoredAudioService = (function () {
+        function StoredAudioService(fs) {
+            this.fs = fs;
         }
-        Directory.prototype.files = function () {
+        StoredAudioService.prototype.load = function () {
             var _this = this;
-            return this.init()
-                .then(function (_) { return _this.readDirectory(); });
-        };
-        Directory.prototype.downloadFile = function (fromUrl, fileName, notify) {
-            var folder = this.path;
-            var targetPath = folder + "/" + fileName + ".mp3";
-            return this.init()
-                .then(function () { return new Promise(function (resolve, reject) {
-                var transfer = new FileTransfer();
-                transfer.onprogress = function (event) {
-                    if (event.lengthComputable) {
-                        var progressInfo = {
-                            percent: Math.round(event.loaded / event.total * 100),
-                            bytesLoaded: event.loaded,
-                            bytesTotal: event.total
-                        };
-                        if (notify)
-                            notify(progressInfo);
-                    }
-                };
-                transfer.download(fromUrl, targetPath, function (file) {
-                    resolve({
-                        path: file.fullPath,
-                        name: file.name
-                    });
-                }, function (error) { return reject(error); }, true);
-            }); });
-        };
-        Directory.prototype.init = function () {
-            return new Promise(function (resolve, reject) {
-                window.requestFileSystem(1, 0, function (fs) { return resolve(fs); }, function (error) { return reject(error); });
+            return this.fs
+                .files()
+                .then(function (files) {
+                return files.map(function (f) { return _this.parseFileName(f.path); });
             });
         };
-        Directory.prototype.readDirectory = function () {
-            var _this = this;
-            return new Promise(function (resolve, reject) {
-                window.resolveLocalFileSystemURI(_this.path, function (dirEntry) {
-                    dirEntry.createReader()
-                        .readEntries(function (entries) {
-                        resolve(entries.map(function (e) { return ({ path: e.fullPath, name: e.name }); }));
-                    }, function (error) { return reject(error); });
-                }, function (error) { return reject(error); });
-            });
+        StoredAudioService.prototype.download = function (audio, progress) {
+            return null;
         };
-        Directory.ServiceName = "directory";
-        Directory.PathDependency = "path";
-        return Directory;
+        StoredAudioService.prototype.parseFileName = function (path) {
+            var fileName = this.getFileName(path);
+            var match = StoredAudioService.SplitFileName.exec(fileName);
+            if (!match)
+                return null;
+            return {
+                id: parseInt(match[1]),
+                name: fileName,
+                path: path
+            };
+        };
+        StoredAudioService.prototype.buildFileName = function (audio) {
+            return audio.id + " - " + this.sanitize(audio.artist) + " - " + this.sanitize(audio.title) + ".mp3";
+        };
+        StoredAudioService.prototype.getFileName = function (path) {
+            if (!path)
+                throw "Path is missing.";
+            return path.slice(path.indexOf("/") + 1);
+        };
+        StoredAudioService.prototype.sanitize = function (word) {
+            return word;
+        };
+        StoredAudioService.SplitFileName = /^(\d{1,}) - (.{1, }).(.{1, })$/;
+        StoredAudioService.ServiceName = "StoredAudioService";
+        StoredAudioService.$inject = [Directory.ServiceName];
+        return StoredAudioService;
     }());
-    return Directory;
+    return StoredAudioService;
 });
 define("pub-sub/EventBus", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -566,7 +613,6 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
 });
 define("handlers/AudioListMessages", ["require", "exports"], function (require, exports) {
     "use strict";
-    /// <reference path="../../typings/browser.d.ts" />
     var LoadMyAudio = (function () {
         function LoadMyAudio() {
         }
@@ -704,7 +750,7 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkService", "hand
     return AudioListHandler;
 });
 /// <references path="../typings/main.d.ts" />
-define("app", ["require", "exports", "vk/VkService", "filesys/Directory", "components/ListComponent", "components/AppComponent", "components/MyAudioComponent", "components/AudioRecordComponent", "handlers/AudioListHandler"], function (require, exports, VkService, Directory, List, App, MyAudio, AudioRecord, AudioListHandler) {
+define("app", ["require", "exports", "filesys/Directory", "vk/VkService", "vk/StoredAudioService", "components/ListComponent", "components/AppComponent", "components/MyAudioComponent", "components/AudioRecordComponent", "handlers/AudioListHandler"], function (require, exports, Directory, VkService, StoredAudioService, List, App, MyAudio, AudioRecord, AudioListHandler) {
     "use strict";
     function onDeviceReady() {
         console.log("Device ready called");
@@ -712,6 +758,7 @@ define("app", ["require", "exports", "vk/VkService", "filesys/Directory", "compo
             .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
             .service(Directory.ServiceName, Directory)
             .service(VkService.ServiceName, VkService)
+            .service(StoredAudioService.ServiceName, StoredAudioService)
             .service(AudioListHandler.ServiceName, AudioListHandler)
             .controller(App.AppComponentController.ControllerName, App.AppComponentController)
             .component("app", App.Component)

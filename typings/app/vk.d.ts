@@ -25,3 +25,16 @@ interface UserAudioResponse {
     count: number;
     items: AudioRecord[];
 } 
+
+interface StoredAudioRecord {
+    id: number;
+    name: string;
+    path: string;
+}
+
+interface IAudioDownloadingProgress {
+    audio_id: number;
+    bytesLoaded: number
+    bytesTotal: number
+    percent: number
+}
