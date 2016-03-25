@@ -398,20 +398,9 @@ define("filesys/Directory", ["require", "exports"], function (require, exports) 
         Directory.prototype.files = function () {
             var _this = this;
             return this.init()
-                .then(function (_) {
-                if (_this.directoryContent != null)
-                    return _this.directoryContent;
-                else {
-                    return _this.readDirectory()
-                        .then(function (result) {
-                        _this.directoryContent = result;
-                        return _this.directoryContent;
-                    });
-                }
-            });
+                .then(function (_) { return _this.readDirectory(); });
         };
         Directory.prototype.downloadFile = function (fromUrl, fileName, notify) {
-            var _this = this;
             var folder = this.path;
             var targetPath = folder + "/" + fileName + ".mp3";
             return this.init()
@@ -429,14 +418,11 @@ define("filesys/Directory", ["require", "exports"], function (require, exports) 
                     }
                 };
                 transfer.download(fromUrl, targetPath, function (file) {
-                    _this.directoryContent = null;
                     resolve({
                         path: file.fullPath,
                         name: file.name
                     });
-                }, function (error) {
-                    reject(error);
-                }, true);
+                }, function (error) { return reject(error); }, true);
             }); });
         };
         Directory.prototype.init = function () {
@@ -450,17 +436,7 @@ define("filesys/Directory", ["require", "exports"], function (require, exports) 
                 window.resolveLocalFileSystemURI(_this.path, function (dirEntry) {
                     dirEntry.createReader()
                         .readEntries(function (entries) {
-                        var result = [];
-                        for (var i in entries) {
-                            var entry = entries[i];
-                            if (entry.isFile) {
-                                result.push({
-                                    path: entry.fullPath,
-                                    name: entry.name
-                                });
-                            }
-                        }
-                        resolve(result);
+                        resolve(entries.map(function (e) { return ({ path: e.fullPath, name: e.name }); }));
                     }, function (error) { return reject(error); });
                 }, function (error) { return reject(error); });
             });
