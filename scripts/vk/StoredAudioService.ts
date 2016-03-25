@@ -11,11 +11,12 @@ class StoredAudioService {
     constructor(private fs: Directory) {}
 
     load() : Promise<StoredAudioRecord[]> {
-        return this.fs
+        /*return this.fs
                    .files()
                    .then(files => {
                        return files.map(f => this.parseFileName(f.path));
-                   });
+                   });*/
+        return Promise.resolve([]);
     }
     
     download(audio: VkAudioRecord, progress: (progress: IAudioDownloadingProgress) => void) : Promise<StoredAudioRecord> {

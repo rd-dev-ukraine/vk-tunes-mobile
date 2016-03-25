@@ -14,11 +14,14 @@ export class SearchAudioController {
     }
 
     $onInit() {
-        this.reloadAudio();
+        this.$scope.$watch(() => this.query, () => this.reloadAudio());
     }
 
     reloadAudio() {
-        this.publish(new Messages.SearchAudio(this.query));
+        if (this.query)
+            this.publish(new Messages.SearchAudio(this.query));
+        else
+            this.audio = [];
     }
 
     @PS.Handle(Messages.SearchAudioResultLoaded)

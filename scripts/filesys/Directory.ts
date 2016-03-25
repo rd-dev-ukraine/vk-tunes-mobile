@@ -61,7 +61,7 @@ class Directory {
         
         return new Promise((resolve, reject) => {
 
-            window.resolveLocalFileSystemURI(
+            window.resolveLocalFileSystemURL(
                 this.path,
                 (dirEntry: DirectoryEntry) => {
                     dirEntry.createReader()

@@ -18,7 +18,6 @@ import AudioRecord = require("components/AudioRecordComponent");
 import AudioListHandler = require("handlers/AudioListHandler");
 
 export function onDeviceReady() {
-    console.log("Device ready called");
 
     angular.module("vk-tunes", [])
            .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")

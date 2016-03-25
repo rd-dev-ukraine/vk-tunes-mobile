@@ -16,9 +16,11 @@ class VkService {
     }
 
     searchAudio(query: string): Promise<VkAudioRecord[]> {
+        this.queue.clear(VkOperationPriority.SearchApiCall);
+
         return this.queue
                    .enqueueFirst(() => this.vk.searchAudio(query),
-                                 VkOperationPriority.ApiCall);
+                                 VkOperationPriority.SearchApiCall);
     }
 
     getAudioSize(audio: AudioInfo[], callback: (audio: AudioInfo, fileSize:number) => void) {
@@ -37,6 +39,7 @@ class VkService {
 }
 
 const enum VkOperationPriority {
+    SearchApiCall = 101,
     ApiCall = 100,
     DownloadFile = 10,
     GetFileSize = 3

@@ -49,7 +49,7 @@ define("filesys/Directory", ["require", "exports"], function (require, exports) 
         Directory.prototype.readDirectory = function () {
             var _this = this;
             return new Promise(function (resolve, reject) {
-                window.resolveLocalFileSystemURI(_this.path, function (dirEntry) {
+                window.resolveLocalFileSystemURL(_this.path, function (dirEntry) {
                     dirEntry.createReader()
                         .readEntries(function (entries) {
                         resolve(entries.map(function (e) { return ({ path: e.fullPath, name: e.name }); }));
@@ -194,7 +194,6 @@ define("vk/VkTypedApi", ["require", "exports", "vk/VkApi"], function (require, e
                 method: "HEAD"
             })
                 .then(function (r) {
-                console.log(r);
                 var contentLength = r.headers.get("Content-Length");
                 return parseFloat(contentLength);
             });
@@ -430,8 +429,9 @@ define("vk/VkAudioService", ["require", "exports", "vk/VkTypedApi", "task-queue/
         };
         VkService.prototype.searchAudio = function (query) {
             var _this = this;
+            this.queue.clear(101 /* SearchApiCall */);
             return this.queue
-                .enqueueFirst(function () { return _this.vk.searchAudio(query); }, 100 /* ApiCall */);
+                .enqueueFirst(function () { return _this.vk.searchAudio(query); }, 101 /* SearchApiCall */);
         };
         VkService.prototype.getAudioSize = function (audio, callback) {
             var _this = this;
@@ -458,12 +458,12 @@ define("vk/StoredAudioService", ["require", "exports", "filesys/Directory"], fun
             this.fs = fs;
         }
         StoredAudioService.prototype.load = function () {
-            var _this = this;
-            return this.fs
-                .files()
-                .then(function (files) {
-                return files.map(function (f) { return _this.parseFileName(f.path); });
-            });
+            /*return this.fs
+                       .files()
+                       .then(files => {
+                           return files.map(f => this.parseFileName(f.path));
+                       });*/
+            return Promise.resolve([]);
         };
         StoredAudioService.prototype.download = function (audio, progress) {
             var fileName = this.buildFileName(audio);
@@ -627,15 +627,12 @@ define("components/TabComponent", ["require", "exports"], function (require, exp
         }
         TabComponentController.prototype.addTab = function (tab) {
             this.tabs.push(tab);
-            if (this.tabs.length === 0)
+            if (this.tabs.length === 1)
                 this.select(tab);
         };
         TabComponentController.prototype.select = function (tab) {
             this.tabs.forEach(function (t) { return t.selected = false; });
-            var added = this.tabs.some(function (t) { return t == tab; });
-            if (added) {
-                tab.selected = true;
-            }
+            tab.selected = true;
         };
         return TabComponentController;
     }());
@@ -645,6 +642,9 @@ define("components/TabComponent", ["require", "exports"], function (require, exp
             this.selected = false;
             this.title = "";
         }
+        TabItemController.prototype.$onInit = function () {
+            this.tab.addTab(this);
+        };
         return TabItemController;
     }());
     exports.TabItemController = TabItemController;
@@ -657,6 +657,7 @@ define("components/TabComponent", ["require", "exports"], function (require, exp
         bindings: {
             title: "@"
         },
+        controller: TabItemController,
         require: {
             tab: "^tab"
         },
@@ -760,10 +761,14 @@ define("components/SearchAudioComponent", ["require", "exports", "pub-sub/Decora
             this.$scope = $scope;
         }
         SearchAudioController.prototype.$onInit = function () {
-            this.reloadAudio();
+            var _this = this;
+            this.$scope.$watch(function () { return _this.query; }, function () { return _this.reloadAudio(); });
         };
         SearchAudioController.prototype.reloadAudio = function () {
-            this.publish(new Messages.SearchAudio(this.query));
+            if (this.query)
+                this.publish(new Messages.SearchAudio(this.query));
+            else
+                this.audio = [];
         };
         SearchAudioController.prototype.onAudioLoaded = function (message) {
             this.audio = message.audio;
@@ -886,7 +891,6 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", 
 define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "vk/StoredAudioService", "components/ListComponent", "components/TabComponent", "components/AppComponent", "components/MyAudioComponent", "components/SearchAudioComponent", "components/AudioRecordComponent", "handlers/AudioListHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, App, MyAudio, SearchAudio, AudioRecord, AudioListHandler) {
     "use strict";
     function onDeviceReady() {
-        console.log("Device ready called");
         angular.module("vk-tunes", [])
             .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
             .service(Directory.ServiceName, Directory)

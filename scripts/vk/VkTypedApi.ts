@@ -33,8 +33,6 @@ class VkTypedApi {
                         method: "HEAD"
                      })
                      .then(r => {
-                         console.log(r);
-
                          let contentLength = r.headers.get("Content-Length");
                          return parseFloat(contentLength);
                      });

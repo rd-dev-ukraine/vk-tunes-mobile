@@ -5,23 +5,25 @@ export class TabComponentController {
 
     addTab(tab: TabItemController) {
         this.tabs.push(tab);
-        if (this.tabs.length === 0)
+        if (this.tabs.length === 1)
             this.select(tab);
     }
 
     select(tab: TabItemController) {
         this.tabs.forEach(t => t.selected = false);
-
-        var added = this.tabs.some(t => t == tab);
-        if (added) {
-            tab.selected = true;
-        }
+        tab.selected = true;
     }
 }
 
 export class TabItemController {
     selected = false;
     title: string = "";
+
+    tab: TabComponentController;
+
+    $onInit() {
+        this.tab.addTab(this);
+    }
 }
 
 export var TabConfiguration: ng.IComponentOptions = {
@@ -48,10 +50,10 @@ export var TabItemConfiguration: ng.IComponentOptions = {
     bindings: {
         title: "@"
     },
+    controller: TabItemController,
     require: {
         tab: "^tab"
     },
     transclude: true,
     template: `<div ng-show="$ctrl.selected" ng-transclude></div>`
-
 };
