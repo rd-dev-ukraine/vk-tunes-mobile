@@ -63,7 +63,8 @@ class AudioListHandler {
         return remote.map(r => ({
             remote: r,
             local: storedAudioIndex[r.id],
-            fileSize: null
+            fileSize: null,
+            isInMyAudio: r.owner_id === this.vk.currentUser()
         }));
     }
 }

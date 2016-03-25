@@ -416,6 +416,9 @@ define("vk/VkAudioService", ["require", "exports", "vk/VkTypedApi", "task-queue/
             this.vk = new VkTypedApi();
             this.queue = new PriorityQueue();
         }
+        VkService.prototype.currentUser = function () {
+            return this.vk.currentUser();
+        };
         VkService.prototype.myAudio = function () {
             var _this = this;
             return this.queue
@@ -867,12 +870,14 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", 
         };
         AudioListHandler.prototype.publish = function (message) { };
         AudioListHandler.prototype.audio = function (remote, local) {
+            var _this = this;
             var storedAudioIndex = {};
             local.forEach(function (l) { return storedAudioIndex[l.id] = l; });
             return remote.map(function (r) { return ({
                 remote: r,
                 local: storedAudioIndex[r.id],
-                fileSize: null
+                fileSize: null,
+                isInMyAudio: r.owner_id === _this.vk.currentUser()
             }); });
         };
         AudioListHandler.ServiceName = "AudioListHandler";

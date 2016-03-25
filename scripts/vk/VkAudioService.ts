@@ -8,6 +8,10 @@ class VkService {
 
     private vk = new VkTypedApi();
     private queue = new PriorityQueue();
+    
+    currentUser(): number {
+        return this.vk.currentUser();
+    }
 
     myAudio(): Promise<VkAudioRecord[]> {
         return this.queue
