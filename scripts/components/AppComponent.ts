@@ -2,8 +2,7 @@
 import PS = require("../pub-sub/Decorators");
 
 @PS.Subscriber
-export class AppComponentController {
-    static ControllerName = "AppComponentController";
+class AppComponentController {
     static $inject = ["$scope"];    
     
     constructor(private $scope: ng.IScope) {        
@@ -12,6 +11,6 @@ export class AppComponentController {
 }
 
 export var Component : ng.IComponentOptions = {
-    controller: AppComponentController.ControllerName,
+    controller: AppComponentController,
     templateUrl: "templates/AppComponent.html"
 }

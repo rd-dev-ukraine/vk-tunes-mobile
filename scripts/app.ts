@@ -25,17 +25,12 @@ export function onDeviceReady() {
            .service(VkAudioService.ServiceName, VkAudioService)
            .service(StoredAudioService.ServiceName, StoredAudioService)
            .service(AudioListHandler.ServiceName, AudioListHandler)
-           .controller(App.AppComponentController.ControllerName, App.AppComponentController)
-           .component("app", App.Component)
-           .controller(List.ListComponentController.ControllerName, List.ListComponentController)
+           .component("app", App.Component)           
            .component("list", List.Component)
            .component("tab", Tabs.TabConfiguration)
            .component("tabItem", Tabs.TabItemConfiguration)
-           .controller(MyAudio.MyAudioController.ControllerName, MyAudio.MyAudioController)
            .component("myAudio", MyAudio.Configuration)
-           .controller(SearchAudio.SearchAudioController.ControllerName, SearchAudio.SearchAudioController)
            .component("searchAudio", SearchAudio.Configuration)
-           .controller(AudioRecord.AudioRecordController.ControllerName, AudioRecord.AudioRecordController)
            .component("audioRecord", AudioRecord.Configuration)
            .config(function($locationProvider) {
                $locationProvider.html5Mode(true);

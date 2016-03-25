@@ -2,7 +2,7 @@
 
 export var TabActivatedEvent = "$tabActivated";
 
-export class TabComponentController {
+class TabComponentController {
     tabs: TabItemController[] = [];
 
     addTab(tab: TabItemController) {
@@ -18,7 +18,7 @@ export class TabComponentController {
     }
 }
 
-export class TabItemController {
+class TabItemController {
     static $inject = ["$scope"];
     
     selected = false;

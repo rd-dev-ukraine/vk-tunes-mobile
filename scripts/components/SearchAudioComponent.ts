@@ -3,8 +3,7 @@ import PS = require("../pub-sub/Decorators");
 import Messages = require("../handlers/Messages");
 
 @PS.Subscriber
-export class SearchAudioController {
-    static ControllerName = "SearchAudioController";
+class SearchAudioController {
     static $inject = ["$scope"];
 
     query: string;
@@ -34,6 +33,6 @@ export class SearchAudioController {
 }
 
 export var Configuration: ng.IComponentOptions = {
-    controller: SearchAudioController.ControllerName,
+    controller: SearchAudioController,
     templateUrl: "templates/SearchAudioComponent.html"
 };

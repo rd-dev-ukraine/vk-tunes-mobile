@@ -4,8 +4,7 @@ import Messages = require("../handlers/Messages");
 import Tabs = require("TabComponent");
 
 @PS.Subscriber
-export class MyAudioController {
-    static ControllerName = "MyAudioController";
+class MyAudioController {
     static $inject = ["$scope"];
 
     audio: AudioInfo[]
@@ -32,6 +31,6 @@ export class MyAudioController {
 }
 
 export var Configuration: ng.IComponentOptions = {
-    controller: MyAudioController.ControllerName,
+    controller: MyAudioController,
     templateUrl: "templates/MyAudioComponent.html"
 };

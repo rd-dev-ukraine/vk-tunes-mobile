@@ -3,8 +3,7 @@ import PS = require("../pub-sub/Decorators");
 import Messages = require("../handlers/Messages");
 
 @PS.Subscriber
-export class AudioRecordController {
-    static ControllerName = "AudioRecordController";
+class AudioRecordController {    
     static $inject = ["$scope"];
     
     audio: AudioInfo;
@@ -25,6 +24,6 @@ export var Configuration: ng.IComponentOptions = {
     bindings: {
         audio: "<"  
     },
-    controller: AudioRecordController.ControllerName,
+    controller: AudioRecordController,
     templateUrl: "templates/AudioRecordComponent.html"        
 };

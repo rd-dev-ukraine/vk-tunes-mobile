@@ -605,12 +605,11 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
         ], ListComponentController);
         return ListComponentController;
     }());
-    exports.ListComponentController = ListComponentController;
     exports.Component = {
         bindings: {
             items: "<"
         },
-        controller: ListComponentController.ControllerName,
+        controller: ListComponentController,
         template: "\n    <ul>\n        <li ng-repeat=\"$item in $ctrl.items\">\n            <div ng-transclude></div>\n            <hr />\n        <li>\n    </ul>\n    ",
         transclude: true
     };
@@ -635,7 +634,6 @@ define("components/TabComponent", ["require", "exports"], function (require, exp
         };
         return TabComponentController;
     }());
-    exports.TabComponentController = TabComponentController;
     var TabItemController = (function () {
         function TabItemController($scope) {
             this.$scope = $scope;
@@ -651,7 +649,6 @@ define("components/TabComponent", ["require", "exports"], function (require, exp
         TabItemController.$inject = ["$scope"];
         return TabItemController;
     }());
-    exports.TabItemController = TabItemController;
     exports.TabConfiguration = {
         transclude: true,
         controller: TabComponentController,
@@ -675,16 +672,14 @@ define("components/AppComponent", ["require", "exports", "pub-sub/Decorators"], 
         function AppComponentController($scope) {
             this.$scope = $scope;
         }
-        AppComponentController.ControllerName = "AppComponentController";
         AppComponentController.$inject = ["$scope"];
         AppComponentController = __decorate([
             PS.Subscriber
         ], AppComponentController);
         return AppComponentController;
     }());
-    exports.AppComponentController = AppComponentController;
     exports.Component = {
-        controller: AppComponentController.ControllerName,
+        controller: AppComponentController,
         templateUrl: "templates/AppComponent.html"
     };
 });
@@ -744,7 +739,6 @@ define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators
             this.$scope.$$phase || this.$scope.$digest();
         };
         MyAudioController.prototype.publish = function (message) { };
-        MyAudioController.ControllerName = "MyAudioController";
         MyAudioController.$inject = ["$scope"];
         __decorate([
             PS.Handle(Messages.MyAudioLoaded)
@@ -754,9 +748,8 @@ define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators
         ], MyAudioController);
         return MyAudioController;
     }());
-    exports.MyAudioController = MyAudioController;
     exports.Configuration = {
-        controller: MyAudioController.ControllerName,
+        controller: MyAudioController,
         templateUrl: "templates/MyAudioComponent.html"
     };
 });
@@ -781,7 +774,6 @@ define("components/SearchAudioComponent", ["require", "exports", "pub-sub/Decora
             this.$scope.$$phase || this.$scope.$digest();
         };
         SearchAudioController.prototype.publish = function (message) { };
-        SearchAudioController.ControllerName = "SearchAudioController";
         SearchAudioController.$inject = ["$scope"];
         __decorate([
             PS.Handle(Messages.SearchAudioResultLoaded)
@@ -791,9 +783,8 @@ define("components/SearchAudioComponent", ["require", "exports", "pub-sub/Decora
         ], SearchAudioController);
         return SearchAudioController;
     }());
-    exports.SearchAudioController = SearchAudioController;
     exports.Configuration = {
-        controller: SearchAudioController.ControllerName,
+        controller: SearchAudioController,
         templateUrl: "templates/SearchAudioComponent.html"
     };
 });
@@ -809,7 +800,6 @@ define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decora
                 this.$scope.$$phase || this.$scope.$digest();
             }
         };
-        AudioRecordController.ControllerName = "AudioRecordController";
         AudioRecordController.$inject = ["$scope"];
         __decorate([
             PS.Handle(Messages.AudioInfoUpdated)
@@ -819,12 +809,11 @@ define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decora
         ], AudioRecordController);
         return AudioRecordController;
     }());
-    exports.AudioRecordController = AudioRecordController;
     exports.Configuration = {
         bindings: {
             audio: "<"
         },
-        controller: AudioRecordController.ControllerName,
+        controller: AudioRecordController,
         templateUrl: "templates/AudioRecordComponent.html"
     };
 });
@@ -905,17 +894,12 @@ define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "
             .service(VkAudioService.ServiceName, VkAudioService)
             .service(StoredAudioService.ServiceName, StoredAudioService)
             .service(AudioListHandler.ServiceName, AudioListHandler)
-            .controller(App.AppComponentController.ControllerName, App.AppComponentController)
             .component("app", App.Component)
-            .controller(List.ListComponentController.ControllerName, List.ListComponentController)
             .component("list", List.Component)
             .component("tab", Tabs.TabConfiguration)
             .component("tabItem", Tabs.TabItemConfiguration)
-            .controller(MyAudio.MyAudioController.ControllerName, MyAudio.MyAudioController)
             .component("myAudio", MyAudio.Configuration)
-            .controller(SearchAudio.SearchAudioController.ControllerName, SearchAudio.SearchAudioController)
             .component("searchAudio", SearchAudio.Configuration)
-            .controller(AudioRecord.AudioRecordController.ControllerName, AudioRecord.AudioRecordController)
             .component("audioRecord", AudioRecord.Configuration)
             .config(function ($locationProvider) {
             $locationProvider.html5Mode(true);

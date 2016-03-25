@@ -2,7 +2,7 @@
 import PS = require("../pub-sub/Decorators");
 
 @PS.Subscriber
-export class ListComponentController {
+class ListComponentController {
     static ControllerName = "ListComponentController";
     
     items: any[] = [];
@@ -12,7 +12,7 @@ export var Component: ng.IComponentOptions = {
     bindings: {
         items: "<"        
     }, 
-    controller: ListComponentController.ControllerName,    
+    controller: ListComponentController,    
     template: `
     <ul>
         <li ng-repeat="$item in $ctrl.items">
