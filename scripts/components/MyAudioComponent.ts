@@ -1,6 +1,7 @@
 /// <reference path="../../typings/browser.d.ts" />
 import PS = require("../pub-sub/Decorators");
 import Messages = require("../handlers/Messages");
+import Tabs = require("TabComponent");
 
 @PS.Subscriber
 export class MyAudioController {
@@ -9,11 +10,12 @@ export class MyAudioController {
 
     audio: AudioInfo[]
 
-    constructor(private $scope: ng.IScope) {
+    constructor(private $scope: ng.IScope) {        
     }
 
     $onInit() {
         this.reloadAudio();
+        this.$scope.$on(Tabs.TabActivatedEvent, () => this.reloadAudio());
     }
 
     reloadAudio() {

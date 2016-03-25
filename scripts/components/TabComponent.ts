@@ -1,5 +1,7 @@
 /// <reference path="../../typings/browser.d.ts" />
 
+export var TabActivatedEvent = "$tabActivated";
+
 export class TabComponentController {
     tabs: TabItemController[] = [];
 
@@ -12,17 +14,27 @@ export class TabComponentController {
     select(tab: TabItemController) {
         this.tabs.forEach(t => t.selected = false);
         tab.selected = true;
+        tab.$onActivate();
     }
 }
 
 export class TabItemController {
+    static $inject = ["$scope"];
+    
     selected = false;
     title: string = "";
+    
+    constructor(private $scope: ng.IScope) {        
+    }
 
     tab: TabComponentController;
 
     $onInit() {
         this.tab.addTab(this);
+    }
+    
+    $onActivate() {
+        this.$scope.$broadcast(TabActivatedEvent, this);
     }
 }
 

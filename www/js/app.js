@@ -615,6 +615,7 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
 /// <reference path="../../typings/browser.d.ts" />
 define("components/TabComponent", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.TabActivatedEvent = "$tabActivated";
     var TabComponentController = (function () {
         function TabComponentController() {
             this.tabs = [];
@@ -627,18 +628,24 @@ define("components/TabComponent", ["require", "exports"], function (require, exp
         TabComponentController.prototype.select = function (tab) {
             this.tabs.forEach(function (t) { return t.selected = false; });
             tab.selected = true;
+            tab.$onActivate();
         };
         return TabComponentController;
     }());
     exports.TabComponentController = TabComponentController;
     var TabItemController = (function () {
-        function TabItemController() {
+        function TabItemController($scope) {
+            this.$scope = $scope;
             this.selected = false;
             this.title = "";
         }
         TabItemController.prototype.$onInit = function () {
             this.tab.addTab(this);
         };
+        TabItemController.prototype.$onActivate = function () {
+            this.$scope.$broadcast(exports.TabActivatedEvent, this);
+        };
+        TabItemController.$inject = ["$scope"];
         return TabItemController;
     }());
     exports.TabItemController = TabItemController;
@@ -715,14 +722,16 @@ define("handlers/Messages", ["require", "exports"], function (require, exports) 
     }());
     exports.AudioInfoUpdated = AudioInfoUpdated;
 });
-define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators", "handlers/Messages"], function (require, exports, PS, Messages) {
+define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators", "handlers/Messages", "components/TabComponent"], function (require, exports, PS, Messages, Tabs) {
     "use strict";
     var MyAudioController = (function () {
         function MyAudioController($scope) {
             this.$scope = $scope;
         }
         MyAudioController.prototype.$onInit = function () {
+            var _this = this;
             this.reloadAudio();
+            this.$scope.$on(Tabs.TabActivatedEvent, function () { return _this.reloadAudio(); });
         };
         MyAudioController.prototype.reloadAudio = function () {
             this.publish(new Messages.LoadMyAudio());
