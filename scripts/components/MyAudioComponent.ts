@@ -1,6 +1,6 @@
 /// <reference path="../../typings/browser.d.ts" />
 import PS = require("../pub-sub/Decorators");
-import Messages = require("../handlers/AudioListMessages");
+import Messages = require("../handlers/Messages");
 
 @PS.Subscriber
 export class MyAudioController {

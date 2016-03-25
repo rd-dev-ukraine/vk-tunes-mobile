@@ -2,7 +2,7 @@
 
 import VkAudioService = require("../vk/VkAudioService");
 import StoredAudioService = require("../vk/StoredAudioService");
-import Messages = require("AudioListMessages");
+import Messages = require("Messages");
 import PS = require("../pub-sub/Decorators");
 
 @PS.Subscriber
@@ -28,7 +28,8 @@ class AudioListHandler {
             this.publish(new Messages.MyAudioLoaded(list));
                 
             this.vk.getAudioSize(list, (record, size) => {
-                this.publish(new Messages.AudioSizeLoaded(record));
+                record.fileSize = size;
+                this.publish(new Messages.AudioInfoUpdated(record));
             });
         });
     }

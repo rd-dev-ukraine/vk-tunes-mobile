@@ -618,29 +618,6 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
         transclude: true
     };
 });
-define("handlers/AudioListMessages", ["require", "exports"], function (require, exports) {
-    "use strict";
-    var LoadMyAudio = (function () {
-        function LoadMyAudio() {
-        }
-        return LoadMyAudio;
-    }());
-    exports.LoadMyAudio = LoadMyAudio;
-    var MyAudioLoaded = (function () {
-        function MyAudioLoaded(audio) {
-            this.audio = audio;
-        }
-        return MyAudioLoaded;
-    }());
-    exports.MyAudioLoaded = MyAudioLoaded;
-    var AudioSizeLoaded = (function () {
-        function AudioSizeLoaded(audio) {
-            this.audio = audio;
-        }
-        return AudioSizeLoaded;
-    }());
-    exports.AudioSizeLoaded = AudioSizeLoaded;
-});
 define("components/AppComponent", ["require", "exports", "pub-sub/Decorators"], function (require, exports, PS) {
     "use strict";
     var AppComponentController = (function () {
@@ -660,7 +637,30 @@ define("components/AppComponent", ["require", "exports", "pub-sub/Decorators"], 
         templateUrl: "templates/AppComponent.html"
     };
 });
-define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators", "handlers/AudioListMessages"], function (require, exports, PS, Messages) {
+define("handlers/Messages", ["require", "exports"], function (require, exports) {
+    "use strict";
+    var LoadMyAudio = (function () {
+        function LoadMyAudio() {
+        }
+        return LoadMyAudio;
+    }());
+    exports.LoadMyAudio = LoadMyAudio;
+    var MyAudioLoaded = (function () {
+        function MyAudioLoaded(audio) {
+            this.audio = audio;
+        }
+        return MyAudioLoaded;
+    }());
+    exports.MyAudioLoaded = MyAudioLoaded;
+    var AudioInfoUpdated = (function () {
+        function AudioInfoUpdated(audio) {
+            this.audio = audio;
+        }
+        return AudioInfoUpdated;
+    }());
+    exports.AudioInfoUpdated = AudioInfoUpdated;
+});
+define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators", "handlers/Messages"], function (require, exports, PS, Messages) {
     "use strict";
     var MyAudioController = (function () {
         function MyAudioController($scope) {
@@ -693,7 +693,7 @@ define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators
         templateUrl: "templates/MyAudioComponent.html"
     };
 });
-define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decorators", "handlers/AudioListMessages"], function (require, exports, PS, Messages) {
+define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decorators", "handlers/Messages"], function (require, exports, PS, Messages) {
     "use strict";
     var AudioRecordController = (function () {
         function AudioRecordController($scope) {
@@ -701,14 +701,14 @@ define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decora
         }
         AudioRecordController.prototype.onAudioSizeGot = function (message) {
             if (this.audio && this.audio.remote.id === message.audio.remote.id) {
-                this.audio.fileSize = message.audio.fileSize;
+                this.audio = message.audio;
                 this.$scope.$$phase || this.$scope.$digest();
             }
         };
         AudioRecordController.ControllerName = "AudioRecordController";
         AudioRecordController.$inject = ["$scope"];
         __decorate([
-            PS.Handle(Messages.AudioSizeLoaded)
+            PS.Handle(Messages.AudioInfoUpdated)
         ], AudioRecordController.prototype, "onAudioSizeGot", null);
         AudioRecordController = __decorate([
             PS.Subscriber
@@ -725,7 +725,7 @@ define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decora
     };
 });
 /// <reference path="../../typings/browser.d.ts" />
-define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", "vk/StoredAudioService", "handlers/AudioListMessages", "pub-sub/Decorators"], function (require, exports, VkAudioService, StoredAudioService, Messages, PS) {
+define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", "vk/StoredAudioService", "handlers/Messages", "pub-sub/Decorators"], function (require, exports, VkAudioService, StoredAudioService, Messages, PS) {
     "use strict";
     var AudioListHandler = (function () {
         function AudioListHandler(vk, storage) {
@@ -743,7 +743,8 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", 
                 var list = _this.audio(remote, local);
                 _this.publish(new Messages.MyAudioLoaded(list));
                 _this.vk.getAudioSize(list, function (record, size) {
-                    _this.publish(new Messages.AudioSizeLoaded(record));
+                    record.fileSize = size;
+                    _this.publish(new Messages.AudioInfoUpdated(record));
                 });
             });
         };

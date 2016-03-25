@@ -1,6 +1,6 @@
 /// <reference path="../../typings/browser.d.ts" />
 import PS = require("../pub-sub/Decorators");
-import Messages = require("../handlers/AudioListMessages");
+import Messages = require("../handlers/Messages");
 
 @PS.Subscriber
 export class AudioRecordController {
@@ -11,11 +11,11 @@ export class AudioRecordController {
     
     constructor(private $scope: ng.IScope) { }
     
-    @PS.Handle(Messages.AudioSizeLoaded)
-    onAudioSizeGot(message: Messages.AudioSizeLoaded) {
+    @PS.Handle(Messages.AudioInfoUpdated)
+    onAudioSizeGot(message: Messages.AudioInfoUpdated) {
         
         if (this.audio && this.audio.remote.id === message.audio.remote.id) {            
-            this.audio.fileSize = message.audio.fileSize;
+            this.audio = message.audio;
             this.$scope.$$phase || this.$scope.$digest();
         }
     }

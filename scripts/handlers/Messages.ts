@@ -7,6 +7,6 @@ export class MyAudioLoaded {
     constructor(public audio: AudioInfo[]) { }
 }
 
-export class AudioSizeLoaded {
+export class AudioInfoUpdated {
     constructor(public audio: AudioInfo) { }
 }
