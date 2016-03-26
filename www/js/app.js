@@ -597,7 +597,20 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
     var ListComponentController = (function () {
         function ListComponentController() {
             this.items = [];
+            this.selectedItems = [];
+            this.selectionMode = false;
         }
+        ListComponentController.prototype.isSelected = function (item) {
+            return this.items.some(function (e) { return e === item; });
+        };
+        ListComponentController.prototype.toggleSelection = function (item) {
+            if (!this.selectionMode)
+                return;
+            if (this.isSelected(item))
+                this.selectedItems = this.selectedItems.filter(function (e) { return e !== item; });
+            else
+                this.selectedItems.push(item);
+        };
         ListComponentController.ControllerName = "ListComponentController";
         ListComponentController = __decorate([
             PS.Subscriber
@@ -606,10 +619,11 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
     }());
     exports.Component = {
         bindings: {
-            items: "<"
+            items: "<",
+            selectionMode: "="
         },
         controller: ListComponentController,
-        template: "\n    <ul>\n        <li ng-repeat=\"$item in $ctrl.items\">\n            <div ng-transclude></div>\n            <hr />\n        <li>\n    </ul>\n    ",
+        template: "\n    <h3>{{$ctrl.selectionMode}}</h3>\n    <ul>\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $ctrl.items\">\n            <div class=\"list-item__container\">\n                <div class=\"list-item__selector\"\n                     style=\"float: left\"\n                     ng-show=\"$ctrl.selectionMode\">\n                    <input type=\"checkbox\"\n                           ng-checked=\"$ctrl.isSelected($item)\"\n                           ng-click=\"$ctrl.toggleSelection($item)\" />\n                </div>\n                <div ng-transclude></div>\n            </div>\n            <hr />            \n        <li>\n    </ul>\n    ",
         transclude: true
     };
 });
@@ -679,7 +693,7 @@ define("components/AppComponent", ["require", "exports", "pub-sub/Decorators"], 
     }());
     exports.Component = {
         controller: AppComponentController,
-        templateUrl: "templates/AppComponent.html"
+        template: "\n<div>\n    <h1>VK-Tunes mobile app</h1>\n    <tab>\n        <tab-item title=\"My Audio\">\n            <my-audio></my-audio>\n        </tab-item>\n        <tab-item title=\"Search Audio\">\n            <search-audio></search-audio>\n        </tab-item>\n    </tab>\n</div>\n"
     };
 });
 define("handlers/Messages", ["require", "exports"], function (require, exports) {
@@ -749,7 +763,7 @@ define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators
     }());
     exports.Configuration = {
         controller: MyAudioController,
-        templateUrl: "templates/MyAudioComponent.html"
+        template: "\n<h2>My audio</h2>\n<audio-list audio=\"$ctrl.audio\"></audio-list>\n"
     };
 });
 define("components/SearchAudioComponent", ["require", "exports", "pub-sub/Decorators", "handlers/Messages"], function (require, exports, PS, Messages) {
@@ -784,7 +798,7 @@ define("components/SearchAudioComponent", ["require", "exports", "pub-sub/Decora
     }());
     exports.Configuration = {
         controller: SearchAudioController,
-        templateUrl: "templates/SearchAudioComponent.html"
+        template: "\n<h2>Search audio</h2>\n<div>\n    <input ng-model=\"$ctrl.query\"\n        ng-model-options=\"{ debounce: 100 }\"\n        type=\"text\" />\n</div>\n<audio-list audio=\"$ctrl.audio\"></audio-list>\n"
     };
 });
 define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decorators", "handlers/Messages"], function (require, exports, PS, Messages) {
@@ -813,7 +827,26 @@ define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decora
             audio: "<"
         },
         controller: AudioRecordController,
-        templateUrl: "templates/AudioRecordComponent.html"
+        template: "\n<div>\n  <span ng-show=\"$ctrl.audio.isInMyAudio\">[*] </span>\n  <strong>{{$ctrl.audio.remote.artist}}</strong> - {{$ctrl.audio.remote.title}}\n  <em>{{$ctrl.audio.fileSize}}</em>\n</div>\n"
+    };
+});
+define("components/AudioListComponent", ["require", "exports"], function (require, exports) {
+    "use strict";
+    var AudioListController = (function () {
+        function AudioListController() {
+            this.selectionMode = false;
+        }
+        AudioListController.prototype.toggleSelection = function () {
+            this.selectionMode = !this.selectionMode;
+        };
+        return AudioListController;
+    }());
+    exports.Configuration = {
+        bindings: {
+            audio: "<"
+        },
+        controller: AudioListController,
+        template: "<div>\n         <button ng-click=\"$ctrl.toggleSelection()\">Select</button>\n     </div>\n     <list items=\"$ctrl.audio\" selectionMode=\"$ctrl.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
     };
 });
 /// <reference path="../../typings/browser.d.ts" />
@@ -884,7 +917,7 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", 
     return AudioListHandler;
 });
 /// <references path="../typings/main.d.ts" />
-define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "vk/StoredAudioService", "components/ListComponent", "components/TabComponent", "components/AppComponent", "components/MyAudioComponent", "components/SearchAudioComponent", "components/AudioRecordComponent", "handlers/AudioListHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, App, MyAudio, SearchAudio, AudioRecord, AudioListHandler) {
+define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "vk/StoredAudioService", "components/ListComponent", "components/TabComponent", "components/AppComponent", "components/MyAudioComponent", "components/SearchAudioComponent", "components/AudioRecordComponent", "components/AudioListComponent", "handlers/AudioListHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, App, MyAudio, SearchAudio, AudioRecord, AudioList, AudioListHandler) {
     "use strict";
     function onDeviceReady() {
         angular.module("vk-tunes", [])
@@ -897,6 +930,7 @@ define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "
             .component("list", List.Component)
             .component("tab", Tabs.TabConfiguration)
             .component("tabItem", Tabs.TabItemConfiguration)
+            .component("audioList", AudioList.Configuration)
             .component("myAudio", MyAudio.Configuration)
             .component("searchAudio", SearchAudio.Configuration)
             .component("audioRecord", AudioRecord.Configuration)

@@ -32,5 +32,9 @@ class MyAudioController {
 
 export var Configuration: ng.IComponentOptions = {
     controller: MyAudioController,
-    templateUrl: "templates/MyAudioComponent.html"
+    template: 
+`
+<h2>My audio</h2>
+<audio-list audio="$ctrl.audio"></audio-list>
+`
 };

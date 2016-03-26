@@ -12,5 +12,18 @@ class AppComponentController {
 
 export var Component : ng.IComponentOptions = {
     controller: AppComponentController,
-    templateUrl: "templates/AppComponent.html"
+    template:
+`
+<div>
+    <h1>VK-Tunes mobile app</h1>
+    <tab>
+        <tab-item title="My Audio">
+            <my-audio></my-audio>
+        </tab-item>
+        <tab-item title="Search Audio">
+            <search-audio></search-audio>
+        </tab-item>
+    </tab>
+</div>
+`
 }

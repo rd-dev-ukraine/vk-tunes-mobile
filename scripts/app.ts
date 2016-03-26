@@ -13,7 +13,7 @@ import App = require("components/AppComponent");
 import MyAudio = require("components/MyAudioComponent");
 import SearchAudio = require("components/SearchAudioComponent");
 import AudioRecord = require("components/AudioRecordComponent");
-
+import AudioList = require("components/AudioListComponent");
 
 import AudioListHandler = require("handlers/AudioListHandler");
 
@@ -29,6 +29,7 @@ export function onDeviceReady() {
            .component("list", List.Component)
            .component("tab", Tabs.TabConfiguration)
            .component("tabItem", Tabs.TabItemConfiguration)
+           .component("audioList", AudioList.Configuration)
            .component("myAudio", MyAudio.Configuration)
            .component("searchAudio", SearchAudio.Configuration)
            .component("audioRecord", AudioRecord.Configuration)
