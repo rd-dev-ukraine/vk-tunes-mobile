@@ -19,7 +19,7 @@ export var Configuration: ng.IComponentOptions = {
     `<div>
          <button ng-click="$ctrl.toggleSelection()">Select</button>
      </div>
-     <list items="$ctrl.audio" selectionMode="$ctrl.selectionMode">
+     <list items="$ctrl.audio" selection-mode="$ctrl.selectionMode">
          <audio-record audio="$parent.$item"></audio-record>
      </list>`    
 };

@@ -11,7 +11,7 @@ class ListComponentController {
     selectionMode: boolean = false;
     
     isSelected(item: any): boolean {
-        return this.items.some(e => e === item);
+        return (this.selectedItems || []).some(e => e === item);
     }
     
     toggleSelection(item: any) {
@@ -32,7 +32,6 @@ export var Component: ng.IComponentOptions = {
     }, 
     controller: ListComponentController,    
     template: `
-    <h3>{{$ctrl.selectionMode}}</h3>
     <ul>
         <li class="list-item"
             ng-repeat="$item in $ctrl.items">

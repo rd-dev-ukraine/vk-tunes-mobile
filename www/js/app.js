@@ -601,7 +601,7 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
             this.selectionMode = false;
         }
         ListComponentController.prototype.isSelected = function (item) {
-            return this.items.some(function (e) { return e === item; });
+            return (this.selectedItems || []).some(function (e) { return e === item; });
         };
         ListComponentController.prototype.toggleSelection = function (item) {
             if (!this.selectionMode)
@@ -623,7 +623,7 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
             selectionMode: "="
         },
         controller: ListComponentController,
-        template: "\n    <h3>{{$ctrl.selectionMode}}</h3>\n    <ul>\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $ctrl.items\">\n            <div class=\"list-item__container\">\n                <div class=\"list-item__selector\"\n                     style=\"float: left\"\n                     ng-show=\"$ctrl.selectionMode\">\n                    <input type=\"checkbox\"\n                           ng-checked=\"$ctrl.isSelected($item)\"\n                           ng-click=\"$ctrl.toggleSelection($item)\" />\n                </div>\n                <div ng-transclude></div>\n            </div>\n            <hr />            \n        <li>\n    </ul>\n    ",
+        template: "\n    <div>{{$ctrl.selectedItems | json}}</div>\n    <ul>\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $ctrl.items\">\n            <div class=\"list-item__container\">\n                <div class=\"list-item__selector\"\n                     style=\"float: left\"\n                     ng-show=\"$ctrl.selectionMode\">\n                    <input type=\"checkbox\"\n                           ng-checked=\"$ctrl.isSelected($item)\"\n                           ng-click=\"$ctrl.toggleSelection($item)\" />\n                </div>\n                <div ng-transclude></div>\n            </div>\n            <hr />            \n        <li>\n    </ul>\n    ",
         transclude: true
     };
 });
@@ -846,7 +846,7 @@ define("components/AudioListComponent", ["require", "exports"], function (requir
             audio: "<"
         },
         controller: AudioListController,
-        template: "<div>\n         <button ng-click=\"$ctrl.toggleSelection()\">Select</button>\n     </div>\n     <list items=\"$ctrl.audio\" selectionMode=\"$ctrl.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
+        template: "<div>\n         <button ng-click=\"$ctrl.toggleSelection()\">Select</button>\n     </div>\n     <list items=\"$ctrl.audio\" selection-mode=\"$ctrl.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
     };
 });
 /// <reference path="../../typings/browser.d.ts" />
