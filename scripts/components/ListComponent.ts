@@ -4,11 +4,17 @@ import PS = require("../pub-sub/Decorators");
 @PS.Subscriber
 class ListComponentController {
     static ControllerName = "ListComponentController";
+    static $inject = ["$timeout"];
+    
+    private isSelectionToggleScheduled = true;
     
     items: any[] = [];
     selectedItems: any[] = [];
     
     selectionMode: boolean = false;
+    
+    constructor(private $timeout: ng.ITimeoutService) {        
+    }
     
     isSelected(item: any): boolean {
         return (this.selectedItems || []).some(e => e === item);
@@ -23,6 +29,22 @@ class ListComponentController {
         else
             this.selectedItems.push(item);   
     }
+    
+    beginToggleSelection() {
+        if (this.selectionMode)
+            return;
+            
+        this.isSelectionToggleScheduled = true;
+        this.$timeout(1000, true)
+            .then(() => {
+                if (this.isSelectionToggleScheduled)
+                    this.selectionMode = true; 
+            });
+    }
+    
+    cancelToggleSelection() {
+        this.isSelectionToggleScheduled = false;
+    }
 }
 
 export var Component: ng.IComponentOptions = {
@@ -30,18 +52,19 @@ export var Component: ng.IComponentOptions = {
         items: "<",
         selectionMode: "="
     }, 
-    controller: ListComponentController,    
+    controller: ListComponentController,
+    controllerAs: "$c",
     template: `
-    <ul>
+    <ul ng-mousedown="$c.beginToggleSelection()" ng-mouseup="$c.cancelToggleSelection()">
         <li class="list-item"
-            ng-repeat="$item in $ctrl.items">
+            ng-repeat="$item in $c.items">
             <div class="list-item__container">
                 <div class="list-item__selector"
                      style="float: left"
-                     ng-show="$ctrl.selectionMode">
+                     ng-show="$c.selectionMode">
                     <input type="checkbox"
-                           ng-checked="$ctrl.isSelected($item)"
-                           ng-click="$ctrl.toggleSelection($item)" />
+                           ng-checked="$c.isSelected($item)"
+                           ng-click="$c.toggleSelection($item)" />
                 </div>
                 <div ng-transclude></div>
             </div>

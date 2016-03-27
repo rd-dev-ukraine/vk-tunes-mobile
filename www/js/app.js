@@ -595,7 +595,9 @@ define("pub-sub/Decorators", ["require", "exports", "pub-sub/EventBus", "pub-sub
 define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"], function (require, exports, PS) {
     "use strict";
     var ListComponentController = (function () {
-        function ListComponentController() {
+        function ListComponentController($timeout) {
+            this.$timeout = $timeout;
+            this.isSelectionToggleScheduled = true;
             this.items = [];
             this.selectedItems = [];
             this.selectionMode = false;
@@ -611,7 +613,22 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
             else
                 this.selectedItems.push(item);
         };
+        ListComponentController.prototype.beginToggleSelection = function () {
+            var _this = this;
+            if (this.selectionMode)
+                return;
+            this.isSelectionToggleScheduled = true;
+            this.$timeout(1000, true)
+                .then(function () {
+                if (_this.isSelectionToggleScheduled)
+                    _this.selectionMode = true;
+            });
+        };
+        ListComponentController.prototype.cancelToggleSelection = function () {
+            this.isSelectionToggleScheduled = false;
+        };
         ListComponentController.ControllerName = "ListComponentController";
+        ListComponentController.$inject = ["$timeout"];
         ListComponentController = __decorate([
             PS.Subscriber
         ], ListComponentController);
@@ -623,7 +640,8 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
             selectionMode: "="
         },
         controller: ListComponentController,
-        template: "\n    <div>{{$ctrl.selectedItems | json}}</div>\n    <ul>\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $ctrl.items\">\n            <div class=\"list-item__container\">\n                <div class=\"list-item__selector\"\n                     style=\"float: left\"\n                     ng-show=\"$ctrl.selectionMode\">\n                    <input type=\"checkbox\"\n                           ng-checked=\"$ctrl.isSelected($item)\"\n                           ng-click=\"$ctrl.toggleSelection($item)\" />\n                </div>\n                <div ng-transclude></div>\n            </div>\n            <hr />            \n        <li>\n    </ul>\n    ",
+        controllerAs: "$c",
+        template: "\n    <ul ng-mousedown=\"$c.beginToggleSelection()\" ng-mouseup=\"$c.cancelToggleSelection()\">\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $c.items\">\n            <div class=\"list-item__container\">\n                <div class=\"list-item__selector\"\n                     style=\"float: left\"\n                     ng-show=\"$c.selectionMode\">\n                    <input type=\"checkbox\"\n                           ng-checked=\"$c.isSelected($item)\"\n                           ng-click=\"$c.toggleSelection($item)\" />\n                </div>\n                <div ng-transclude></div>\n            </div>\n            <hr />            \n        <li>\n    </ul>\n    ",
         transclude: true
     };
 });
