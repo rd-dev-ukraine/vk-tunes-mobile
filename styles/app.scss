@@ -1,5 +1,9 @@
 @import "_reset";
 
+html {
+    -webkit-user-select: none;
+}
+
 .body {
     color: #c0c0c0;
 }

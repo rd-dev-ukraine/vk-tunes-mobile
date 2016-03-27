@@ -6,7 +6,7 @@ class ListComponentController {
     static ControllerName = "ListComponentController";
     static $inject = ["$timeout"];
     
-    private isSelectionToggleScheduled = true;
+    private selectionTogglePromise: ng.IPromise<any>;
     
     items: any[] = [];
     selectedItems: any[] = [];
@@ -32,18 +32,19 @@ class ListComponentController {
     
     beginToggleSelection() {
         if (this.selectionMode)
-            return;
-            
-        this.isSelectionToggleScheduled = true;
-        this.$timeout(1000, true)
+            return;           
+        
+        this.selectionTogglePromise = this.$timeout(1000, true);
+        
+        this.selectionTogglePromise
             .then(() => {
-                if (this.isSelectionToggleScheduled)
-                    this.selectionMode = true; 
+                this.selectionMode = true;                
             });
     }
     
     cancelToggleSelection() {
-        this.isSelectionToggleScheduled = false;
+        if (this.selectionTogglePromise)
+            this.$timeout.cancel(this.selectionTogglePromise);
     }
 }
 
@@ -55,7 +56,8 @@ export var Component: ng.IComponentOptions = {
     controller: ListComponentController,
     controllerAs: "$c",
     template: `
-    <ul ng-mousedown="$c.beginToggleSelection()" ng-mouseup="$c.cancelToggleSelection()">
+    <ul ng-mousedown="$c.beginToggleSelection()" ng-mouseup="$c.cancelToggleSelection()" ng-mousemove="$c.cancelToggleSelection()"
+        ng-touchstart="$c.beginToggleSelection()" ng-touchend="$c.cancelToggleSelection()" ng-touchmove="$c.cancelToggleSelection()">
         <li class="list-item"
             ng-repeat="$item in $c.items">
             <div class="list-item__container">

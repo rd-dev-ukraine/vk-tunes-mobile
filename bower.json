@@ -20,6 +20,7 @@
     "requirejs": "^2.2.0",
     "angular": "^1.5.2",
     "es6-promise": "^3.2.1",
-    "fetch": "^0.11.0"
+    "fetch": "^0.11.0",
+    "ngtouch": "^1.0.1"
   }
 }

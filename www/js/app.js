@@ -597,7 +597,6 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
     var ListComponentController = (function () {
         function ListComponentController($timeout) {
             this.$timeout = $timeout;
-            this.isSelectionToggleScheduled = true;
             this.items = [];
             this.selectedItems = [];
             this.selectionMode = false;
@@ -617,15 +616,15 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
             var _this = this;
             if (this.selectionMode)
                 return;
-            this.isSelectionToggleScheduled = true;
-            this.$timeout(1000, true)
+            this.selectionTogglePromise = this.$timeout(1000, true);
+            this.selectionTogglePromise
                 .then(function () {
-                if (_this.isSelectionToggleScheduled)
-                    _this.selectionMode = true;
+                _this.selectionMode = true;
             });
         };
         ListComponentController.prototype.cancelToggleSelection = function () {
-            this.isSelectionToggleScheduled = false;
+            if (this.selectionTogglePromise)
+                this.$timeout.cancel(this.selectionTogglePromise);
         };
         ListComponentController.ControllerName = "ListComponentController";
         ListComponentController.$inject = ["$timeout"];
@@ -641,7 +640,7 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
         },
         controller: ListComponentController,
         controllerAs: "$c",
-        template: "\n    <ul ng-mousedown=\"$c.beginToggleSelection()\" ng-mouseup=\"$c.cancelToggleSelection()\">\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $c.items\">\n            <div class=\"list-item__container\">\n                <div class=\"list-item__selector\"\n                     style=\"float: left\"\n                     ng-show=\"$c.selectionMode\">\n                    <input type=\"checkbox\"\n                           ng-checked=\"$c.isSelected($item)\"\n                           ng-click=\"$c.toggleSelection($item)\" />\n                </div>\n                <div ng-transclude></div>\n            </div>\n            <hr />            \n        <li>\n    </ul>\n    ",
+        template: "\n    <ul ng-mousedown=\"$c.beginToggleSelection()\" ng-mouseup=\"$c.cancelToggleSelection()\" ng-mousemove=\"$c.cancelToggleSelection()\"\n        ng-touchstart=\"$c.beginToggleSelection()\" ng-touchend=\"$c.cancelToggleSelection()\" ng-touchmove=\"$c.cancelToggleSelection()\">\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $c.items\">\n            <div class=\"list-item__container\">\n                <div class=\"list-item__selector\"\n                     style=\"float: left\"\n                     ng-show=\"$c.selectionMode\">\n                    <input type=\"checkbox\"\n                           ng-checked=\"$c.isSelected($item)\"\n                           ng-click=\"$c.toggleSelection($item)\" />\n                </div>\n                <div ng-transclude></div>\n            </div>\n            <hr />            \n        <li>\n    </ul>\n    ",
         transclude: true
     };
 });
@@ -938,7 +937,7 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", 
 define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "vk/StoredAudioService", "components/ListComponent", "components/TabComponent", "components/AppComponent", "components/MyAudioComponent", "components/SearchAudioComponent", "components/AudioRecordComponent", "components/AudioListComponent", "handlers/AudioListHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, App, MyAudio, SearchAudio, AudioRecord, AudioList, AudioListHandler) {
     "use strict";
     function onDeviceReady() {
-        angular.module("vk-tunes", [])
+        angular.module("vk-tunes", ["ngTouch"])
             .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
             .service(Directory.ServiceName, Directory)
             .service(VkAudioService.ServiceName, VkAudioService)
