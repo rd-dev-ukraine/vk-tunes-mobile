@@ -17,3 +17,7 @@ export class SearchAudioResultLoaded {
 export class AudioInfoUpdated {
     constructor(public audio: AudioInfo) { }
 }
+
+export class DownloadAudio {
+    constructor(public audio: AudioInfo[]) { }
+}

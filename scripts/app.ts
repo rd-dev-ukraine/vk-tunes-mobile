@@ -16,6 +16,7 @@ import AudioRecord = require("components/AudioRecordComponent");
 import AudioList = require("components/AudioListComponent");
 
 import AudioListHandler = require("handlers/AudioListHandler");
+import DownloadAudioHandler = require("handlers/DownloadAudioHandler");
 
 export function onDeviceReady() {
 
@@ -25,6 +26,7 @@ export function onDeviceReady() {
            .service(VkAudioService.ServiceName, VkAudioService)
            .service(StoredAudioService.ServiceName, StoredAudioService)
            .service(AudioListHandler.ServiceName, AudioListHandler)
+           .service(DownloadAudioHandler.ServiceName, DownloadAudioHandler)
            .component("app", App.Component)           
            .component("list", List.Component)
            .component("tab", Tabs.TabConfiguration)
@@ -38,8 +40,9 @@ export function onDeviceReady() {
            })
            .run([
                AudioListHandler.ServiceName,
-               (audioListHandler: AudioListHandler) => {
-                   // Do nothing, just to ensure AudioListHandler is instantiated.
+               DownloadAudioHandler.ServiceName,
+               (audioListHandler, downloadAudioHandler) => {
+                   // Do nothing, just to ensure all handlers are instantiated.
                }
            ]);
 

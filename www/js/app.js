@@ -441,6 +441,10 @@ define("vk/VkAudioService", ["require", "exports", "vk/VkTypedApi", "task-queue/
                 });
             });
         };
+        VkService.prototype.enqueueDownloading = function (audio) {
+            return this.queue
+                .enqueueLast(function () { return Promise.resolve(audio); }, 10 /* DownloadFile */);
+        };
         VkService.ServiceName = "VkQueued";
         return VkService;
     }());
@@ -749,6 +753,13 @@ define("handlers/Messages", ["require", "exports"], function (require, exports) 
         return AudioInfoUpdated;
     }());
     exports.AudioInfoUpdated = AudioInfoUpdated;
+    var DownloadAudio = (function () {
+        function DownloadAudio(audio) {
+            this.audio = audio;
+        }
+        return DownloadAudio;
+    }());
+    exports.DownloadAudio = DownloadAudio;
 });
 define("components/MyAudioComponent", ["require", "exports", "pub-sub/Decorators", "handlers/Messages", "components/TabComponent"], function (require, exports, PS, Messages, Tabs) {
     "use strict";
@@ -933,8 +944,56 @@ define("handlers/AudioListHandler", ["require", "exports", "vk/VkAudioService", 
     }());
     return AudioListHandler;
 });
+/// <reference path="../../typings/browser.d.ts" />
+define("handlers/DownloadAudioHandler", ["require", "exports", "vk/VkAudioService", "vk/StoredAudioService", "handlers/Messages", "pub-sub/Decorators"], function (require, exports, VkAudioService, StoredAudioService, Messages, PS) {
+    "use strict";
+    var DownloadAudioHandler = (function () {
+        function DownloadAudioHandler(vk, fs) {
+            this.vk = vk;
+            this.fs = fs;
+            this.downloadQueue = [];
+            this.isDownloading = false;
+        }
+        DownloadAudioHandler.prototype.downloadAudio = function (message) {
+            (_a = this.downloadQueue).push.apply(_a, message.audio);
+            this.download();
+            var _a;
+        };
+        DownloadAudioHandler.prototype.publish = function (message) { };
+        DownloadAudioHandler.prototype.download = function () {
+            var _this = this;
+            if (this.isDownloading)
+                return;
+            if (this.downloadQueue.length) {
+                this.isDownloading = true;
+                var next = this.downloadQueue.shift();
+                this.vk
+                    .enqueueDownloading(next)
+                    .then(function (audio) { return _this.fs.download(audio.remote, function (p) { return _this.onProgress(p); }); })
+                    .then(function (local) {
+                    next.local = local;
+                    _this.publish(new Messages.AudioInfoUpdated(next));
+                    _this.isDownloading = false;
+                    _this.download();
+                });
+            }
+        };
+        DownloadAudioHandler.prototype.onProgress = function (progress) {
+        };
+        DownloadAudioHandler.ServiceName = "AudioListHandler";
+        DownloadAudioHandler.$inject = [VkAudioService.ServiceName, StoredAudioService.ServiceName];
+        __decorate([
+            PS.Handle(Messages.DownloadAudio)
+        ], DownloadAudioHandler.prototype, "downloadAudio", null);
+        DownloadAudioHandler = __decorate([
+            PS.Subscriber
+        ], DownloadAudioHandler);
+        return DownloadAudioHandler;
+    }());
+    return DownloadAudioHandler;
+});
 /// <references path="../typings/main.d.ts" />
-define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "vk/StoredAudioService", "components/ListComponent", "components/TabComponent", "components/AppComponent", "components/MyAudioComponent", "components/SearchAudioComponent", "components/AudioRecordComponent", "components/AudioListComponent", "handlers/AudioListHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, App, MyAudio, SearchAudio, AudioRecord, AudioList, AudioListHandler) {
+define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "vk/StoredAudioService", "components/ListComponent", "components/TabComponent", "components/AppComponent", "components/MyAudioComponent", "components/SearchAudioComponent", "components/AudioRecordComponent", "components/AudioListComponent", "handlers/AudioListHandler", "handlers/DownloadAudioHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, App, MyAudio, SearchAudio, AudioRecord, AudioList, AudioListHandler, DownloadAudioHandler) {
     "use strict";
     function onDeviceReady() {
         angular.module("vk-tunes", ["ngTouch"])
@@ -943,6 +1002,7 @@ define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "
             .service(VkAudioService.ServiceName, VkAudioService)
             .service(StoredAudioService.ServiceName, StoredAudioService)
             .service(AudioListHandler.ServiceName, AudioListHandler)
+            .service(DownloadAudioHandler.ServiceName, DownloadAudioHandler)
             .component("app", App.Component)
             .component("list", List.Component)
             .component("tab", Tabs.TabConfiguration)
@@ -956,8 +1016,9 @@ define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "
         })
             .run([
             AudioListHandler.ServiceName,
-            function (audioListHandler) {
-                // Do nothing, just to ensure AudioListHandler is instantiated.
+            DownloadAudioHandler.ServiceName,
+            function (audioListHandler, downloadAudioHandler) {
+                // Do nothing, just to ensure all handlers are instantiated.
             }
         ]);
         angular.bootstrap(document.getElementsByTagName("body")[0], ["vk-tunes"]);

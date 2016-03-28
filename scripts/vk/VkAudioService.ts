@@ -8,7 +8,7 @@ class VkService {
 
     private vk = new VkTypedApi();
     private queue = new PriorityQueue();
-    
+
     currentUser(): number {
         return this.vk.currentUser();
     }
@@ -39,6 +39,12 @@ class VkService {
                     callback(record, fileSize);
                 });
         });
+    }
+
+    enqueueDownloading(audio: AudioInfo): Promise<AudioInfo> {
+        return this.queue
+                    .enqueueLast(() => Promise.resolve(audio),
+                                 VkOperationPriority.DownloadFile);
     }
 }
 
