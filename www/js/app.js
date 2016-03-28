@@ -1041,3 +1041,4 @@ define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "
     exports.onDeviceReady = onDeviceReady;
     document.addEventListener("deviceready", onDeviceReady, false);
 });
+//# sourceMappingURL=app.js.map

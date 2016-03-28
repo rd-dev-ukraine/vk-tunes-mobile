@@ -8,6 +8,7 @@ export function Handle(messageType: any) {
 }
 
 export function Subscriber(ctor: any):any {
+    
     var newCtor = function (...args) {
         var instance = new ctor(...args);
         

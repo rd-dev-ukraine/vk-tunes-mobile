@@ -4,6 +4,7 @@
         "module": "amd", 
         "outFile": "www/js/app.js",
         "pretty": true,
-        "target": "es5"        
+        "target": "es5",
+        "sourceMap": true        
     }
 }
