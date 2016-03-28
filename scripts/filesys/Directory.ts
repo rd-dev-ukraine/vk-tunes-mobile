@@ -2,74 +2,71 @@
 
 class Directory {
     static ServiceName = "directory";
-    static PathDependency = "path"    
-
-    constructor(private path: string) {
-    }
 
     files(): Promise<FileInfo[]> {
-        return this.init()
-                   .then(_ =>  this.readDirectory());
+        return this.resolveRoot()
+            .then(dir => {
+                return new Promise((resolve, reject) => {
+                    dir.createReader()
+                        .readEntries(entries => {
+                            const fileInfo = entries.filter(e => e.isFile)
+                                .map(e => ({ path: e.fullPath, name: e.name }));
+                            resolve(fileInfo);
+                        },
+                        error => reject(error));
+                });
+            });
     }
 
     downloadFile(fromUrl: string, fileName: string, notify: (progressInfo: IFileDownloadingProgress) => void): Promise<FileInfo> {
 
-        var folder = this.path;
-        var targetPath = folder + "/" + fileName + ".mp3";
+        return this.resolveRoot()
+            .then(path => new Promise((resolve, reject) => {
+                var targetPath = path + fileName + ".mp3";
 
-        return this.init()
-                   .then(() => new Promise((resolve, reject) => {
-                        var transfer = new FileTransfer();
+                var transfer = new FileTransfer();
 
-                        transfer.onprogress = (event) => {
-                            if (event.lengthComputable) {
-                                var progressInfo: IFileDownloadingProgress = {
-                                    percent: Math.round(event.loaded / event.total * 100),
-                                    bytesLoaded: event.loaded,
-                                    bytesTotal: event.total
-                                };
-
-                                if (notify)
-                                    notify(progressInfo);
-                            }
+                transfer.onprogress = (event) => {
+                    if (event.lengthComputable) {
+                        var progressInfo: IFileDownloadingProgress = {
+                            percent: Math.round(event.loaded / event.total * 100),
+                            bytesLoaded: event.loaded,
+                            bytesTotal: event.total
                         };
 
-                        transfer.download(fromUrl,
-                                          targetPath,
-                                          file => {
-                                              resolve({
-                                                  path: file.fullPath,
-                                                  name: file.name
-                                              });
-                                          },
-                                          error => reject(error),
-                                          true);
-                   }));
+                        if (notify)
+                            notify(progressInfo);
+                    }
+                };
+
+                transfer.download(fromUrl,
+                    targetPath,
+                    file => {
+                        resolve({
+                            path: file.fullPath,
+                            name: file.name
+                        });
+                    },
+                    error => reject(error),
+                    true);
+            }));
     }
 
-    private init(): Promise<any> {
+    private resolveRoot(): Promise<DirectoryEntry> {
+        return this.requestFileSystem()
+            .then(fs => new Promise((resolve, reject) => {
+                window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Music",
+                    dirEntry => resolve(dirEntry),
+                    err => reject(err));
+            }));
+    }
+
+    private requestFileSystem(): Promise<FileSystem> {
         return new Promise((resolve, reject) => {
             window.requestFileSystem(
-                1,
+                window.PERSISTENT,
                 0,
                 fs => resolve(fs),
-                error => reject(error));
-        });
-    }
-
-    private readDirectory(): Promise<FileInfo[]> {
-        
-        return new Promise((resolve, reject) => {
-
-            window.resolveLocalFileSystemURL(
-                this.path,
-                (dirEntry: DirectoryEntry) => {
-                    dirEntry.createReader()
-                            .readEntries(entries => {                                
-                                resolve(entries.map(e => ({ path: e.fullPath, name: e.name })));
-                            },
-                            error => reject(error));
-                },
                 error => reject(error));
         });
     }

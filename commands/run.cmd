@@ -1,0 +1,1 @@
+nodevars && tsc && cordova build android && cordova run android

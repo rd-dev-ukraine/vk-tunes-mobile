@@ -2,19 +2,25 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var Directory = (function () {
-        function Directory(path) {
-            this.path = path;
+        function Directory() {
         }
         Directory.prototype.files = function () {
-            var _this = this;
-            return this.init()
-                .then(function (_) { return _this.readDirectory(); });
+            return this.resolveRoot()
+                .then(function (dir) {
+                return new Promise(function (resolve, reject) {
+                    dir.createReader()
+                        .readEntries(function (entries) {
+                        var fileInfo = entries.filter(function (e) { return e.isFile; })
+                            .map(function (e) { return ({ path: e.fullPath, name: e.name }); });
+                        resolve(fileInfo);
+                    }, function (error) { return reject(error); });
+                });
+            });
         };
         Directory.prototype.downloadFile = function (fromUrl, fileName, notify) {
-            var folder = this.path;
-            var targetPath = folder + "/" + fileName + ".mp3";
-            return this.init()
-                .then(function () { return new Promise(function (resolve, reject) {
+            return this.resolveRoot()
+                .then(function (path) { return new Promise(function (resolve, reject) {
+                var targetPath = path + fileName + ".mp3";
                 var transfer = new FileTransfer();
                 transfer.onprogress = function (event) {
                     if (event.lengthComputable) {
@@ -35,24 +41,18 @@ define(["require", "exports"], function (require, exports) {
                 }, function (error) { return reject(error); }, true);
             }); });
         };
-        Directory.prototype.init = function () {
-            return new Promise(function (resolve, reject) {
-                window.requestFileSystem(1, 0, function (fs) { return resolve(fs); }, function (error) { return reject(error); });
-            });
+        Directory.prototype.resolveRoot = function () {
+            return this.requestFileSystem()
+                .then(function (fs) { return new Promise(function (resolve, reject) {
+                window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Music", function (dirEntry) { return resolve(dirEntry); }, function (err) { return reject(err); });
+            }); });
         };
-        Directory.prototype.readDirectory = function () {
-            var _this = this;
+        Directory.prototype.requestFileSystem = function () {
             return new Promise(function (resolve, reject) {
-                window.resolveLocalFileSystemURL(_this.path, function (dirEntry) {
-                    dirEntry.createReader()
-                        .readEntries(function (entries) {
-                        resolve(entries.map(function (e) { return ({ path: e.fullPath, name: e.name }); }));
-                    }, function (error) { return reject(error); });
-                }, function (error) { return reject(error); });
+                window.requestFileSystem(window.PERSISTENT, 0, function (fs) { return resolve(fs); }, function (error) { return reject(error); });
             });
         };
         Directory.ServiceName = "directory";
-        Directory.PathDependency = "path";
         return Directory;
     }());
     return Directory;

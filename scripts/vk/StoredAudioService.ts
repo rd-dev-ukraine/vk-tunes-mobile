@@ -8,30 +8,29 @@ class StoredAudioService {
     static ServiceName = "StoredAudioService";
     static $inject = [Directory.ServiceName];
 
-    constructor(private fs: Directory) {}
+    constructor(private fs: Directory) { }
 
-    load() : Promise<StoredAudioRecord[]> {
-        /*return this.fs
-                   .files()
-                   .then(files => {
-                       return files.map(f => this.parseFileName(f.path));
-                   });*/
-        return Promise.resolve([]);
+    load(): Promise<StoredAudioRecord[]> {
+        return this.fs
+            .files()
+            .then(files => {
+                return files.map(f => this.parseFileName(f.path));
+            });
     }
-    
-    download(audio: VkAudioRecord, progress: (progress: IAudioDownloadingProgress) => void) : Promise<StoredAudioRecord> {
+
+    download(audio: VkAudioRecord, progress: (progress: IAudioDownloadingProgress) => void): Promise<StoredAudioRecord> {
         var fileName = this.buildFileName(audio);
-        
+
         this.fs
             .downloadFile(audio.url, fileName, p => progress({ audio_id: audio.id, bytesLoaded: p.bytesLoaded, bytesTotal: p.bytesTotal, percent: p.percent }))
             .then(f => ({
-                
+
             }));
-        
+
         return null;
     }
 
-    private parseFileName(path: string) : StoredAudioRecord {
+    private parseFileName(path: string): StoredAudioRecord {
 
         var fileName = this.getFileName(path);
 
@@ -47,7 +46,7 @@ class StoredAudioService {
         };
     }
 
-    private buildFileName(audio: VkAudioRecord) : string {
+    private buildFileName(audio: VkAudioRecord): string {
         return `${audio.id} - ${this.sanitize(audio.artist)} - ${this.sanitize(audio.title)}`;
     }
 

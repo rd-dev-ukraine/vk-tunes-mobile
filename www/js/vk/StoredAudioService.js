@@ -6,12 +6,12 @@ define(["require", "exports", "../filesys/Directory"], function (require, export
             this.fs = fs;
         }
         StoredAudioService.prototype.load = function () {
-            /*return this.fs
-                       .files()
-                       .then(files => {
-                           return files.map(f => this.parseFileName(f.path));
-                       });*/
-            return Promise.resolve([]);
+            var _this = this;
+            return this.fs
+                .files()
+                .then(function (files) {
+                return files.map(function (f) { return _this.parseFileName(f.path); });
+            });
         };
         StoredAudioService.prototype.download = function (audio, progress) {
             var fileName = this.buildFileName(audio);

@@ -21,7 +21,6 @@ import DownloadAudioHandler = require("./handlers/DownloadAudioHandler");
 export function onDeviceReady() {
 
     angular.module("vk-tunes", ["ngTouch"])
-           .value(Directory.PathDependency, "file:///storage/emulated/0/Music/vk")
            .service(Directory.ServiceName, Directory)
            .service(VkAudioService.ServiceName, VkAudioService)
            .service(StoredAudioService.ServiceName, StoredAudioService)
