@@ -21,3 +21,7 @@ export class AudioInfoUpdated {
 export class DownloadAudio {
     constructor(public audio: AudioInfo[]) { }
 }
+
+export class DownloadProgress {
+    constructor(public audio: AudioInfo, public progress: IAudioDownloadingProgress) {}
+}

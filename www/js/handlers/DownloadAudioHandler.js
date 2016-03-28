@@ -29,23 +29,19 @@ define(["require", "exports", "../vk/VkAudioService", "../vk/StoredAudioService"
                 var next = this.downloadQueue.shift();
                 this.vk
                     .enqueueDownloading(next)
-                    .then(function (audio) {
-                    return Promise.resolve({
-                        id: audio.remote.id,
-                        name: audio.remote.title,
-                        path: "/asdas/asdasd/" + audio.remote.title
-                    });
-                    //return this.fs.download(audio.remote, p => this.onProgress(p));
-                })
+                    .then(function (audio) { return _this.fs.download(audio.remote, function (p) { return _this.onProgress(audio, p); }); })
                     .then(function (local) {
                     next.local = local;
+                    _this.onProgress(next);
                     _this.publish(new Messages.AudioInfoUpdated(next));
                     _this.isDownloading = false;
                     _this.download();
                 });
             }
         };
-        DownloadAudioHandler.prototype.onProgress = function (progress) {
+        DownloadAudioHandler.prototype.onProgress = function (audio, progress) {
+            if (progress === void 0) { progress = null; }
+            this.publish(new Messages.DownloadProgress(audio, progress));
         };
         DownloadAudioHandler.ServiceName = "DownloadAudioHandler";
         DownloadAudioHandler.$inject = [VkAudioService.ServiceName, StoredAudioService.ServiceName];

@@ -42,4 +42,12 @@ define(["require", "exports"], function (require, exports) {
         return DownloadAudio;
     }());
     exports.DownloadAudio = DownloadAudio;
+    var DownloadProgress = (function () {
+        function DownloadProgress(audio, progress) {
+            this.audio = audio;
+            this.progress = progress;
+        }
+        return DownloadProgress;
+    }());
+    exports.DownloadProgress = DownloadProgress;
 });

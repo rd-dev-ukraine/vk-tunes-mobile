@@ -36,19 +36,12 @@ class DownloadAudioHandler {
             
             this.vk
                 .enqueueDownloading(next)
-                .then(audio => {
-                    
-                    return Promise.resolve(<StoredAudioRecord>{
-                        id: audio.remote.id,
-                        name: audio.remote.title,
-                        path: "/asdas/asdasd/" + audio.remote.title
-                    })
-                                        
-                    //return this.fs.download(audio.remote, p => this.onProgress(p));
-                })
+                .then(audio => this.fs.download(audio.remote, p => this.onProgress(audio, p)))
                 .then(local => {
                     next.local = local;
-                    this.publish(new Messages.AudioInfoUpdated(next));                   
+                    
+                    this.onProgress(next);
+                    this.publish(new Messages.AudioInfoUpdated(next));
                     
                     this.isDownloading = false;                    
 
@@ -57,7 +50,8 @@ class DownloadAudioHandler {
         }
     }
     
-    private onProgress(progress: IAudioDownloadingProgress) {        
+    private onProgress(audio: AudioInfo, progress: IAudioDownloadingProgress = null) {
+        this.publish(new Messages.DownloadProgress(audio, progress));
     }
 }
 

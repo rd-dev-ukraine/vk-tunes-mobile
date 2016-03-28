@@ -16,10 +16,18 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
                 this.$scope.$$phase || this.$scope.$digest();
             }
         };
+        AudioRecordController.prototype.onAudioDownloading = function (message) {
+            if (this.audio && this.audio.remote.id === message.audio.remote.id) {
+                this.downloadProgress = message.progress;
+            }
+        };
         AudioRecordController.$inject = ["$scope"];
         __decorate([
             PS.Handle(Messages.AudioInfoUpdated)
         ], AudioRecordController.prototype, "onAudioUpdated", null);
+        __decorate([
+            PS.Handle(Messages.DownloadProgress)
+        ], AudioRecordController.prototype, "onAudioDownloading", null);
         AudioRecordController = __decorate([
             PS.Subscriber
         ], AudioRecordController);
@@ -31,6 +39,6 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         },
         controller: AudioRecordController,
         controllerAs: "$c",
-        template: "\n<div>\n  <span ng-show=\"$c.audio.isInMyAudio\">[*] </span>\n  <span ng-show=\"$c.audio.local\">[@]</span>\n  <strong>{{$c.audio.remote.artist}}</strong> - {{$c.audio.remote.title}}\n  <em>{{$c.audio.fileSize}}</em>\n</div>\n"
+        template: "\n<div>\n  <span ng-show=\"$c.audio.isInMyAudio\">[*] </span>\n  <span ng-show=\"$c.audio.local\">[@]</span>\n  <strong>{{$c.audio.remote.artist}}</strong> - {{$c.audio.remote.title}}  \n</div>\n<div>\n    File size <em>{{$c.audio.fileSize}}</em> bytes\n</div>\n<div ng-show=\"$c.downloadProgress\">\n    Downloading {{$c.downloadProgress.percent}}%   [{{$c.downloadProgress.bytesLoaded}}/{{$c.downloadProgress.bytesTotal}}]\n</div>\n"
     };
 });
