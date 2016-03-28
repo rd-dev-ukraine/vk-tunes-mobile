@@ -25,9 +25,11 @@ class ListComponentController {
             return;
         
         if(this.isSelected(item))
-            this.selectedItems = this.selectedItems.filter(e => e !== item);            
+            this.selectedItems = this.selectedItems.filter(e => e !== item) || [];            
         else
             this.selectedItems.push(item);   
+            
+        this.onSelection({ selectedItems: this.selectedItems });
     }
     
     beginToggleSelection() {
@@ -46,19 +48,20 @@ class ListComponentController {
         if (this.selectionTogglePromise)
             this.$timeout.cancel(this.selectionTogglePromise);
     }
+    
+    onSelection(param: any) {}
 }
 
 export var Component: ng.IComponentOptions = {
     bindings: {
         items: "<",
         selectionMode: "=",
-        selectedItems: "="
+        onSelection: "&"
     }, 
     controller: ListComponentController,
     controllerAs: "$c",
     template: `
-    <ul ng-mousedown="$c.beginToggleSelection()" ng-mouseup="$c.cancelToggleSelection()" ng-mousemove="$c.cancelToggleSelection()"
-        ng-touchstart="$c.beginToggleSelection()" ng-touchend="$c.cancelToggleSelection()" ng-touchmove="$c.cancelToggleSelection()">
+    <ul >
         <li class="list-item"
             ng-repeat="$item in $c.items">
             <div class="list-item__container">
@@ -73,7 +76,6 @@ export var Component: ng.IComponentOptions = {
             </div>
             <hr />            
         <li>
-    </ul>
-    `,
+    </ul>`,
     transclude: true
 };

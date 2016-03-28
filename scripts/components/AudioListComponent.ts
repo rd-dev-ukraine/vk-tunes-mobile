@@ -19,6 +19,10 @@ class AudioListController {
         }
     }
     
+    onSelection(items: AudioInfo[]) {
+        this.selectedAudio = items;        
+    }
+    
     publish(message: any) {}
 }
 
@@ -35,10 +39,9 @@ export var Configuration: ng.IComponentOptions = {
      <div ng-show="$c.selectionMode">
          <button ng-click="$c.toggleSelection()">Cancel selection</button>
          <button ng-click="$c.downloadSelected()">Download</button>
-     </div>
-     <div>{{ $c.selectedAudio | json }}</div>
+     </div>     
      <list items="$c.audio"
-           selected-items="$c.selectedAudio"
+           on-selection="$c.onSelection(selectedItems)"
            selection-mode="$c.selectionMode">
          <audio-record audio="$parent.$item"></audio-record>
      </list>`    
