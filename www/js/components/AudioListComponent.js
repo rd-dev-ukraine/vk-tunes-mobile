@@ -18,9 +18,6 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
                 this.publish(new Messages.DownloadAudio(this.selectedAudio));
             }
         };
-        AudioListController.prototype.onSelection = function (items) {
-            this.selectedAudio = items;
-        };
         AudioListController.prototype.publish = function (message) { };
         AudioListController = __decorate([
             PS.Subscriber

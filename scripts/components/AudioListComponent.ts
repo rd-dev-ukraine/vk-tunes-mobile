@@ -19,10 +19,6 @@ class AudioListController {
         }
     }
     
-    onSelection(items: AudioInfo[]) {
-        this.selectedAudio = items;        
-    }
-    
     publish(message: any) {}
 }
 
