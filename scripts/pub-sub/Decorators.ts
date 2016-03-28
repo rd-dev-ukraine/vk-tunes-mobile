@@ -3,7 +3,9 @@ import Metadata = require("EventBusDecoratorMetadata");
 
 export function Handle(messageType: any) {
     return function (target: any, key: string, value: TypedPropertyDescriptor<any>) {
-        Metadata.registerMessageHandler(messageType, target.constructor, target[key]);
+        Metadata.generateSubscriberId(target);
+        
+        Metadata.registerMessageHandler(messageType, target, target[key]);
     };
 }
 
@@ -22,6 +24,8 @@ export function Subscriber(ctor: any):any {
           .forEach(prop => newCtor[prop] = ctor[prop]);
     
     newCtor.prototype = ctor.prototype;
+    
+    Metadata.generateSubscriberId(newCtor);
     
     return newCtor;    
 }

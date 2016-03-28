@@ -552,23 +552,43 @@ define("pub-sub/EventBusDecoratorMetadata", ["require", "exports", "pub-sub/Even
                 throw "Subscriber type is required";
             if (!handlerMethod)
                 throw "Handler method is required.";
-            this.messageHandlerInfo.push({
-                messageType: messageType,
-                subscriberType: subscriberType,
-                handlerMethod: handlerMethod
-            });
+            var subscriberId = this.getSubscriberId(subscriberType);
+            if (subscriberId)
+                this.messageHandlerInfo.push({
+                    messageType: messageType,
+                    subscriberId: subscriberId,
+                    handlerMethod: handlerMethod
+                });
+            else
+                console.debug("Subscriber decorator missing for " + subscriberType);
         };
         EventBusDecoratorMetadata.prototype.subscribe = function (subscriber, eventBus) {
             if (!subscriber)
                 throw "Subscriber is required.";
             eventBus = eventBus || EventBus.Root;
+            var subscriberId = this.getSubscriberId(subscriber);
             subscriber.publish = function (message) { return eventBus.publish(message); };
             this.messageHandlerInfo
-                .filter(function (info) { return subscriber instanceof info.subscriberType; })
+                .filter(function (info) { return subscriberId === info.subscriberId; })
                 .forEach(function (info) {
                 eventBus.subscribe(info.messageType, function (message) { return info.handlerMethod.call(subscriber, message); });
             });
         };
+        /** Adds subscriber ID to constructor if not added and returns the id. */
+        EventBusDecoratorMetadata.prototype.generateSubscriberId = function (ctor) {
+            if (typeof ctor === "function") {
+                var id = ctor.prototype[EventBusDecoratorMetadata.SubscriberPropertyName];
+                if (!id) {
+                    EventBusDecoratorMetadata.SubscriberCounter += 1;
+                    ctor.prototype[EventBusDecoratorMetadata.SubscriberPropertyName] = "Subscriber" + EventBusDecoratorMetadata.SubscriberCounter;
+                }
+            }
+        };
+        EventBusDecoratorMetadata.prototype.getSubscriberId = function (value) {
+            return value[EventBusDecoratorMetadata.SubscriberPropertyName] || value.prototype[EventBusDecoratorMetadata.SubscriberPropertyName];
+        };
+        EventBusDecoratorMetadata.SubscriberPropertyName = "$$__subscriberId";
+        EventBusDecoratorMetadata.SubscriberCounter = 0;
         return EventBusDecoratorMetadata;
     }());
     var instance = new EventBusDecoratorMetadata();
@@ -578,7 +598,8 @@ define("pub-sub/Decorators", ["require", "exports", "pub-sub/EventBus", "pub-sub
     "use strict";
     function Handle(messageType) {
         return function (target, key, value) {
-            Metadata.registerMessageHandler(messageType, target.constructor, target[key]);
+            Metadata.generateSubscriberId(target);
+            Metadata.registerMessageHandler(messageType, target, target[key]);
         };
     }
     exports.Handle = Handle;
@@ -596,6 +617,7 @@ define("pub-sub/Decorators", ["require", "exports", "pub-sub/EventBus", "pub-sub
             .filter(function (prop) { return Object.getOwnPropertyDescriptor(ctor, prop).writable; })
             .forEach(function (prop) { return newCtor[prop] = ctor[prop]; });
         newCtor.prototype = ctor.prototype;
+        Metadata.generateSubscriberId(newCtor);
         return newCtor;
     }
     exports.Subscriber = Subscriber;
@@ -889,7 +911,7 @@ define("components/AudioListComponent", ["require", "exports", "pub-sub/Decorato
         },
         controller: AudioListController,
         controllerAs: "$c",
-        template: "<div ng-show=\"$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Select</button>\n     </div>\n     <div ng-show=\"!$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Cancel selection</button>\n         <button ng-click=\"$c.downloadSelected()\">Download</button>\n     </div>\n     <div>{{ $c.selectedAudio | json }}</div>\n     <list items=\"$c.audio\"\n           selectedItems=\"$c.selectedAudio\"\n           selection-mode=\"$c.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
+        template: "<div ng-show=\"!$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Select</button>\n     </div>\n     <div ng-show=\"$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Cancel selection</button>\n         <button ng-click=\"$c.downloadSelected()\">Download</button>\n     </div>\n     <div>{{ $c.selectedAudio | json }}</div>\n     <list items=\"$c.audio\"\n           selectedItems=\"$c.selectedAudio\"\n           selection-mode=\"$c.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
     };
 });
 /// <reference path="../../typings/browser.d.ts" />
@@ -1041,4 +1063,3 @@ define("app", ["require", "exports", "filesys/Directory", "vk/VkAudioService", "
     exports.onDeviceReady = onDeviceReady;
     document.addEventListener("deviceready", onDeviceReady, false);
 });
-//# sourceMappingURL=app.js.map
