@@ -36,7 +36,16 @@ class DownloadAudioHandler {
             
             this.vk
                 .enqueueDownloading(next)
-                .then(audio => this.fs.download(audio.remote, p => this.onProgress(p)))
+                .then(audio => {
+                    
+                    return Promise.resolve(<StoredAudioRecord>{
+                        id: audio.remote.id,
+                        name: audio.remote.title,
+                        path: "/asdas/asdasd/" + audio.remote.title
+                    })
+                                        
+                    //return this.fs.download(audio.remote, p => this.onProgress(p));
+                })
                 .then(local => {
                     next.local = local;
                     this.publish(new Messages.AudioInfoUpdated(next));                   

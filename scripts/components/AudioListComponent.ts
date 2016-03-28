@@ -16,6 +16,8 @@ class AudioListController {
     downloadSelected() {
         if (this.selectedAudio) {
             this.publish(new Messages.DownloadAudio(this.selectedAudio));
+            this.selectionMode = false;
+            this.selectedAudio = [];
         }
     }
     
@@ -35,8 +37,7 @@ export var Configuration: ng.IComponentOptions = {
      <div ng-show="$c.selectionMode">
          <button ng-click="$c.toggleSelection()">Cancel selection</button>
          <button ng-click="$c.downloadSelected()">Download</button>
-     </div>     
-     <div>{{ $c.selectedAudio | json }}</div>
+     </div>
      <list items="$c.audio"
            selected-items="$c.selectedAudio"
            selection-mode="$c.selectionMode">

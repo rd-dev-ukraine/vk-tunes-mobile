@@ -16,6 +16,8 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         AudioListController.prototype.downloadSelected = function () {
             if (this.selectedAudio) {
                 this.publish(new Messages.DownloadAudio(this.selectedAudio));
+                this.selectionMode = false;
+                this.selectedAudio = [];
             }
         };
         AudioListController.prototype.publish = function (message) { };

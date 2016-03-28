@@ -10,7 +10,7 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         function AudioRecordController($scope) {
             this.$scope = $scope;
         }
-        AudioRecordController.prototype.onAudioSizeGot = function (message) {
+        AudioRecordController.prototype.onAudioUpdated = function (message) {
             if (this.audio && this.audio.remote.id === message.audio.remote.id) {
                 this.audio = message.audio;
                 this.$scope.$$phase || this.$scope.$digest();
@@ -19,7 +19,7 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         AudioRecordController.$inject = ["$scope"];
         __decorate([
             PS.Handle(Messages.AudioInfoUpdated)
-        ], AudioRecordController.prototype, "onAudioSizeGot", null);
+        ], AudioRecordController.prototype, "onAudioUpdated", null);
         AudioRecordController = __decorate([
             PS.Subscriber
         ], AudioRecordController);
@@ -30,6 +30,7 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
             audio: "<"
         },
         controller: AudioRecordController,
-        template: "\n<div>\n  <span ng-show=\"$ctrl.audio.isInMyAudio\">[*] </span>\n  <strong>{{$ctrl.audio.remote.artist}}</strong> - {{$ctrl.audio.remote.title}}\n  <em>{{$ctrl.audio.fileSize}}</em>\n</div>\n"
+        controllerAs: "$c",
+        template: "\n<div>\n  <span ng-show=\"$c.audio.isInMyAudio\">[*] </span>\n  <span ng-show=\"$c.audio.local\">[@]</span>\n  <strong>{{$c.audio.remote.artist}}</strong> - {{$c.audio.remote.title}}\n  <em>{{$c.audio.fileSize}}</em>\n</div>\n"
     };
 });

@@ -11,8 +11,7 @@ class AudioRecordController {
     constructor(private $scope: ng.IScope) { }
 
     @PS.Handle(Messages.AudioInfoUpdated)
-    onAudioSizeGot(message: Messages.AudioInfoUpdated) {
-
+    onAudioUpdated(message: Messages.AudioInfoUpdated) {
         if (this.audio && this.audio.remote.id === message.audio.remote.id) {
             this.audio = message.audio;
             this.$scope.$$phase || this.$scope.$digest();
@@ -25,12 +24,14 @@ export var Configuration: ng.IComponentOptions = {
         audio: "<"
     },
     controller: AudioRecordController,
+    controllerAs: "$c",
     template:
-`
+    `
 <div>
-  <span ng-show="$ctrl.audio.isInMyAudio">[*] </span>
-  <strong>{{$ctrl.audio.remote.artist}}</strong> - {{$ctrl.audio.remote.title}}
-  <em>{{$ctrl.audio.fileSize}}</em>
+  <span ng-show="$c.audio.isInMyAudio">[*] </span>
+  <span ng-show="$c.audio.local">[@]</span>
+  <strong>{{$c.audio.remote.artist}}</strong> - {{$c.audio.remote.title}}
+  <em>{{$c.audio.fileSize}}</em>
 </div>
 `
 };

@@ -29,7 +29,14 @@ define(["require", "exports", "../vk/VkAudioService", "../vk/StoredAudioService"
                 var next = this.downloadQueue.shift();
                 this.vk
                     .enqueueDownloading(next)
-                    .then(function (audio) { return _this.fs.download(audio.remote, function (p) { return _this.onProgress(p); }); })
+                    .then(function (audio) {
+                    return Promise.resolve({
+                        id: audio.remote.id,
+                        name: audio.remote.title,
+                        path: "/asdas/asdasd/" + audio.remote.title
+                    });
+                    //return this.fs.download(audio.remote, p => this.onProgress(p));
+                })
                     .then(function (local) {
                     next.local = local;
                     _this.publish(new Messages.AudioInfoUpdated(next));
