@@ -7,7 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define(["require", "exports", "../pub-sub/Decorators"], function (require, exports, PS) {
     "use strict";
     var ListComponentController = (function () {
-        function ListComponentController($timeout) {
+        function ListComponentController($scope, $timeout) {
+            this.$scope = $scope;
             this.$timeout = $timeout;
             this.items = [];
             this.selectedItems = [];
@@ -19,11 +20,11 @@ define(["require", "exports", "../pub-sub/Decorators"], function (require, expor
         ListComponentController.prototype.toggleSelection = function (item) {
             if (!this.selectionMode)
                 return;
+            this.selectedItems = this.selectedItems || [];
             if (this.isSelected(item))
                 this.selectedItems = this.selectedItems.filter(function (e) { return e !== item; }) || [];
             else
                 this.selectedItems.push(item);
-            this.onSelection({ selectedItems: this.selectedItems });
         };
         ListComponentController.prototype.beginToggleSelection = function () {
             var _this = this;
@@ -39,9 +40,8 @@ define(["require", "exports", "../pub-sub/Decorators"], function (require, expor
             if (this.selectionTogglePromise)
                 this.$timeout.cancel(this.selectionTogglePromise);
         };
-        ListComponentController.prototype.onSelection = function (param) { };
         ListComponentController.ControllerName = "ListComponentController";
-        ListComponentController.$inject = ["$timeout"];
+        ListComponentController.$inject = ["$scope", "$timeout"];
         ListComponentController = __decorate([
             PS.Subscriber
         ], ListComponentController);
@@ -51,11 +51,11 @@ define(["require", "exports", "../pub-sub/Decorators"], function (require, expor
         bindings: {
             items: "<",
             selectionMode: "=",
-            onSelection: "&"
+            selectedItems: "="
         },
         controller: ListComponentController,
         controllerAs: "$c",
-        template: "\n    <ul >\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $c.items\">\n            <div class=\"list-item__container\">\n                <div class=\"list-item__selector\"\n                     style=\"float: left\"\n                     ng-show=\"$c.selectionMode\">\n                    <input type=\"checkbox\"\n                           ng-checked=\"$c.isSelected($item)\"\n                           ng-click=\"$c.toggleSelection($item)\" />\n                </div>\n                <div ng-transclude></div>\n            </div>\n            <hr />            \n        <li>\n    </ul>\n    ",
+        template: "\n    <ul >\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $c.items\">\n            <div ng-mousedown=\"$c.beginToggleSelection()\" \n                 ng-mouseup=\"$c.cancelToggleSelection()\" \n                 ng-mousemove=\"$c.cancelToggleSelection()\"\n                 ng-touchstart=\"$c.beginToggleSelection()\" \n                 ng-touchend=\"$c.cancelToggleSelection()\" \n                 ng-touchmove=\"$c.cancelToggleSelection()\">\n                <div class=\"list-item__container\"\n                    ng-click=\"$c.toggleSelection($item)\">\n                    <div class=\"list-item__selector\"\n                        style=\"float: left\"\n                        ng-show=\"$c.selectionMode\">\n                        <input type=\"checkbox\"\n                            ng-checked=\"$c.isSelected($item)\" />\n                    </div>\n                    <div ng-transclude></div>\n                </div>\n            </div>\n            <hr />\n        <li>\n    </ul>",
         transclude: true
     };
 });

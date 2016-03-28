@@ -33,6 +33,6 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         },
         controller: AudioListController,
         controllerAs: "$c",
-        template: "<div ng-show=\"!$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Select</button>\n     </div>\n     <div ng-show=\"$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Cancel selection</button>\n         <button ng-click=\"$c.downloadSelected()\">Download</button>\n     </div>\n     <div>{{ $c.selectedAudio | json }}</div>\n     <list items=\"$c.audio\"\n           on-selection=\"$c.onSelection(selectedItems)\"\n           selection-mode=\"$c.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
+        template: "<div ng-show=\"!$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Select</button>\n     </div>\n     <div ng-show=\"$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Cancel selection</button>\n         <button ng-click=\"$c.downloadSelected()\">Download</button>\n     </div>     \n     <div>{{ $c.selectedAudio | json }}</div>\n     <list items=\"$c.audio\"\n           selected-items=\"$c.selectedAudio\"\n           selection-mode=\"$c.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
     };
 });

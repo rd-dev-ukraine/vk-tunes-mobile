@@ -40,8 +40,9 @@ export var Configuration: ng.IComponentOptions = {
          <button ng-click="$c.toggleSelection()">Cancel selection</button>
          <button ng-click="$c.downloadSelected()">Download</button>
      </div>     
+     <div>{{ $c.selectedAudio | json }}</div>
      <list items="$c.audio"
-           on-selection="$c.onSelection(selectedItems)"
+           selected-items="$c.selectedAudio"
            selection-mode="$c.selectionMode">
          <audio-record audio="$parent.$item"></audio-record>
      </list>`    
