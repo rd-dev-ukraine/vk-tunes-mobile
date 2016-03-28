@@ -40,7 +40,11 @@ class VkService {
                 });
         });
     }
-
+    
+    /**
+     * Don't perform any vk API call, just enqueue empty operation to ensure downloading is 
+     * not violates API call frequency.
+     */
     enqueueDownloading(audio: AudioInfo): Promise<AudioInfo> {
         return this.queue
                     .enqueueLast(() => Promise.resolve(audio),

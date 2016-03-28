@@ -51,7 +51,8 @@ class ListComponentController {
 export var Component: ng.IComponentOptions = {
     bindings: {
         items: "<",
-        selectionMode: "="
+        selectionMode: "=",
+        selectedItems: "="
     }, 
     controller: ListComponentController,
     controllerAs: "$c",

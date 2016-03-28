@@ -441,6 +441,10 @@ define("vk/VkAudioService", ["require", "exports", "vk/VkTypedApi", "task-queue/
                 });
             });
         };
+        /**
+         * Don't perform any vk API call, just enqueue empty operation to ensure downloading is
+         * not violates API call frequency.
+         */
         VkService.prototype.enqueueDownloading = function (audio) {
             return this.queue
                 .enqueueLast(function () { return Promise.resolve(audio); }, 10 /* DownloadFile */);
@@ -640,7 +644,8 @@ define("components/ListComponent", ["require", "exports", "pub-sub/Decorators"],
     exports.Component = {
         bindings: {
             items: "<",
-            selectionMode: "="
+            selectionMode: "=",
+            selectedItems: "="
         },
         controller: ListComponentController,
         controllerAs: "$c",
@@ -858,7 +863,7 @@ define("components/AudioRecordComponent", ["require", "exports", "pub-sub/Decora
         template: "\n<div>\n  <span ng-show=\"$ctrl.audio.isInMyAudio\">[*] </span>\n  <strong>{{$ctrl.audio.remote.artist}}</strong> - {{$ctrl.audio.remote.title}}\n  <em>{{$ctrl.audio.fileSize}}</em>\n</div>\n"
     };
 });
-define("components/AudioListComponent", ["require", "exports"], function (require, exports) {
+define("components/AudioListComponent", ["require", "exports", "pub-sub/Decorators", "handlers/Messages"], function (require, exports, PS, Messages) {
     "use strict";
     var AudioListController = (function () {
         function AudioListController() {
@@ -867,6 +872,15 @@ define("components/AudioListComponent", ["require", "exports"], function (requir
         AudioListController.prototype.toggleSelection = function () {
             this.selectionMode = !this.selectionMode;
         };
+        AudioListController.prototype.downloadSelected = function () {
+            if (this.selectedAudio) {
+                this.publish(new Messages.DownloadAudio(this.selectedAudio));
+            }
+        };
+        AudioListController.prototype.publish = function (message) { };
+        AudioListController = __decorate([
+            PS.Subscriber
+        ], AudioListController);
         return AudioListController;
     }());
     exports.Configuration = {
@@ -874,7 +888,8 @@ define("components/AudioListComponent", ["require", "exports"], function (requir
             audio: "<"
         },
         controller: AudioListController,
-        template: "<div>\n         <button ng-click=\"$ctrl.toggleSelection()\">Select</button>\n     </div>\n     <list items=\"$ctrl.audio\" selection-mode=\"$ctrl.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
+        controllerAs: "$c",
+        template: "<div ng-show=\"$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Select</button>\n     </div>\n     <div ng-show=\"!$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Cancel selection</button>\n         <button ng-click=\"$c.downloadSelected()\">Download</button>\n     </div>\n     <div>{{ $c.selectedAudio | json }}</div>\n     <list items=\"$c.audio\"\n           selectedItems=\"$c.selectedAudio\"\n           selection-mode=\"$c.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
     };
 });
 /// <reference path="../../typings/browser.d.ts" />
