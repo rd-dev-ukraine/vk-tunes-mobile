@@ -1,22 +1,22 @@
 /// <references path="../typings/main.d.ts" />
 
-import Directory = require("filesys/Directory");
-import VkAudioService = require("vk/VkAudioService");
-import StoredAudioService = require("vk/StoredAudioService");
+import Directory = require("./filesys/Directory");
+import VkAudioService = require("./vk/VkAudioService");
+import StoredAudioService = require("./vk/StoredAudioService");
 
-import EventBus = require("pub-sub/EventBus");
+import EventBus = require("./pub-sub/EventBus");
 
-import List = require("components/ListComponent");
-import Tabs = require("components/TabComponent");
+import List = require("./components/ListComponent");
+import Tabs = require("./components/TabComponent");
 
-import App = require("components/AppComponent");
-import MyAudio = require("components/MyAudioComponent");
-import SearchAudio = require("components/SearchAudioComponent");
-import AudioRecord = require("components/AudioRecordComponent");
-import AudioList = require("components/AudioListComponent");
+import App = require("./components/AppComponent");
+import MyAudio = require("./components/MyAudioComponent");
+import SearchAudio = require("./components/SearchAudioComponent");
+import AudioRecord = require("./components/AudioRecordComponent");
+import AudioList = require("./components/AudioListComponent");
 
-import AudioListHandler = require("handlers/AudioListHandler");
-import DownloadAudioHandler = require("handlers/DownloadAudioHandler");
+import AudioListHandler = require("./handlers/AudioListHandler");
+import DownloadAudioHandler = require("./handlers/DownloadAudioHandler");
 
 export function onDeviceReady() {
 

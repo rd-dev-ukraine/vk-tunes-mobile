@@ -7,7 +7,7 @@ import PS = require("../pub-sub/Decorators");
 
 @PS.Subscriber
 class DownloadAudioHandler {    
-    static ServiceName = "AudioListHandler";
+    static ServiceName = "DownloadAudioHandler";
     static $inject = [VkAudioService.ServiceName, StoredAudioService.ServiceName];
     
     private downloadQueue: AudioInfo[] = [];

@@ -1,6 +1,6 @@
 /// <reference path="../../typings/browser.d.ts"/>
 
-import VkTypedApi = require("VkTypedApi");
+import VkTypedApi = require("./VkTypedApi");
 import PriorityQueue = require("../task-queue/PriorityQueue");
 
 class VkService {

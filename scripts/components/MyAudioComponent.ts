@@ -1,7 +1,7 @@
 /// <reference path="../../typings/browser.d.ts" />
 import PS = require("../pub-sub/Decorators");
 import Messages = require("../handlers/Messages");
-import Tabs = require("TabComponent");
+import Tabs = require("./TabComponent");
 
 @PS.Subscriber
 class MyAudioController {

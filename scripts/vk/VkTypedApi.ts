@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../typings/browser.d.ts"/>
 
-import VkApi = require("VkApi");
+import VkApi = require("./VkApi");
 
 class VkTypedApi {
     private api = new VkApi();

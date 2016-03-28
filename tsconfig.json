@@ -2,7 +2,7 @@
     "compilerOptions": {
         "experimentalDecorators": true,
         "module": "amd", 
-        "outFile": "www/js/app.js",
+        "outDir": "www/js",
         "pretty": true,
         "target": "es5"        
     }

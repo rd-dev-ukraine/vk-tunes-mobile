@@ -38,7 +38,7 @@ export var Configuration: ng.IComponentOptions = {
      </div>
      <div>{{ $c.selectedAudio | json }}</div>
      <list items="$c.audio"
-           selectedItems="$c.selectedAudio"
+           selected-items="$c.selectedAudio"
            selection-mode="$c.selectionMode">
          <audio-record audio="$parent.$item"></audio-record>
      </list>`    

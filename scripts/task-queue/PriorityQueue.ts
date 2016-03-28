@@ -1,4 +1,4 @@
-import LinkedList = require("LinkedList");
+import LinkedList = require("./LinkedList");
 
 class PriorityQueue {
     private isRunning: boolean = false;

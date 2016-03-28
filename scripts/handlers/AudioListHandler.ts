@@ -2,7 +2,7 @@
 
 import VkAudioService = require("../vk/VkAudioService");
 import StoredAudioService = require("../vk/StoredAudioService");
-import Messages = require("Messages");
+import Messages = require("./Messages");
 import PS = require("../pub-sub/Decorators");
 
 @PS.Subscriber
