@@ -5,17 +5,9 @@ class Directory {
 
     files(): Promise<FileInfo[]> {
         return this.resolveRoot()
-            .then(dir => {
-                return new Promise((resolve, reject) => {
-                    dir.createReader()
-                        .readEntries(entries => {
-                            const fileInfo = entries.filter(e => e.isFile)
-                                .map(e => ({ path: e.fullPath, name: e.name }));
-                            resolve(fileInfo);
-                        },
-                        error => reject(error));
-                });
-            });
+            .then(dir => this.makePromise<Entry[]>(dir.createReader().readEntries))
+            .then(entries => entries.filter(e => e.isFile)
+                                    .map(e => ({ path: e.fullPath, name: e.name })));
     }
 
     downloadFile(fromUrl: string, fileName: string, notify: (progressInfo: IFileDownloadingProgress) => void): Promise<FileInfo> {
@@ -55,21 +47,23 @@ class Directory {
     }
 
     private resolveRoot(): Promise<DirectoryEntry> {
-        return this.requestFileSystem()
-            .then(fs => new Promise((resolve, reject) => {
-                window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Music",
-                    dirEntry => resolve(dirEntry),
-                    err => reject(err));
-            }));
+        return this.resolveFileSystemUrl(cordova.file.externalRootDirectory + "Music");
     }
 
     private requestFileSystem(): Promise<FileSystem> {
-        return new Promise((resolve, reject) => {
-            window.requestFileSystem(
-                window.PERSISTENT,
-                0,
-                fs => resolve(fs),
-                error => reject(error));
+        return this.makePromise<FileSystem>(window.requestFileSystem, window.PERSISTENT, 0);
+    }
+    
+    private resolveFileSystemUrl(url: string) : Promise<Entry> {
+        return this.requestFileSystem()
+                   .then(() => this.makePromise<Entry>(window.resolveLocalFileSystemURL, url));
+    }
+    
+    /** Makes a ES6 promise from any function which accepts success and error callbacks as last two arguments. */
+    private makePromise<TResult>(func: Function, ...args: any[]): Promise<TResult> {
+        return new Promise<TResult>((resolve, reject) => {
+            var parameters = [...args, resolve, reject];
+            return func.apply(null, parameters);
         });
     }
 }
