@@ -5,9 +5,11 @@ define(["require", "exports"], function (require, exports) {
         function Directory() {
         }
         Directory.prototype.files = function () {
-            var _this = this;
             return this.resolveRoot()
-                .then(function (dir) { return _this.makePromise(dir.createReader().readEntries); })
+                .then(function (dir) { return new Promise(function (resolve, reject) {
+                dir.createReader()
+                    .readEntries(resolve, reject);
+            }); })
                 .then(function (entries) { return entries.filter(function (e) { return e.isFile; })
                 .map(function (e) { return ({ path: e.fullPath, name: e.name }); }); });
         };

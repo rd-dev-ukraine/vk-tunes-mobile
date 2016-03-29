@@ -5,7 +5,10 @@ class Directory {
 
     files(): Promise<FileInfo[]> {
         return this.resolveRoot()
-            .then(dir => this.makePromise<Entry[]>(dir.createReader().readEntries))
+            .then(dir => new Promise<Entry[]>((resolve, reject) => {
+                dir.createReader()
+                   .readEntries(resolve, reject);
+            }))
             .then(entries => entries.filter(e => e.isFile)
                                     .map(e => ({ path: e.fullPath, name: e.name })));
     }
