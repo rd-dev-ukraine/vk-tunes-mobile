@@ -20,7 +20,7 @@ define(["require", "exports"], function (require, exports) {
         Directory.prototype.downloadFile = function (fromUrl, fileName, notify) {
             return this.resolveRoot()
                 .then(function (path) { return new Promise(function (resolve, reject) {
-                var targetPath = path + fileName + ".mp3";
+                var targetPath = encodeURI(path.toInternalURL() + fileName + ".mp3");
                 var transfer = new FileTransfer();
                 transfer.onprogress = function (event) {
                     if (event.lengthComputable) {
@@ -38,7 +38,9 @@ define(["require", "exports"], function (require, exports) {
                         path: file.fullPath,
                         name: file.name
                     });
-                }, function (error) { return reject(error); }, true);
+                }, function (error) {
+                    reject(error);
+                }, true);
             }); });
         };
         Directory.prototype.resolveRoot = function () {

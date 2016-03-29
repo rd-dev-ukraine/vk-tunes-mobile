@@ -22,7 +22,7 @@ class Directory {
 
         return this.resolveRoot()
             .then(path => new Promise((resolve, reject) => {
-                var targetPath = path + fileName + ".mp3";
+                var targetPath = encodeURI(path.toInternalURL() + fileName + ".mp3");
 
                 var transfer = new FileTransfer();
 
@@ -47,7 +47,9 @@ class Directory {
                             name: file.name
                         });
                     },
-                    error => reject(error),
+                    error => { 
+                        reject(error); 
+                    },
                     true);
             }));
     }

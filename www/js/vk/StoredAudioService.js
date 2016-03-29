@@ -15,10 +15,8 @@ define(["require", "exports", "../filesys/Directory"], function (require, export
         };
         StoredAudioService.prototype.download = function (audio, progress) {
             var fileName = this.buildFileName(audio);
-            this.fs
-                .downloadFile(audio.url, fileName, function (p) { return progress({ audio_id: audio.id, bytesLoaded: p.bytesLoaded, bytesTotal: p.bytesTotal, percent: p.percent }); })
-                .then(function (f) { return ({}); });
-            return null;
+            return this.fs
+                .downloadFile(audio.url, fileName, function (p) { return progress({ audio_id: audio.id, bytesLoaded: p.bytesLoaded, bytesTotal: p.bytesTotal, percent: p.percent }); });
         };
         StoredAudioService.prototype.parseFileName = function (path) {
             var fileName = this.getFileName(path);

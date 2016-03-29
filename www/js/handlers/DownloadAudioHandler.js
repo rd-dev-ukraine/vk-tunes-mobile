@@ -29,11 +29,16 @@ define(["require", "exports", "../vk/VkAudioService", "../vk/StoredAudioService"
                 var next = this.downloadQueue.shift();
                 this.vk
                     .enqueueDownloading(next)
-                    .then(function (audio) { return _this.fs.download(audio.remote, function (p) { return _this.onProgress(audio, p); }); })
+                    .then(function (audio) {
+                    return _this.fs.download(audio.remote, function (p) { return _this.onProgress(audio, p); });
+                })
                     .then(function (local) {
                     next.local = local;
                     _this.onProgress(next);
                     _this.publish(new Messages.AudioInfoUpdated(next));
+                    _this.isDownloading = false;
+                    _this.download();
+                }, function (err) {
                     _this.isDownloading = false;
                     _this.download();
                 });

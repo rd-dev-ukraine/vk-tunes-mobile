@@ -36,7 +36,9 @@ class DownloadAudioHandler {
             
             this.vk
                 .enqueueDownloading(next)
-                .then(audio => this.fs.download(audio.remote, p => this.onProgress(audio, p)))
+                .then(audio => { 
+                    return this.fs.download(audio.remote, p => this.onProgress(audio, p));
+                })
                 .then(local => {
                     next.local = local;
                     
@@ -45,6 +47,10 @@ class DownloadAudioHandler {
                     
                     this.isDownloading = false;                    
 
+                    this.download();
+                }, 
+                err => {
+                    this.isDownloading = false;
                     this.download();
                 });
         }

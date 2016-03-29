@@ -21,13 +21,10 @@ class StoredAudioService {
     download(audio: VkAudioRecord, progress: (progress: IAudioDownloadingProgress) => void): Promise<StoredAudioRecord> {
         var fileName = this.buildFileName(audio);
 
-        this.fs
-            .downloadFile(audio.url, fileName, p => progress({ audio_id: audio.id, bytesLoaded: p.bytesLoaded, bytesTotal: p.bytesTotal, percent: p.percent }))
-            .then(f => ({
-
-            }));
-
-        return null;
+        return this.fs
+            .downloadFile(audio.url,
+                fileName,
+                p => progress({ audio_id: audio.id, bytesLoaded: p.bytesLoaded, bytesTotal: p.bytesTotal, percent: p.percent }));
     }
 
     private parseFileName(path: string): StoredAudioRecord {
