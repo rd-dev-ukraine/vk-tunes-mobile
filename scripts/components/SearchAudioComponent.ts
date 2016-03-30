@@ -34,14 +34,15 @@ class SearchAudioController {
 
 export var Configuration: ng.IComponentOptions = {
     controller: SearchAudioController,
+    controllerAs: "$c",
     template:
 `
 <h2>Search audio</h2>
 <div>
-    <input ng-model="$ctrl.query"
+    <input ng-model="$c.query"
         ng-model-options="{ debounce: 100 }"
         type="text" />
 </div>
-<audio-list audio="$ctrl.audio"></audio-list>
+<audio-list audio="$c.audio"></audio-list>
 `
 };

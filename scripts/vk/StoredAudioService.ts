@@ -3,7 +3,7 @@
 import Directory = require("../filesys/Directory");
 
 class StoredAudioService {
-    private static SplitFileName = /^(\d{1,}) - (.{1, }).(.{1, })$/;
+    private static SplitFileName = /^(\d{1,}) - (.{1,})\.(.{1,})$/;
 
     static ServiceName = "StoredAudioService";
     static $inject = [Directory.ServiceName];
@@ -51,7 +51,7 @@ class StoredAudioService {
         if (!path)
             throw "Path is missing.";
 
-        return path.slice(path.indexOf("/") + 1);
+        return path.slice(path.lastIndexOf("/") + 1);
     }
 
     private sanitize(word: string): string {

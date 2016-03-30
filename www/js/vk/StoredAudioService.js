@@ -35,12 +35,12 @@ define(["require", "exports", "../filesys/Directory"], function (require, export
         StoredAudioService.prototype.getFileName = function (path) {
             if (!path)
                 throw "Path is missing.";
-            return path.slice(path.indexOf("/") + 1);
+            return path.slice(path.lastIndexOf("/") + 1);
         };
         StoredAudioService.prototype.sanitize = function (word) {
             return word;
         };
-        StoredAudioService.SplitFileName = /^(\d{1,}) - (.{1, }).(.{1, })$/;
+        StoredAudioService.SplitFileName = /^(\d{1,}) - (.{1,})\.(.{1,})$/;
         StoredAudioService.ServiceName = "StoredAudioService";
         StoredAudioService.$inject = [Directory.ServiceName];
         return StoredAudioService;

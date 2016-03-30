@@ -13,13 +13,17 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         AudioRecordController.prototype.onAudioUpdated = function (message) {
             if (this.audio && this.audio.remote.id === message.audio.remote.id) {
                 this.audio = message.audio;
-                this.$scope.$$phase || this.$scope.$digest();
+                this.$apply();
             }
         };
         AudioRecordController.prototype.onAudioDownloading = function (message) {
             if (this.audio && this.audio.remote.id === message.audio.remote.id) {
                 this.downloadProgress = message.progress;
+                this.$apply();
             }
+        };
+        AudioRecordController.prototype.$apply = function () {
+            this.$scope.$$phase || this.$scope.$digest();
         };
         AudioRecordController.$inject = ["$scope"];
         __decorate([

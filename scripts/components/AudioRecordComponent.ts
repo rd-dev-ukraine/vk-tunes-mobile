@@ -15,7 +15,7 @@ class AudioRecordController {
     onAudioUpdated(message: Messages.AudioInfoUpdated) {
         if (this.audio && this.audio.remote.id === message.audio.remote.id) {
             this.audio = message.audio;
-            this.$scope.$$phase || this.$scope.$digest();
+            this.$apply()
         }
     }
     
@@ -23,7 +23,12 @@ class AudioRecordController {
     onAudioDownloading(message: Messages.DownloadProgress) {
         if (this.audio && this.audio.remote.id === message.audio.remote.id) {
             this.downloadProgress = message.progress;
+            this.$apply();
         }
+    }
+    
+    private $apply() {
+        this.$scope.$$phase || this.$scope.$digest();
     }
 }
 
