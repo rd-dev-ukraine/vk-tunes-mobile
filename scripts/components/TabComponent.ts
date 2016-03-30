@@ -43,7 +43,7 @@ export var TabComponent: ng.IComponentOptions = {
     controller: TabComponentController,
     template: `
         <div class="tab">
-            <ul class="tab-header">
+            <ul class="tab__header">
                 <li class="tab-header__item"
                     ng-repeat="tab in $ctrl.tabs"
                     ng-class="{ active: tab.selected }">
@@ -53,7 +53,7 @@ export var TabComponent: ng.IComponentOptions = {
                     </a>
                 </li>
             </ul>
-            <div class="tab-content" ng-transclude></div>
+            <div class="tab__content" ng-transclude></div>
         </div>
     `
 };

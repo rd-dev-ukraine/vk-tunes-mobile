@@ -6,7 +6,7 @@ import Messages = require("../handlers/Messages");
 @PS.Subscriber
 class DownloadInfoController {
     static $inject = ["$scope"];
-
+        
     currentDownload: AudioInfo;
     currentDownloadProgress: IAudioDownloadingProgress;
     currentDownloadNumber: number;

@@ -1,1 +1,1 @@
-nodevars && tsc && cordova build android && cordova run android
+commands\sass.cmd && nodevars && tsc && cordova build android && cordova run android

@@ -14,17 +14,19 @@ export var Component : ng.IComponentOptions = {
     controller: AppComponentController,
     template:
 `
-<div>
-    <h1>VK-Tunes mobile app</h1>
-    <download-info></download-info>
-    <tab>
-        <tab-item title="My Audio">
-            <my-audio></my-audio>
-        </tab-item>
-        <tab-item title="Search Audio">
-            <search-audio></search-audio>
-        </tab-item>
-    </tab>    
+<div class="app">
+    <h1 class="app__header">VK-Tunes mobile app</h1>
+    <download-info class="app__download-info"></download-info>
+    <div class="app__content">
+        <tab class="app__tab">
+            <tab-item title="My Audio">
+                <my-audio></my-audio>
+            </tab-item>
+            <tab-item title="Search Audio">
+                <search-audio></search-audio>
+            </tab-item>
+        </tab>
+    </div>
 </div>
 `
 }

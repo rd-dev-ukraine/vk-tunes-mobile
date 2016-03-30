@@ -1,0 +1,18 @@
+.tab {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    &__header {
+        flex-grow: 0;
+        flex-shrink: 0;
+        order: 1;
+    }
+    
+    &__content {
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+}
