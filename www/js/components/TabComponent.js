@@ -36,17 +36,18 @@ define(["require", "exports"], function (require, exports) {
     exports.TabComponent = {
         transclude: true,
         controller: TabComponentController,
-        template: "\n        <div class=\"tab\">\n            <ul class=\"tab__header\">\n                <li class=\"tab-header__item\"\n                    ng-repeat=\"tab in $ctrl.tabs\"\n                    ng-class=\"{ active: tab.selected }\">\n                    <a ng-click=\"$ctrl.select(tab)\"\n                       href=\"javascript:void(0)\">\n                        {{tab.title}}\n                    </a>\n                </li>\n            </ul>\n            <div class=\"tab__content\" ng-transclude></div>\n        </div>\n    "
+        template: "\n<div class=\"tab\">\n    <ul class=\"tab__header\">\n        <li class=\"tab-header__item {{tab.headerCss}}\"\n            ng-repeat=\"tab in $ctrl.tabs\"\n            ng-class=\"{ active: tab.selected }\">\n            <a ng-click=\"$ctrl.select(tab)\"\n                href=\"javascript:void(0)\">\n                {{tab.title}}\n            </a>\n        </li>\n    </ul>\n    <div class=\"tab__content\" ng-transclude></div>\n</div>\n"
     };
     exports.TabItemComponent = {
         bindings: {
-            title: "@"
+            title: "@",
+            headerCss: "@headerClass"
         },
         controller: TabItemController,
         require: {
             tab: "^tab"
         },
         transclude: true,
-        template: "<div ng-show=\"$ctrl.selected\" ng-transclude></div>"
+        template: "\n<div ng-class=\"$ctrl.css\" ng-show=\"$ctrl.selected\" ng-transclude></div>\n"
     };
 });

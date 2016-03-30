@@ -19,10 +19,12 @@ export var Component : ng.IComponentOptions = {
     <download-info class="app__download-info"></download-info>
     <div class="app__content">
         <tab class="app__tab">
-            <tab-item title="My Audio">
+            <tab-item header-class="tab-button my-audio"
+                      title="My Audio">
                 <my-audio></my-audio>
             </tab-item>
-            <tab-item title="Search Audio">
+            <tab-item header-class="tab-button search-audio" 
+                      title="Search Audio">
                 <search-audio></search-audio>
             </tab-item>
         </tab>

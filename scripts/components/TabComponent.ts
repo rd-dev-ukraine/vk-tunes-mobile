@@ -41,31 +41,36 @@ class TabItemController {
 export var TabComponent: ng.IComponentOptions = {
     transclude: true,
     controller: TabComponentController,
-    template: `
-        <div class="tab">
-            <ul class="tab__header">
-                <li class="tab-header__item"
-                    ng-repeat="tab in $ctrl.tabs"
-                    ng-class="{ active: tab.selected }">
-                    <a ng-click="$ctrl.select(tab)"
-                       href="javascript:void(0)">
-                        {{tab.title}}
-                    </a>
-                </li>
-            </ul>
-            <div class="tab__content" ng-transclude></div>
-        </div>
-    `
+    template: 
+`
+<div class="tab">
+    <ul class="tab__header">
+        <li class="tab-header__item {{tab.headerCss}}"
+            ng-repeat="tab in $ctrl.tabs"
+            ng-class="{ active: tab.selected }">
+            <a ng-click="$ctrl.select(tab)"
+                href="javascript:void(0)">
+                {{tab.title}}
+            </a>
+        </li>
+    </ul>
+    <div class="tab__content" ng-transclude></div>
+</div>
+`
 };
 
 export var TabItemComponent: ng.IComponentOptions = {
     bindings: {
-        title: "@"
+        title: "@",
+        headerCss: "@headerClass"
     },
     controller: TabItemController,
     require: {
         tab: "^tab"
     },
     transclude: true,
-    template: `<div ng-show="$ctrl.selected" ng-transclude></div>`
+    template: 
+`
+<div ng-class="$ctrl.css" ng-show="$ctrl.selected" ng-transclude></div>
+`
 };

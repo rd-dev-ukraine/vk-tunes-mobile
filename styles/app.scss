@@ -1,6 +1,6 @@
 @import "_reset";
-@import "_progress-bar";
-@import "_tab";
+@import "../scripts/components/ProgressBarComponent";
+@import "../scripts/components/TabComponent";
 @import "_app";
 
 html {

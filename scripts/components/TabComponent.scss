@@ -17,6 +17,9 @@ tab {
         flex-grow: 0;
         flex-shrink: 0;
         order: 1;
+        
+        display: flex;
+        justify-content: center;
     }
     
     &__content {
