@@ -45,13 +45,11 @@ export var TabComponent: ng.IComponentOptions = {
 `
 <div class="tab">
     <ul class="tab__header">
-        <li class="tab-header__item {{tab.headerCss}}"
+        <li class="tab-header__item {{tab.headerCss}}"        
             ng-repeat="tab in $ctrl.tabs"
+            ng-click="$ctrl.select(tab)"
             ng-class="{ active: tab.selected }">
-            <a ng-click="$ctrl.select(tab)"
-                href="javascript:void(0)">
-                {{tab.title}}
-            </a>
+            {{tab.title}}            
         </li>
     </ul>
     <div class="tab__content" ng-transclude></div>

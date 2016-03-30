@@ -18,6 +18,6 @@ define(["require", "exports", "../pub-sub/Decorators"], function (require, expor
     }());
     exports.Component = {
         controller: AppComponentController,
-        template: "\n<div class=\"app\">\n    <h1 class=\"app__header\">VK-Tunes mobile app</h1>\n    <download-info class=\"app__download-info\"></download-info>\n    <div class=\"app__content\">\n        <tab class=\"app__tab\">\n            <tab-item header-class=\"app__tab-item my-audio\"\n                      title=\"My Audio\">\n                <my-audio></my-audio>\n            </tab-item>\n            <tab-item header-class=\"app__tab-item search-audio\" \n                      title=\"Search Audio\">\n                <search-audio></search-audio>\n            </tab-item>\n        </tab>\n    </div>\n</div>\n"
+        template: "\n<div class=\"app\">\n    <h1 class=\"app__header\">VK-Tunes mobile app</h1>\n    <download-info class=\"app__download-info\"></download-info>\n    <div class=\"app__content\">\n        <tab class=\"app__tab\">\n            <tab-item header-class=\"tab-button my-audio\"\n                      title=\"My Audio\">\n                <my-audio></my-audio>\n            </tab-item>\n            <tab-item header-class=\"tab-button search-audio\" \n                      title=\"Search Audio\">\n                <search-audio></search-audio>\n            </tab-item>\n        </tab>\n    </div>\n</div>\n"
     };
 });
