@@ -13,9 +13,11 @@ define(["require", "exports", "../vk/VkAudioService", "../vk/StoredAudioService"
             this.fs = fs;
             this.downloadQueue = [];
             this.isDownloading = false;
+            this.totalDownloading = 0;
         }
         DownloadAudioHandler.prototype.downloadAudio = function (message) {
             (_a = this.downloadQueue).push.apply(_a, message.audio);
+            this.totalDownloading += message.audio.length;
             this.download();
             var _a;
         };
@@ -43,10 +45,15 @@ define(["require", "exports", "../vk/VkAudioService", "../vk/StoredAudioService"
                     _this.download();
                 });
             }
+            else {
+                this.totalDownloading = 0;
+                this.publish(new Messages.DownloadInfoNotification(0, 0));
+            }
         };
         DownloadAudioHandler.prototype.onProgress = function (audio, progress) {
             if (progress === void 0) { progress = null; }
             this.publish(new Messages.DownloadProgress(audio, progress));
+            this.publish(new Messages.DownloadInfoNotification(this.totalDownloading - this.downloadQueue.length, this.totalDownloading));
         };
         DownloadAudioHandler.ServiceName = "DownloadAudioHandler";
         DownloadAudioHandler.$inject = [VkAudioService.ServiceName, StoredAudioService.ServiceName];

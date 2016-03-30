@@ -33,12 +33,12 @@ define(["require", "exports"], function (require, exports) {
         TabItemController.$inject = ["$scope"];
         return TabItemController;
     }());
-    exports.TabConfiguration = {
+    exports.TabComponent = {
         transclude: true,
         controller: TabComponentController,
         template: "\n        <div class=\"tab\">\n            <ul class=\"tab-header\">\n                <li class=\"tab-header__item\"\n                    ng-repeat=\"tab in $ctrl.tabs\"\n                    ng-class=\"{ active: tab.selected }\">\n                    <a ng-click=\"$ctrl.select(tab)\"\n                       href=\"javascript:void(0)\">\n                        {{tab.title}}\n                    </a>\n                </li>\n            </ul>\n            <div class=\"tab-content\" ng-transclude></div>\n        </div>\n    "
     };
-    exports.TabItemConfiguration = {
+    exports.TabItemComponent = {
         bindings: {
             title: "@"
         },

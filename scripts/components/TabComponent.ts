@@ -38,7 +38,7 @@ class TabItemController {
     }
 }
 
-export var TabConfiguration: ng.IComponentOptions = {
+export var TabComponent: ng.IComponentOptions = {
     transclude: true,
     controller: TabComponentController,
     template: `
@@ -58,7 +58,7 @@ export var TabConfiguration: ng.IComponentOptions = {
     `
 };
 
-export var TabItemConfiguration: ng.IComponentOptions = {
+export var TabItemComponent: ng.IComponentOptions = {
     bindings: {
         title: "@"
     },

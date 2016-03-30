@@ -50,4 +50,12 @@ define(["require", "exports"], function (require, exports) {
         return DownloadProgress;
     }());
     exports.DownloadProgress = DownloadProgress;
+    var DownloadInfoNotification = (function () {
+        function DownloadInfoNotification(index, total) {
+            this.index = index;
+            this.total = total;
+        }
+        return DownloadInfoNotification;
+    }());
+    exports.DownloadInfoNotification = DownloadInfoNotification;
 });

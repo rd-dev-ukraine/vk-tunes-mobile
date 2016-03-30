@@ -32,7 +32,7 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages", "
         ], MyAudioController);
         return MyAudioController;
     }());
-    exports.Configuration = {
+    exports.Component = {
         controller: MyAudioController,
         template: "\n<h2>My audio</h2>\n<audio-list audio=\"$ctrl.audio\"></audio-list>\n"
     };

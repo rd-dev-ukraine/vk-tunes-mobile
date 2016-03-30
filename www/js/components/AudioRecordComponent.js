@@ -37,7 +37,7 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         ], AudioRecordController);
         return AudioRecordController;
     }());
-    exports.Configuration = {
+    exports.Component = {
         bindings: {
             audio: "<"
         },

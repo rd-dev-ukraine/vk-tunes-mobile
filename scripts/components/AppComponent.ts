@@ -16,6 +16,7 @@ export var Component : ng.IComponentOptions = {
 `
 <div>
     <h1>VK-Tunes mobile app</h1>
+    <download-info></download-info>
     <tab>
         <tab-item title="My Audio">
             <my-audio></my-audio>
@@ -23,7 +24,7 @@ export var Component : ng.IComponentOptions = {
         <tab-item title="Search Audio">
             <search-audio></search-audio>
         </tab-item>
-    </tab>
+    </tab>    
 </div>
 `
 }

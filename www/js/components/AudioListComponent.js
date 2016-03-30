@@ -26,7 +26,7 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         ], AudioListController);
         return AudioListController;
     }());
-    exports.Configuration = {
+    exports.Component = {
         bindings: {
             audio: "<"
         },

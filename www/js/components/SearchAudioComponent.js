@@ -34,7 +34,7 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         ], SearchAudioController);
         return SearchAudioController;
     }());
-    exports.Configuration = {
+    exports.Component = {
         controller: SearchAudioController,
         controllerAs: "$c",
         template: "\n<h2>Search audio</h2>\n<div>\n    <input ng-model=\"$c.query\"\n        ng-model-options=\"{ debounce: 100 }\"\n        type=\"text\" />\n</div>\n<audio-list audio=\"$c.audio\"></audio-list>\n"

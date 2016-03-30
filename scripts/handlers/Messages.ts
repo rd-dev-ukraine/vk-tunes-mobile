@@ -25,3 +25,9 @@ export class DownloadAudio {
 export class DownloadProgress {
     constructor(public audio: AudioInfo, public progress: IAudioDownloadingProgress) {}
 }
+
+export class DownloadInfoNotification {
+    constructor(public index: number, 
+                public total: number ) {
+    }
+}

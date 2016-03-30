@@ -18,6 +18,6 @@ define(["require", "exports", "../pub-sub/Decorators"], function (require, expor
     }());
     exports.Component = {
         controller: AppComponentController,
-        template: "\n<div>\n    <h1>VK-Tunes mobile app</h1>\n    <tab>\n        <tab-item title=\"My Audio\">\n            <my-audio></my-audio>\n        </tab-item>\n        <tab-item title=\"Search Audio\">\n            <search-audio></search-audio>\n        </tab-item>\n    </tab>\n</div>\n"
+        template: "\n<div>\n    <h1>VK-Tunes mobile app</h1>\n    <download-info></download-info>\n    <tab>\n        <tab-item title=\"My Audio\">\n            <my-audio></my-audio>\n        </tab-item>\n        <tab-item title=\"Search Audio\">\n            <search-audio></search-audio>\n        </tab-item>\n    </tab>    \n</div>\n"
     };
 });

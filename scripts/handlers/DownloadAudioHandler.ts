@@ -13,6 +13,8 @@ class DownloadAudioHandler {
     private downloadQueue: AudioInfo[] = [];
     private isDownloading = false; 
     
+    private totalDownloading = 0;
+    
     constructor(private vk: VkAudioService, private fs: StoredAudioService) {        
     }
     
@@ -20,6 +22,8 @@ class DownloadAudioHandler {
     @PS.Handle(Messages.DownloadAudio)
     downloadAudio(message: Messages.DownloadAudio) {
         this.downloadQueue.push(...message.audio);
+        this.totalDownloading += message.audio.length;
+                
         this.download();
     }
     
@@ -53,11 +57,17 @@ class DownloadAudioHandler {
                     this.isDownloading = false;
                     this.download();
                 });
+        } else {
+             this.totalDownloading = 0;
+             this.publish(new Messages.DownloadInfoNotification(0, 0));
         }
     }
     
     private onProgress(audio: AudioInfo, progress: IAudioDownloadingProgress = null) {
         this.publish(new Messages.DownloadProgress(audio, progress));
+        this.publish(new Messages.DownloadInfoNotification(
+                            this.totalDownloading - this.downloadQueue.length,
+                            this.totalDownloading));
     }
 }
 

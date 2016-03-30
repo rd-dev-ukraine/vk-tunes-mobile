@@ -15,6 +15,7 @@ import MyAudio = require("./components/MyAudioComponent");
 import SearchAudio = require("./components/SearchAudioComponent");
 import AudioRecord = require("./components/AudioRecordComponent");
 import AudioList = require("./components/AudioListComponent");
+import DownloadInfo = require("./components/DownloadInfoComponent");
 
 import AudioListHandler = require("./handlers/AudioListHandler");
 import DownloadAudioHandler = require("./handlers/DownloadAudioHandler");
@@ -29,13 +30,14 @@ export function onDeviceReady() {
            .service(DownloadAudioHandler.ServiceName, DownloadAudioHandler)
            .component("app", App.Component)           
            .component("list", List.Component)
-           .component("tab", Tabs.TabConfiguration)
-           .component("tabItem", Tabs.TabItemConfiguration)
+           .component("tab", Tabs.TabComponent)
+           .component("tabItem", Tabs.TabItemComponent)
            .component("progressBar", ProgressBar.Component)           
-           .component("audioList", AudioList.Configuration)
-           .component("myAudio", MyAudio.Configuration)
-           .component("searchAudio", SearchAudio.Configuration)
-           .component("audioRecord", AudioRecord.Configuration)
+           .component("audioList", AudioList.Component)
+           .component("myAudio", MyAudio.Component)
+           .component("searchAudio", SearchAudio.Component)
+           .component("audioRecord", AudioRecord.Component)
+           .component("downloadInfo", DownloadInfo.Component)
            .config(function($locationProvider) {
                $locationProvider.html5Mode(true);
            })

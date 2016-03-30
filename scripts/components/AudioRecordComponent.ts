@@ -32,7 +32,7 @@ class AudioRecordController {
     }
 }
 
-export var Configuration: ng.IComponentOptions = {
+export var Component: ng.IComponentOptions = {
     bindings: {
         audio: "<"
     },

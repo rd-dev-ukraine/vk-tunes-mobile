@@ -24,7 +24,7 @@ class AudioListController {
     publish(message: any) {}
 }
 
-export var Configuration: ng.IComponentOptions = {
+export var Component: ng.IComponentOptions = {
     bindings: {
         audio: "<"
     },

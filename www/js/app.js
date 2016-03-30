@@ -1,5 +1,5 @@
 /// <references path="../typings/main.d.ts" />
-define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./vk/StoredAudioService", "./components/ListComponent", "./components/TabComponent", "./components/ProgressBarComponent", "./components/AppComponent", "./components/MyAudioComponent", "./components/SearchAudioComponent", "./components/AudioRecordComponent", "./components/AudioListComponent", "./handlers/AudioListHandler", "./handlers/DownloadAudioHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, ProgressBar, App, MyAudio, SearchAudio, AudioRecord, AudioList, AudioListHandler, DownloadAudioHandler) {
+define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./vk/StoredAudioService", "./components/ListComponent", "./components/TabComponent", "./components/ProgressBarComponent", "./components/AppComponent", "./components/MyAudioComponent", "./components/SearchAudioComponent", "./components/AudioRecordComponent", "./components/AudioListComponent", "./components/DownloadInfoComponent", "./handlers/AudioListHandler", "./handlers/DownloadAudioHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, ProgressBar, App, MyAudio, SearchAudio, AudioRecord, AudioList, DownloadInfo, AudioListHandler, DownloadAudioHandler) {
     "use strict";
     function onDeviceReady() {
         angular.module("vk-tunes", ["ngTouch"])
@@ -10,13 +10,14 @@ define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./v
             .service(DownloadAudioHandler.ServiceName, DownloadAudioHandler)
             .component("app", App.Component)
             .component("list", List.Component)
-            .component("tab", Tabs.TabConfiguration)
-            .component("tabItem", Tabs.TabItemConfiguration)
+            .component("tab", Tabs.TabComponent)
+            .component("tabItem", Tabs.TabItemComponent)
             .component("progressBar", ProgressBar.Component)
-            .component("audioList", AudioList.Configuration)
-            .component("myAudio", MyAudio.Configuration)
-            .component("searchAudio", SearchAudio.Configuration)
-            .component("audioRecord", AudioRecord.Configuration)
+            .component("audioList", AudioList.Component)
+            .component("myAudio", MyAudio.Component)
+            .component("searchAudio", SearchAudio.Component)
+            .component("audioRecord", AudioRecord.Component)
+            .component("downloadInfo", DownloadInfo.Component)
             .config(function ($locationProvider) {
             $locationProvider.html5Mode(true);
         })
