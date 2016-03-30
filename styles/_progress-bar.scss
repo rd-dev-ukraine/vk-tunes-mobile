@@ -1,0 +1,14 @@
+.progress-bar {
+    overflow: hidden;
+    position: relative;
+    height: 3px;
+    
+    &__progress-indicator {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        
+        background: #33FF33;
+    }    
+}

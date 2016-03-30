@@ -8,6 +8,7 @@ import EventBus = require("./pub-sub/EventBus");
 
 import List = require("./components/ListComponent");
 import Tabs = require("./components/TabComponent");
+import ProgressBar = require("./components/ProgressBarComponent");
 
 import App = require("./components/AppComponent");
 import MyAudio = require("./components/MyAudioComponent");
@@ -30,6 +31,7 @@ export function onDeviceReady() {
            .component("list", List.Component)
            .component("tab", Tabs.TabConfiguration)
            .component("tabItem", Tabs.TabItemConfiguration)
+           .component("progressBar", ProgressBar.Component)           
            .component("audioList", AudioList.Configuration)
            .component("myAudio", MyAudio.Configuration)
            .component("searchAudio", SearchAudio.Configuration)

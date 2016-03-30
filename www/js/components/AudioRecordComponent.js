@@ -43,6 +43,6 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         },
         controller: AudioRecordController,
         controllerAs: "$c",
-        template: "\n<div>\n  <span ng-show=\"$c.audio.isInMyAudio\">[*] </span>\n  <span ng-show=\"$c.audio.local\">[@]</span>\n  <strong>{{$c.audio.remote.artist}}</strong> - {{$c.audio.remote.title}}  \n</div>\n<div>\n    File size <em>{{$c.audio.fileSize}}</em> bytes\n</div>\n<div ng-show=\"$c.downloadProgress\">\n    Downloading {{$c.downloadProgress.percent}}%   [{{$c.downloadProgress.bytesLoaded}}/{{$c.downloadProgress.bytesTotal}}]\n</div>\n"
+        template: "\n<div>\n  <span ng-show=\"$c.audio.isInMyAudio\">[*] </span>\n  <span ng-show=\"$c.audio.local\">[@]</span>\n  <strong>{{$c.audio.remote.artist}}</strong> - {{$c.audio.remote.title}}  \n</div>\n<div>\n    File size <em>{{$c.audio.fileSize}}</em> bytes\n</div>\n<div ng-show=\"$c.downloadProgress\">\n    Downloading {{$c.downloadProgress.percent}}%   [{{$c.downloadProgress.bytesLoaded}}/{{$c.downloadProgress.bytesTotal}}]\n    <progress-bar progress=\"$c.downloadProgress.percent\"></progress-bar>\n</div>\n"
     };
 });

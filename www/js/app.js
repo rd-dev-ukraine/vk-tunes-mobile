@@ -1,5 +1,5 @@
 /// <references path="../typings/main.d.ts" />
-define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./vk/StoredAudioService", "./components/ListComponent", "./components/TabComponent", "./components/AppComponent", "./components/MyAudioComponent", "./components/SearchAudioComponent", "./components/AudioRecordComponent", "./components/AudioListComponent", "./handlers/AudioListHandler", "./handlers/DownloadAudioHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, App, MyAudio, SearchAudio, AudioRecord, AudioList, AudioListHandler, DownloadAudioHandler) {
+define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./vk/StoredAudioService", "./components/ListComponent", "./components/TabComponent", "./components/ProgressBarComponent", "./components/AppComponent", "./components/MyAudioComponent", "./components/SearchAudioComponent", "./components/AudioRecordComponent", "./components/AudioListComponent", "./handlers/AudioListHandler", "./handlers/DownloadAudioHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, ProgressBar, App, MyAudio, SearchAudio, AudioRecord, AudioList, AudioListHandler, DownloadAudioHandler) {
     "use strict";
     function onDeviceReady() {
         angular.module("vk-tunes", ["ngTouch"])
@@ -12,6 +12,7 @@ define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./v
             .component("list", List.Component)
             .component("tab", Tabs.TabConfiguration)
             .component("tabItem", Tabs.TabItemConfiguration)
+            .component("progressBar", ProgressBar.Component)
             .component("audioList", AudioList.Configuration)
             .component("myAudio", MyAudio.Configuration)
             .component("searchAudio", SearchAudio.Configuration)

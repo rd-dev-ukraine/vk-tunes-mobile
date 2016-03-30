@@ -50,6 +50,7 @@ export var Configuration: ng.IComponentOptions = {
 </div>
 <div ng-show="$c.downloadProgress">
     Downloading {{$c.downloadProgress.percent}}%   [{{$c.downloadProgress.bytesLoaded}}/{{$c.downloadProgress.bytesTotal}}]
+    <progress-bar progress="$c.downloadProgress.percent"></progress-bar>
 </div>
 `
 };
