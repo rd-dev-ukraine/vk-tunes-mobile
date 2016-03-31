@@ -48,6 +48,6 @@ define(["require", "exports"], function (require, exports) {
             tab: "^tab"
         },
         transclude: true,
-        template: "\n<div ng-class=\"$ctrl.css\" ng-show=\"$ctrl.selected\" ng-transclude></div>\n"
+        template: "\n<div class=\"tab-item__content\" ng-show=\"$ctrl.selected\" ng-transclude></div>\n"
     };
 });

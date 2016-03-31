@@ -92,13 +92,18 @@ tab-item {
     }
 }
 
-
-my-audio, search-audio {
+.audio-page {
+    @include abs-fill-parent;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     
     & > * {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+    
+    & > my-audio, & > search-audio {
         flex-grow: 1;
         flex-shrink: 1;
     }

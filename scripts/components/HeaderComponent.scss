@@ -4,7 +4,7 @@
 @import "../../styles/font-awesome/_mixins.scss";
 
 header {
-    font-size: 2em;
+    font-size: $font-size-large;
     text-transform: uppercase;
     color: $blue-color;    
 }

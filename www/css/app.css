@@ -79,6 +79,19 @@ tab {
     left: 0;
     bottom: 0; }
 
+tab-item {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0; }
+  tab-item__content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0; }
+
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
 html, body {
@@ -163,18 +176,26 @@ tab-item {
     flex-shrink: 1;
     flex-basis: auto; }
 
-my-audio, search-audio {
+.audio-page {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start; }
-  my-audio > *, search-audio > * {
+  .audio-page > * {
+    flex-grow: 0;
+    flex-shrink: 0; }
+  .audio-page > my-audio, .audio-page > search-audio {
     flex-grow: 1;
     flex-shrink: 1; }
 
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
 header {
-  font-size: 2em;
+  font-size: 18px;
   text-transform: uppercase;
   color: #2B587A; }
 
@@ -183,6 +204,20 @@ header {
 
 .header__sub-title {
   color: #999; }
+
+/* Contains variables for https://vk.com styles */
+/* Contains variables for https://vk.com styles */
+audio-list {
+  display: flex;
+  flex-direction: column; }
+  audio-list > * {
+    flex: 1; }
+
+/* Contains variables for https://vk.com styles */
+/* Contains variables for https://vk.com styles */
+list {
+  overflow-x: hidden;
+  overflow-y: auto; }
 
 /* Contains variables for https://vk.com styles */
 html {

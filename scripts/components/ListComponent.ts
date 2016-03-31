@@ -60,7 +60,7 @@ export var Component: ng.IComponentOptions = {
     controller: ListComponentController,
     controllerAs: "$c",
     template: `
-    <ul >
+    <ul>
         <li class="list-item"
             ng-repeat="$item in $c.items">
             <div ng-mousedown="$c.beginToggleSelection()" 

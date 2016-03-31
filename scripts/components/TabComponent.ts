@@ -72,6 +72,6 @@ export var TabItemComponent: ng.IComponentOptions = {
     transclude: true,
     template: 
 `
-<div ng-class="$ctrl.css" ng-show="$ctrl.selected" ng-transclude></div>
+<div class="tab-item__content" ng-show="$ctrl.selected" ng-transclude></div>
 `
 };
