@@ -1,4 +1,6 @@
 @import "../../styles/_vk-vars.scss";
+@import "../../styles/font-awesome/_variables.scss";
+@import "../../styles/font-awesome/_mixins.scss";
 
 html, body {
     height: 100%;
@@ -49,19 +51,20 @@ html, body {
     }
     
     &:before {
+        @include fa-icon();
+        
         display: inline-block;
-        content: '';
-        background: currentColor;
-        width: 3em;
-        height: 3em;
+        font-size: 3em;
+        width: 1em;
+        height: 1em;
     }
     
     &.my-audio:before {
-       -webkit-mask: url("images/fa-star-o.svg") no-repeat center center;         
+       content: '#{$fa-var-star-o}';         
     }
     
     &.search-audio:before {
-        -webkit-mask: url("images/fa-search.svg") no-repeat center center;
+        content: '#{$fa-var-search}';
     }
 }
 
