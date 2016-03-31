@@ -64,8 +64,11 @@ tab.app__tab .tab__header {
     border-top: 1px solid $color-border;
 }
 
-.audio-page {
+.audio-page {    
     @include abs-fill-parent;
+    
+    margin: 0.3em;
+    
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

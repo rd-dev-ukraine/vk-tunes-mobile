@@ -148,6 +148,7 @@ tab.app__tab .tab__header {
   right: 0;
   left: 0;
   bottom: 0;
+  margin: 0.3em;
   display: flex;
   flex-direction: column;
   justify-content: flex-start; }
@@ -200,6 +201,36 @@ audio-list {
 list {
   overflow-x: hidden;
   overflow-y: auto; }
+
+/* Contains variables for https://vk.com styles */
+/* Contains variables for https://vk.com styles */
+search-box {
+  border: 1px solid #DAE1E8;
+  border-radius: 3px;
+  padding: 0.3em; }
+  search-box > * {
+    vertical-align: middle; }
+  search-box::before {
+    display: inline-block;
+    font: normal normal normal 14px / 1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "";
+    color: #999;
+    margin: 0.3em; }
+
+.search-box {
+  display: flex;
+  flex-direction: row; }
+  .search-box > {
+    flex-grow: 0;
+    flex-shrink: 0; }
+  .search-box__input {
+    flex-grow: 1;
+    border: 0 none;
+    outline: 0 none; }
 
 /* Contains variables for https://vk.com styles */
 html {

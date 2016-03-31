@@ -1,0 +1,39 @@
+@import "../../styles/_vk-vars.scss";
+@import "../../styles/_mixins.scss";
+@import "../../styles/font-awesome/_variables.scss";
+@import "../../styles/font-awesome/_mixins.scss";
+
+
+search-box {
+    border: 1px solid $color-border;
+    border-radius: 3px;
+    padding: 0.3em;
+    
+    & > * {
+        vertical-align: middle;
+    }
+    
+    &::before {
+        @include fa-icon();
+        content: $fa-var-search;
+        color: $color-inactive;
+        margin: 0.3em;
+    }
+}
+
+.search-box {
+    display: flex;
+    flex-direction: row;
+    
+    & > {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+    
+    &__input {
+        flex-grow: 1;
+        
+        border: 0 none;
+        outline: 0 none;
+    }
+}

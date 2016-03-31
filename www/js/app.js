@@ -1,5 +1,5 @@
 /// <references path="../typings/main.d.ts" />
-define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./vk/StoredAudioService", "./components/ListComponent", "./components/TabComponent", "./components/ProgressBarComponent", "./components/AppComponent", "./components/HeaderComponent", "./components/MyAudioComponent", "./components/SearchAudioComponent", "./components/AudioRecordComponent", "./components/AudioListComponent", "./components/DownloadInfoComponent", "./handlers/AudioListHandler", "./handlers/DownloadAudioHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, ProgressBar, App, Header, MyAudio, SearchAudio, AudioRecord, AudioList, DownloadInfo, AudioListHandler, DownloadAudioHandler) {
+define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./vk/StoredAudioService", "./components/ListComponent", "./components/TabComponent", "./components/ProgressBarComponent", "./components/SearchBoxComponent", "./components/AppComponent", "./components/HeaderComponent", "./components/MyAudioComponent", "./components/SearchAudioComponent", "./components/AudioRecordComponent", "./components/AudioListComponent", "./components/DownloadInfoComponent", "./handlers/AudioListHandler", "./handlers/DownloadAudioHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, ProgressBar, SearchBox, App, Header, MyAudio, SearchAudio, AudioRecord, AudioList, DownloadInfo, AudioListHandler, DownloadAudioHandler) {
     "use strict";
     function onDeviceReady() {
         angular.module("vk-tunes", ["ngTouch"])
@@ -13,6 +13,7 @@ define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./v
             .component("list", List.Component)
             .component("tab", Tabs.TabComponent)
             .component("tabItem", Tabs.TabItemComponent)
+            .component("searchBox", SearchBox.Component)
             .component("progressBar", ProgressBar.Component)
             .component("audioList", AudioList.Component)
             .component("myAudio", MyAudio.Component)

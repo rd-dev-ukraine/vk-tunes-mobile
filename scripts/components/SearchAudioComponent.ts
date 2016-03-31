@@ -37,11 +37,7 @@ export var Component: ng.IComponentOptions = {
     controllerAs: "$c",
     template:
 `
-<div>
-    <input ng-model="$c.query"
-        ng-model-options="{ debounce: 100 }"
-        type="text" />
-</div>
+<search-box value="$c.query"></search-box>
 <audio-list audio="$c.audio"></audio-list>
 `
 };
