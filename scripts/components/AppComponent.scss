@@ -36,7 +36,7 @@ html, body {
     align-items: center;
     font-size: $font-size-small;
     color: $color-inactive;
-    padding: 0.3em 1em;
+    padding: $space $space-large;
     
     &.active {
         color: $blue-color;        
@@ -67,7 +67,7 @@ tab.app__tab .tab__header {
 .audio-page {    
     @include abs-fill-parent;
     
-    margin: 0.3em;
+    margin: $space;
     
     display: flex;
     flex-direction: column;
@@ -81,6 +81,14 @@ tab.app__tab .tab__header {
     & > my-audio, & > search-audio {
         flex-grow: 1;
         flex-shrink: 1;
+    }
+    
+    header {
+        margin-bottom: $space;
+    }
+    
+    download-info {
+        margin-bottom: $space;
     }
 }
 

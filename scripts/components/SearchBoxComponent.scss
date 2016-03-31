@@ -17,7 +17,7 @@ search-box {
         @include fa-icon();
         content: $fa-var-search;
         color: $color-inactive;
-        margin: 0.3em;
+        margin: $space;
     }
 }
 

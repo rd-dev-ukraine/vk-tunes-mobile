@@ -158,6 +158,10 @@ tab.app__tab .tab__header {
   .audio-page > my-audio, .audio-page > search-audio {
     flex-grow: 1;
     flex-shrink: 1; }
+  .audio-page header {
+    margin-bottom: 0.3em; }
+  .audio-page download-info {
+    margin-bottom: 0.3em; }
 
 my-audio, search-audio {
   display: flex;
@@ -201,6 +205,11 @@ audio-list {
 list {
   overflow-x: hidden;
   overflow-y: auto; }
+
+/* Contains variables for https://vk.com styles */
+/* Contains variables for https://vk.com styles */
+search-audio search-box {
+  margin-bottom: 0.3em; }
 
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
