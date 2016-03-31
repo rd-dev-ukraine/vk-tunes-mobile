@@ -34,6 +34,6 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages", "
     }());
     exports.Component = {
         controller: MyAudioController,
-        template: "\n<h2>My audio</h2>\n<audio-list audio=\"$ctrl.audio\"></audio-list>\n"
+        template: "\n<h2 class=\"audio-page__item\">My audio</h2>\n<div class=\"audio-page__item fill\">\n    <audio-list class=\"audio-page__item-fill-content\" audio=\"$ctrl.audio\"></audio-list>\n</div>\n"
     };
 });

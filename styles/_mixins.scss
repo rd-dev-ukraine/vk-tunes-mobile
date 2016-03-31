@@ -1,0 +1,26 @@
+@import "_vk-vars";
+
+@mixin header-content {
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin content {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+@mixin content-fill {
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: 100%;
+    position: relative;
+}
+
+@mixin abs-fill-parent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}

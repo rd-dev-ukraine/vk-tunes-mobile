@@ -47,14 +47,15 @@ table {
     bottom: 0;
     background: #33FF33; }
 
+/* Contains variables for https://vk.com styles */
 tab {
   position: relative; }
 
 .tab {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
+  left: 0;
   bottom: 0;
   display: flex;
   flex-direction: column;
@@ -65,13 +66,20 @@ tab {
     order: 1;
     display: flex;
     justify-content: center; }
-  .tab__content {
-    flex-grow: 0;
+  .tab__tab-container {
+    flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 100%;
-    overflow-x: hidden;
-    overflow-y: auto; }
+    position: relative;
+    overflow: hidden; }
+  .tab__content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0; }
 
+/* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
 html, body {
   height: 100%; }
@@ -84,18 +92,18 @@ html, body {
   display: flex;
   flex-direction: column; }
   .app__header, .app__download-info {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .app__content {
     flex-grow: 1;
+    flex-shrink: 1; }
+  .app__content {
+    flex-grow: 0;
     flex-shrink: 1;
     flex-basis: 100%;
     position: relative; }
   .app__tab {
     position: absolute;
     top: 0;
-    left: 0;
     right: 0;
+    left: 0;
     bottom: 0; }
 
 .tab-button {
@@ -126,6 +134,51 @@ html, body {
 
 tab.app__tab .tab__header {
   border-top: 1px solid #DAE1E8; }
+
+.audio-page {
+  display: flex;
+  flex-direction: column; }
+  .audio-page__item {
+    flex-grow: 1;
+    flex-shrink: 1; }
+  .audio-page__item.fill {
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: 100%;
+    position: relative; }
+  .audio-page__item-fill-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; }
+
+tab-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; }
+  tab-item > * {
+    flex-grow: 1;
+    flex-shrink: 1; }
+  tab-item > *:last-child {
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: 100%;
+    position: relative; }
+
+/* Contains variables for https://vk.com styles */
+/* Contains variables for https://vk.com styles */
+header {
+  margin: 0.3em;
+  font-size: 2em;
+  text-transform: uppercase;
+  color: #2B587A; }
+
+.header__separator {
+  color: #E9EDF1; }
+
+.header__sub-title {
+  color: #999; }
 
 /* Contains variables for https://vk.com styles */
 html {

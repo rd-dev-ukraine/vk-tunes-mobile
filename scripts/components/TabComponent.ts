@@ -52,7 +52,10 @@ export var TabComponent: ng.IComponentOptions = {
             {{tab.title}}            
         </li>
     </ul>
-    <div class="tab__content" ng-transclude></div>
+    <div class="tab__tab-container">
+        <div class="tab__content" ng-transclude>
+        </div>
+    </div>
 </div>
 `
 };

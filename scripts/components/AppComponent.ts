@@ -15,16 +15,18 @@ export var Component : ng.IComponentOptions = {
     template:
 `
 <div class="app">
-    <h1 class="app__header">VK-Tunes mobile app</h1>
-    <download-info class="app__download-info"></download-info>
     <div class="app__content">
         <tab class="app__tab">
             <tab-item header-class="tab-button my-audio"
                       title="My Audio">
-                <my-audio></my-audio>
+                <header title="My audio"></header>                    
+                <download-info class="app__download-info"></download-info>
+                <my-audio ></my-audio>
             </tab-item>
             <tab-item header-class="tab-button search-audio" 
                       title="Search Audio">
+                <header title="Search audio"></header>                    
+                <download-info class="app__download-info"></download-info>
                 <search-audio></search-audio>
             </tab-item>
         </tab>

@@ -1,5 +1,5 @@
 /// <references path="../typings/main.d.ts" />
-define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./vk/StoredAudioService", "./components/ListComponent", "./components/TabComponent", "./components/ProgressBarComponent", "./components/AppComponent", "./components/MyAudioComponent", "./components/SearchAudioComponent", "./components/AudioRecordComponent", "./components/AudioListComponent", "./components/DownloadInfoComponent", "./handlers/AudioListHandler", "./handlers/DownloadAudioHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, ProgressBar, App, MyAudio, SearchAudio, AudioRecord, AudioList, DownloadInfo, AudioListHandler, DownloadAudioHandler) {
+define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./vk/StoredAudioService", "./components/ListComponent", "./components/TabComponent", "./components/ProgressBarComponent", "./components/AppComponent", "./components/HeaderComponent", "./components/MyAudioComponent", "./components/SearchAudioComponent", "./components/AudioRecordComponent", "./components/AudioListComponent", "./components/DownloadInfoComponent", "./handlers/AudioListHandler", "./handlers/DownloadAudioHandler"], function (require, exports, Directory, VkAudioService, StoredAudioService, List, Tabs, ProgressBar, App, Header, MyAudio, SearchAudio, AudioRecord, AudioList, DownloadInfo, AudioListHandler, DownloadAudioHandler) {
     "use strict";
     function onDeviceReady() {
         angular.module("vk-tunes", ["ngTouch"])
@@ -9,6 +9,7 @@ define(["require", "exports", "./filesys/Directory", "./vk/VkAudioService", "./v
             .service(AudioListHandler.ServiceName, AudioListHandler)
             .service(DownloadAudioHandler.ServiceName, DownloadAudioHandler)
             .component("app", App.Component)
+            .component("header", Header.Component)
             .component("list", List.Component)
             .component("tab", Tabs.TabComponent)
             .component("tabItem", Tabs.TabItemComponent)

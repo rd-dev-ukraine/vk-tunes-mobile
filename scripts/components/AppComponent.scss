@@ -1,4 +1,5 @@
 @import "../../styles/_vk-vars.scss";
+@import "../../styles/_mixins.scss";
 @import "../../styles/font-awesome/_variables.scss";
 @import "../../styles/font-awesome/_mixins.scss";
 
@@ -13,27 +14,18 @@ html, body {
 .app {
     height: 100%;
     
-    display: flex;
-    flex-direction: column;
+    @include header-content;
     
     &__header, &__download-info {
-        flex-grow: 0;
-        flex-shrink: 0;
+        @include content;
     }
     
     &__content {
-        flex-grow: 1;
-        flex-shrink: 1;
-        flex-basis: 100%;
-        position: relative;
+        @include content-fill;
     }
     
     &__tab {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        @include abs-fill-parent;
     }
 }
 
@@ -70,4 +62,17 @@ html, body {
 
 tab.app__tab .tab__header {
     border-top: 1px solid $color-border;
+}
+
+tab-item {
+    @include header-content;
+    justify-content: flex-start;
+    
+    & > * {
+        @include content;
+    }
+    
+    & > *:last-child {
+        @include content-fill;
+    }
 }

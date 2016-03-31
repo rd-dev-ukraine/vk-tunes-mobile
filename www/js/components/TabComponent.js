@@ -36,7 +36,7 @@ define(["require", "exports"], function (require, exports) {
     exports.TabComponent = {
         transclude: true,
         controller: TabComponentController,
-        template: "\n<div class=\"tab\">\n    <ul class=\"tab__header\">\n        <li class=\"tab-header__item {{tab.headerCss}}\"        \n            ng-repeat=\"tab in $ctrl.tabs\"\n            ng-click=\"$ctrl.select(tab)\"\n            ng-class=\"{ active: tab.selected }\">\n            {{tab.title}}            \n        </li>\n    </ul>\n    <div class=\"tab__content\" ng-transclude></div>\n</div>\n"
+        template: "\n<div class=\"tab\">\n    <ul class=\"tab__header\">\n        <li class=\"tab-header__item {{tab.headerCss}}\"        \n            ng-repeat=\"tab in $ctrl.tabs\"\n            ng-click=\"$ctrl.select(tab)\"\n            ng-class=\"{ active: tab.selected }\">\n            {{tab.title}}            \n        </li>\n    </ul>\n    <div class=\"tab__tab-container\">\n        <div class=\"tab__content\" ng-transclude>\n        </div>\n    </div>\n</div>\n"
     };
     exports.TabItemComponent = {
         bindings: {

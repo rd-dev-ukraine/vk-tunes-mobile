@@ -11,6 +11,7 @@ import Tabs = require("./components/TabComponent");
 import ProgressBar = require("./components/ProgressBarComponent");
 
 import App = require("./components/AppComponent");
+import Header = require("./components/HeaderComponent");
 import MyAudio = require("./components/MyAudioComponent");
 import SearchAudio = require("./components/SearchAudioComponent");
 import AudioRecord = require("./components/AudioRecordComponent");
@@ -29,6 +30,7 @@ export function onDeviceReady() {
            .service(AudioListHandler.ServiceName, AudioListHandler)
            .service(DownloadAudioHandler.ServiceName, DownloadAudioHandler)
            .component("app", App.Component)           
+           .component("header", Header.Component)
            .component("list", List.Component)
            .component("tab", Tabs.TabComponent)
            .component("tabItem", Tabs.TabItemComponent)

@@ -1,13 +1,11 @@
+@import "../../styles/_mixins.scss";
+
 tab {
     position: relative;    
 }
 
 .tab {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    @include abs-fill-parent;
     
     display: flex;
     flex-direction: column;
@@ -22,11 +20,16 @@ tab {
         justify-content: center;
     }
     
-    &__content {
-        flex-grow: 0;
+    &__tab-container {
+        flex-grow: 1;
         flex-shrink: 1;
         flex-basis: 100%;
-        overflow-x: hidden;
-        overflow-y: auto;
+        
+        position: relative;
+        overflow: hidden;
+    }
+    
+    &__content {
+        @include abs-fill-parent;
     }
 }

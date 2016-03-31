@@ -1,0 +1,20 @@
+@import "../../styles/_vk-vars.scss";
+@import "../../styles/_mixins.scss";
+@import "../../styles/font-awesome/_variables.scss";
+@import "../../styles/font-awesome/_mixins.scss";
+
+header {
+    font-size: 2em;
+    text-transform: uppercase;
+    color: $blue-color;    
+}
+
+.header {
+    &__separator {
+        color: $color-background-hover;        
+    }
+    
+    &__sub-title {
+        color: $color-inactive;
+    }
+}
