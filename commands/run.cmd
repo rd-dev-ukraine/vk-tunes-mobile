@@ -1,1 +1,6 @@
-commands\sass.cmd && nodevars && tsc && cordova build android && cordova run android
+@echo off
+
+call %~dp0build.cmd
+if %errorlevel% neq 0 exit /b %errorlevel%
+
+call cordova run android
