@@ -6,8 +6,15 @@
 audio-list {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     
     & > * {
-        flex: 1;
+        flex-grow: 0;
+        flex-shrink: 0;        
+    }
+    
+    & > list {
+        flex-grow: 1;
+        flex-shrink: 1;
     }
 }

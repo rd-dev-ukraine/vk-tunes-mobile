@@ -158,6 +158,17 @@ tab.app__tab .tab__header {
     flex-grow: 1;
     flex-shrink: 1; }
 
+my-audio, search-audio {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; }
+  my-audio > *, search-audio > * {
+    flex-grow: 0;
+    flex-shrink: 0; }
+  my-audio > audio-list, search-audio > audio-list {
+    flex-grow: 1;
+    flex-shrink: 1; }
+
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
 header {
@@ -175,9 +186,14 @@ header {
 /* Contains variables for https://vk.com styles */
 audio-list {
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  justify-content: flex-start; }
   audio-list > * {
-    flex: 1; }
+    flex-grow: 0;
+    flex-shrink: 0; }
+  audio-list > list {
+    flex-grow: 1;
+    flex-shrink: 1; }
 
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */

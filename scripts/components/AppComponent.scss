@@ -80,3 +80,19 @@ tab.app__tab .tab__header {
         flex-shrink: 1;
     }
 }
+
+my-audio, search-audio {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+    & > * {
+        flex-grow: 0;
+        flex-shrink: 0; 
+    }
+    
+    & > audio-list {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+}
