@@ -79,18 +79,12 @@ tab {
     left: 0;
     bottom: 0; }
 
-tab-item {
+tab-item__content {
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0; }
-  tab-item__content {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0; }
 
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
@@ -147,34 +141,6 @@ html, body {
 
 tab.app__tab .tab__header {
   border-top: 1px solid #DAE1E8; }
-
-tab-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin: 0.3em; }
-  tab-item > * {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  tab-item > *:last-child {
-    flex-grow: 0;
-    flex-shrink: 1;
-    flex-basis: 100%;
-    position: relative; }
-
-/* tab-item is container for tab ui */
-tab-item {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column; }
-  tab-item > * {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto; }
 
 .audio-page {
   position: absolute;

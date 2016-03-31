@@ -35,8 +35,6 @@ tab {
 }
 
 tab-item {
-    @include abs-fill-parent;
-    
     &__content {
         @include abs-fill-parent;
     }    
