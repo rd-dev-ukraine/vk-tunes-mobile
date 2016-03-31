@@ -67,6 +67,7 @@ tab.app__tab .tab__header {
 tab-item {
     @include header-content;
     justify-content: flex-start;
+    margin: 0.3em;
     
     & > * {
         @include content;
@@ -74,5 +75,31 @@ tab-item {
     
     & > *:last-child {
         @include content-fill;
+    }
+}
+
+/* tab-item is container for tab ui */
+tab-item {
+    @include abs-fill-parent;
+    
+    display: flex;
+    flex-direction: column;
+    
+    & > * {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: auto;
+    }
+}
+
+
+my-audio, search-audio {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+    & > * {
+        flex-grow: 1;
+        flex-shrink: 1;
     }
 }

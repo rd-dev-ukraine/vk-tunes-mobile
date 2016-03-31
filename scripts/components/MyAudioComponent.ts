@@ -34,9 +34,7 @@ export var Component: ng.IComponentOptions = {
     controller: MyAudioController,
     template: 
 `
-<h2 class="audio-page__item">My audio</h2>
-<div class="audio-page__item fill">
-    <audio-list class="audio-page__item-fill-content" audio="$ctrl.audio"></audio-list>
-</div>
+<audio-list audio="$ctrl.audio">
+</audio-list>
 `
 };
