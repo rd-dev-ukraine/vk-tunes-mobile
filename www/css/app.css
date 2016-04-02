@@ -297,6 +297,29 @@ audio-record {
   .audio-record-title__artist {
     font-weight: bold; }
 
+.audio-record-badges {
+  margin-bottom: 0.3em; }
+
+.audio-record-badge {
+  display: inline-block;
+  border-radius: 2px;
+  font-size: 8px;
+  line-height: 2em;
+  padding: 0 0.6em;
+  color: #fff; }
+  .audio-record-badge__text, .audio-record-badge__icon {
+    vertical-align: middle; }
+  .audio-record-badge__text {
+    text-transform: uppercase; }
+  .audio-record-badge.my-audio {
+    background: #ff88ff; }
+  .audio-record-badge.on-device {
+    background: #f0aa02; }
+  .audio-record-badge.file-size {
+    background: #30ca00; }
+  .audio-record-badge.bitrate {
+    background: #ff3333; }
+
 /* Contains variables for https://vk.com styles */
 html {
   -webkit-user-select: none;

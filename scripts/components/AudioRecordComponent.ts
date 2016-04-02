@@ -10,6 +10,15 @@ class AudioRecordController {
     downloadProgress: IAudioDownloadingProgress;
 
     constructor(private $scope: ng.IScope) { }
+    
+    bitrate () {
+        if (this.audio.fileSize && this.audio.remote && this.audio.remote.duration) {
+            const bitrate = (this.audio.fileSize / this.audio.remote.duration / 1024).toFixed(0);
+            return `${bitrate}Kbps`;
+        }
+        
+        return "";
+    }
 
     @PS.Handle(Messages.AudioInfoUpdated)
     onAudioUpdated(message: Messages.AudioInfoUpdated) {
@@ -53,10 +62,34 @@ export var Component: ng.IComponentOptions = {
         {{$c.audio.remote.duration | duration}}
     </div>
 </div>
-<div>
-    <span ng-show="$c.audio.isInMyAudio">[*] </span>
-    <span ng-show="$c.audio.local">[@]</span>
-    File size <em>{{$c.audio.fileSize | filesize}}</em> 
+<div class="audio-record-badges">
+    <span class="audio-record-badge my-audio"
+          ng-show="$c.audio.isInMyAudio">
+        <span class="fa fa-star-o audio-record-badge__icon"></span>
+        <span class="audio-record-badge__text">
+            My audio
+        </span>
+    </span>
+    <span class="audio-record-badge on-device"
+          ng-show="$c.audio.local">
+        <span class="fa fa-hdd-o audio-record-badge__icon"></span>
+        <span class="audio-record-badge__text">
+            On device
+        </span>
+    </span>
+    <span class="audio-record-badge file-size"
+          ng-show="$c.audio.fileSize">        
+        <span class="audio-record-badge__text">
+            {{$c.audio.fileSize | filesize}}
+        </span>
+    </span>
+    <span class="audio-record-badge bitrate"
+          ng-show="$c.audio.fileSize">        
+        <span class="audio-record-badge__text">
+            {{$c.bitrate()}}
+        </span>
+    </span>
+    
 </div>
 <div ng-show="$c.downloadProgress">
     Downloading {{$c.downloadProgress.percent}}%   [{{$c.downloadProgress.bytesLoaded}}/{{$c.downloadProgress.bytesTotal}}]

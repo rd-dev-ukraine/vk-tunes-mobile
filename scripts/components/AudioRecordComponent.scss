@@ -8,9 +8,6 @@ audio-record {
     padding: $space;   
 }
 
-.audio-record {    
-}
-
 .audio-record-duration {
     color: $color-inactive;
 }
@@ -38,5 +35,42 @@ audio-record {
     
     &__artist {
         font-weight: bold;
+    }
+}
+
+.audio-record-badges {
+    margin-bottom: $space;
+}
+
+.audio-record-badge {
+    display: inline-block;
+    border-radius: 2px;
+    font-size: $font-size-x-small;
+    line-height: 1.8em;
+    padding: 0 0.6em;
+    color: #fff;    
+    
+    &__text, &__icon {
+        vertical-align: middle;
+    }
+    
+    &__text {
+        text-transform: uppercase;
+    }
+    
+    &.my-audio {
+        background: #cfcfcf;
+    }
+    
+    &.on-device {
+        background: #FF964A;
+    }
+    
+    &.file-size {
+        background: #30ca00;
+    }
+    
+    &.bitrate {
+        background: #ff3333;
     }
 }
