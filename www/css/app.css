@@ -304,7 +304,7 @@ audio-record {
   display: inline-block;
   border-radius: 2px;
   font-size: 8px;
-  line-height: 2em;
+  line-height: 1.8em;
   padding: 0 0.6em;
   color: #fff; }
   .audio-record-badge__text, .audio-record-badge__icon {
@@ -312,13 +312,16 @@ audio-record {
   .audio-record-badge__text {
     text-transform: uppercase; }
   .audio-record-badge.my-audio {
-    background: #ff88ff; }
+    background: #cfcfcf; }
   .audio-record-badge.on-device {
-    background: #f0aa02; }
+    background: #FF964A; }
   .audio-record-badge.file-size {
     background: #30ca00; }
   .audio-record-badge.bitrate {
     background: #ff3333; }
+
+.audio-record-download-progress {
+  font-size: 10px; }
 
 /* Contains variables for https://vk.com styles */
 html {

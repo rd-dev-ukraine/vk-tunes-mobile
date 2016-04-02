@@ -91,8 +91,9 @@ export var Component: ng.IComponentOptions = {
     </span>
     
 </div>
-<div ng-show="$c.downloadProgress">
-    Downloading {{$c.downloadProgress.percent}}%   [{{$c.downloadProgress.bytesLoaded}}/{{$c.downloadProgress.bytesTotal}}]
+<div class="audio-record-download-progress"
+     ng-show="$c.downloadProgress">
+    Downloading {{$c.downloadProgress.percent}}%   [{{$c.downloadProgress.bytesLoaded | filesize}}/{{$c.downloadProgress.bytesTotal | filesize}}]
     <progress-bar progress="$c.downloadProgress.percent"></progress-bar>
 </div>
 `
