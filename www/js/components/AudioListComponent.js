@@ -13,12 +13,19 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         AudioListController.prototype.toggleSelection = function () {
             this.selectionMode = !this.selectionMode;
         };
+        AudioListController.prototype.cancelSelection = function () {
+            this.selectedAudio = [];
+            this.selectionMode = false;
+        };
         AudioListController.prototype.downloadSelected = function () {
             if (this.selectedAudio) {
                 this.publish(new Messages.DownloadAudio(this.selectedAudio));
                 this.selectionMode = false;
                 this.selectedAudio = [];
             }
+        };
+        AudioListController.prototype.selectAll = function () {
+            this.selectedAudio = this.audio;
         };
         AudioListController.prototype.publish = function (message) { };
         AudioListController = __decorate([
@@ -32,6 +39,6 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         },
         controller: AudioListController,
         controllerAs: "$c",
-        template: "<div class=\"audio-list__button-panel\" \n          ng-show=\"!$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Select</button>\n     </div>\n     <div class=\"audio-list__button-panel\" \n          ng-show=\"$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Cancel selection</button>\n         <button ng-click=\"$c.downloadSelected()\">Download</button>\n     </div>\n     <list items=\"$c.audio\"\n           selected-items=\"$c.selectedAudio\"\n           selection-mode=\"$c.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
+        template: "<div class=\"audio-list__button-panel\" \n          ng-show=\"!$c.selectionMode\">\n         <button ng-click=\"$c.toggleSelection()\">Select</button>\n     </div>\n     <div class=\"audio-list__button-panel\" \n          ng-show=\"$c.selectionMode\">\n         <button ng-click=\"$c.selectAll()\">Select ALL</button>\n         <button ng-click=\"$c.downloadSelected()\">Download</button>\n         <button ng-click=\"$c.cancelSelection()\">Cancel selection</button>         \n     </div>\n     <list items=\"$c.audio\"\n           selected-items=\"$c.selectedAudio\"\n           selection-mode=\"$c.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
     };
 });

@@ -13,12 +13,21 @@ class AudioListController {
         this.selectionMode = !this.selectionMode;
     }
     
+    cancelSelection() {
+        this.selectedAudio = [];
+        this.selectionMode = false;
+    }
+    
     downloadSelected() {
         if (this.selectedAudio) {
             this.publish(new Messages.DownloadAudio(this.selectedAudio));
             this.selectionMode = false;
             this.selectedAudio = [];
         }
+    }
+    
+    selectAll() {
+        this.selectedAudio = this.audio;
     }
     
     publish(message: any) {}
@@ -32,13 +41,10 @@ export var Component: ng.IComponentOptions = {
     controllerAs: "$c",        
     template: 
     `<div class="audio-list__button-panel" 
-          ng-show="!$c.selectionMode">
-         <button ng-click="$c.toggleSelection()">Select</button>
-     </div>
-     <div class="audio-list__button-panel" 
           ng-show="$c.selectionMode">
-         <button ng-click="$c.toggleSelection()">Cancel selection</button>
+         <button ng-click="$c.selectAll()">Select ALL</button>
          <button ng-click="$c.downloadSelected()">Download</button>
+         <button ng-click="$c.cancelSelection()">Cancel selection</button>         
      </div>
      <list items="$c.audio"
            selected-items="$c.selectedAudio"
