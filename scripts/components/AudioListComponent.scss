@@ -16,5 +16,17 @@ audio-list {
     & > list {
         flex-grow: 1;
         flex-shrink: 1;
+    }    
+}
+
+
+.audio-list {
+    &__button-panel {
+        padding: $space;
+        border-bottom: 1px solid $color-border;
+        
+        & > button {
+            margin-right: $space;
+        }
     }
 }

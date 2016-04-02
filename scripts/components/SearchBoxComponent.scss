@@ -5,11 +5,17 @@
 
 
 search-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
     border: 1px solid $color-border;
     border-radius: 3px;
     padding: 0.3em;
     
     & > * {
+        flex-grow: 0;
+        flex-shrink: 0;
         vertical-align: middle;
     }
     
@@ -17,19 +23,12 @@ search-box {
         @include fa-icon();
         content: $fa-var-search;
         color: $color-inactive;
-        margin: $space;
+        margin: $space $space * 2 $space;
+        
     }
 }
 
 .search-box {
-    display: flex;
-    flex-direction: row;
-    
-    & > {
-        flex-grow: 0;
-        flex-shrink: 0;
-    }
-    
     &__input {
         flex-grow: 1;
         

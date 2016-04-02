@@ -24,3 +24,17 @@ a, a:link, a:visited, a:hover, a:target {
     color: $blue-color;
     text-decoration: none;        
 }
+
+button {
+    border: 0 none;
+    outline: 0 none;
+    padding: 4px 8px;
+    background: $background-blue-color;
+    border-radius: 2px;
+    color: white;
+    font-weight: bold;
+}
+
+button:disabled {
+    background: $color-inactive;
+}

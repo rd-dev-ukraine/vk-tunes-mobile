@@ -7,3 +7,23 @@ list {
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+.list-item {
+    border-bottom: 1px solid $color-border;
+}
+
+.list-item__container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    & > * {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+    
+    & > .list-item__selector {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+}

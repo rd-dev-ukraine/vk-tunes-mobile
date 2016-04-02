@@ -1,5 +1,7 @@
 /// <references path="../typings/main.d.ts" />
 
+import FileSizeFilter = require("./filters/FileSize");
+
 import Directory = require("./filesys/Directory");
 import VkAudioService = require("./vk/VkAudioService");
 import StoredAudioService = require("./vk/StoredAudioService");
@@ -25,6 +27,7 @@ import DownloadAudioHandler = require("./handlers/DownloadAudioHandler");
 export function onDeviceReady() {
 
     angular.module("vk-tunes", ["ngTouch"])
+           .filter("filesize", FileSizeFilter)
            .service(Directory.ServiceName, Directory)
            .service(VkAudioService.ServiceName, VkAudioService)
            .service(StoredAudioService.ServiceName, StoredAudioService)

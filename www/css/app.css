@@ -148,7 +148,6 @@ tab.app__tab .tab__header {
   right: 0;
   left: 0;
   bottom: 0;
-  margin: 0.3em;
   display: flex;
   flex-direction: column;
   justify-content: flex-start; }
@@ -177,6 +176,7 @@ my-audio, search-audio {
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
 header {
+  padding: 0.3em;
   font-size: 18px;
   text-transform: uppercase;
   color: #2B587A; }
@@ -200,24 +200,49 @@ audio-list {
     flex-grow: 1;
     flex-shrink: 1; }
 
+.audio-list__button-panel {
+  padding: 0.3em;
+  border-bottom: 1px solid #DAE1E8; }
+  .audio-list__button-panel > button {
+    margin-right: 0.3em; }
+
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
 list {
   overflow-x: hidden;
   overflow-y: auto; }
 
+.list-item {
+  border-bottom: 1px solid #DAE1E8; }
+
+.list-item__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center; }
+  .list-item__container > * {
+    flex-grow: 1;
+    flex-shrink: 1; }
+  .list-item__container > .list-item__selector {
+    flex-grow: 0;
+    flex-shrink: 0; }
+
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
 search-audio search-box {
-  margin-bottom: 0.3em; }
+  margin: 0.3em; }
 
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
 search-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   border: 1px solid #DAE1E8;
   border-radius: 3px;
   padding: 0.3em; }
   search-box > * {
+    flex-grow: 0;
+    flex-shrink: 0;
     vertical-align: middle; }
   search-box::before {
     display: inline-block;
@@ -228,18 +253,12 @@ search-box {
     -moz-osx-font-smoothing: grayscale;
     content: "";
     color: #999;
-    margin: 0.3em; }
+    margin: 0.3em 0.6em 0.3em; }
 
-.search-box {
-  display: flex;
-  flex-direction: row; }
-  .search-box > {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .search-box__input {
-    flex-grow: 1;
-    border: 0 none;
-    outline: 0 none; }
+.search-box__input {
+  flex-grow: 1;
+  border: 0 none;
+  outline: 0 none; }
 
 /* Contains variables for https://vk.com styles */
 html {
@@ -253,4 +272,16 @@ html {
 a, a:link, a:visited, a:hover, a:target {
   color: #2B587A;
   text-decoration: none; }
+
+button {
+  border: 0 none;
+  outline: 0 none;
+  padding: 4px 8px;
+  background: #597DA3;
+  border-radius: 2px;
+  color: white;
+  font-weight: bold; }
+
+button:disabled {
+  background: #999; }
 

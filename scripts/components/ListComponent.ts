@@ -62,26 +62,25 @@ export var Component: ng.IComponentOptions = {
     template: `
     <ul>
         <li class="list-item"
-            ng-repeat="$item in $c.items">
-            <div ng-mousedown="$c.beginToggleSelection()" 
-                 ng-mouseup="$c.cancelToggleSelection()" 
-                 ng-mousemove="$c.cancelToggleSelection()"
-                 ng-touchstart="$c.beginToggleSelection()" 
-                 ng-touchend="$c.cancelToggleSelection()" 
-                 ng-touchmove="$c.cancelToggleSelection()">
-                <div class="list-item__container"
-                    ng-touchstart="$c.toggleSelection($item)"
-                    ng-mousedown="$c.toggleSelection($item)">
-                    <div class="list-item__selector"
-                        style="float: left"
-                        ng-show="$c.selectionMode">
-                        <input type="checkbox"
-                            ng-checked="$c.isSelected($item)" />
-                    </div>
-                    <div ng-transclude></div>
+            ng-repeat="$item in $c.items"
+            ng-mousedown="$c.beginToggleSelection()" 
+            ng-mouseup="$c.cancelToggleSelection()" 
+            ng-mousemove="$c.cancelToggleSelection()"
+            ng-touchstart="$c.beginToggleSelection()" 
+            ng-touchend="$c.cancelToggleSelection()" 
+            ng-touchmove="$c.cancelToggleSelection()">            
+            <div class="list-item__container"
+                ng-touchstart="$c.toggleSelection($item)"
+                ng-mousedown="$c.toggleSelection($item)">
+                <div class="list-item__selector"
+                    ng-show="$c.selectionMode">
+                    <span class="fa fa-check-square-o"
+                          ng-show="$c.isSelected($item)"></span>
+                    <span class="fa fa-square-o" 
+                          ng-show="!$c.isSelected($item)"></span>
                 </div>
-            </div>
-            <hr />
+                <div ng-transclude></div>
+            </div>            
         <li>
     </ul>`,
     transclude: true

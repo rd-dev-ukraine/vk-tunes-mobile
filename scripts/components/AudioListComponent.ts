@@ -31,10 +31,12 @@ export var Component: ng.IComponentOptions = {
     controller: AudioListController,
     controllerAs: "$c",        
     template: 
-    `<div ng-show="!$c.selectionMode">
+    `<div class="audio-list__button-panel" 
+          ng-show="!$c.selectionMode">
          <button ng-click="$c.toggleSelection()">Select</button>
      </div>
-     <div ng-show="$c.selectionMode">
+     <div class="audio-list__button-panel" 
+          ng-show="$c.selectionMode">
          <button ng-click="$c.toggleSelection()">Cancel selection</button>
          <button ng-click="$c.downloadSelected()">Download</button>
      </div>

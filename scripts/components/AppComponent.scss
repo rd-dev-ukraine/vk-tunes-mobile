@@ -67,8 +67,6 @@ tab.app__tab .tab__header {
 .audio-page {    
     @include abs-fill-parent;
     
-    margin: $space;
-    
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

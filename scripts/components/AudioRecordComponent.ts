@@ -46,7 +46,7 @@ export var Component: ng.IComponentOptions = {
   <strong>{{$c.audio.remote.artist}}</strong> - {{$c.audio.remote.title}}  
 </div>
 <div>
-    File size <em>{{$c.audio.fileSize}}</em> bytes
+    File size <em>{{$c.audio.fileSize | filesize}}</em> 
 </div>
 <div ng-show="$c.downloadProgress">
     Downloading {{$c.downloadProgress.percent}}%   [{{$c.downloadProgress.bytesLoaded}}/{{$c.downloadProgress.bytesTotal}}]
