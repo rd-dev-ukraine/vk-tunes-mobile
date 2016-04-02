@@ -276,19 +276,26 @@ audio-record {
   display: block;
   padding: 0.3em; }
 
-.audio-record__duration {
+.audio-record-duration {
   color: #999; }
 
 .audio-record-headline {
   display: flex;
   flex-direction: row;
-  align-items: center; }
+  align-items: center;
+  margin-bottom: 0.3em; }
   .audio-record-headline__content {
     flex-grow: 1;
     flex-shrink: 1; }
   .audio-record-headline__badge {
     flex-grow: 0;
-    flex-shrink: 0; }
+    flex-shrink: 0;
+    margin-left: 0.3em; }
+
+.audio-record-title {
+  color: #2B587A; }
+  .audio-record-title__artist {
+    font-weight: bold; }
 
 /* Contains variables for https://vk.com styles */
 html {
