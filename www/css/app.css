@@ -271,6 +271,26 @@ search-box {
   outline: 0 none; }
 
 /* Contains variables for https://vk.com styles */
+/* Contains variables for https://vk.com styles */
+audio-record {
+  display: block;
+  padding: 0.3em; }
+
+.audio-record__duration {
+  color: #999; }
+
+.audio-record-headline {
+  display: flex;
+  flex-direction: row;
+  align-items: center; }
+  .audio-record-headline__content {
+    flex-grow: 1;
+    flex-shrink: 1; }
+  .audio-record-headline__badge {
+    flex-grow: 0;
+    flex-shrink: 0; }
+
+/* Contains variables for https://vk.com styles */
 html {
   -webkit-user-select: none;
   font-family: Lucida Grande, Arial, tahoma, verdana, sans-serif;

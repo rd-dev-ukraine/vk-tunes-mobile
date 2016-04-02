@@ -1,0 +1,34 @@
+@import "../../styles/_vk-vars.scss";
+@import "../../styles/_mixins.scss";
+@import "../../styles/font-awesome/_variables.scss";
+@import "../../styles/font-awesome/_mixins.scss";
+
+audio-record {
+    display: block;
+    padding: $space;   
+}
+
+.audio-record {
+    
+    
+    &__duration {
+        color: $color-inactive;
+    }
+}
+
+.audio-record-headline {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    &__content {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }        
+    
+    &__badge {
+        flex-grow: 0;
+        flex-shrink: 0;
+        margin-left: $space;
+    }
+}

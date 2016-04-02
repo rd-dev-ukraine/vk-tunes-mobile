@@ -40,12 +40,22 @@ export var Component: ng.IComponentOptions = {
     controllerAs: "$c",
     template:
     `
-<div>
-  <span ng-show="$c.audio.isInMyAudio">[*] </span>
-  <span ng-show="$c.audio.local">[@]</span>
-  <strong>{{$c.audio.remote.artist}}</strong> - {{$c.audio.remote.title}}  
+<div class="audio-record-headline">
+    <div class="audio-record-headline__content audio-record-title">  
+        <span class="audio-record-title__artist">
+            {{$c.audio.remote.artist}}
+        </span> - 
+        <span class="audio-record-title__title">
+            {{$c.audio.remote.title}}
+        </span>    
+    </div>
+    <div class="audio-record-headline__badge audio-record-duration">
+        {{$c.audio.remote.duration | duration}}
+    </div>
 </div>
 <div>
+    <span ng-show="$c.audio.isInMyAudio">[*] </span>
+    <span ng-show="$c.audio.local">[@]</span>
     File size <em>{{$c.audio.fileSize | filesize}}</em> 
 </div>
 <div ng-show="$c.downloadProgress">
