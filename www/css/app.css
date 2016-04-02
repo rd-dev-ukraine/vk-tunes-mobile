@@ -226,6 +226,16 @@ list {
     flex-grow: 0;
     flex-shrink: 0; }
 
+.list-item__selector {
+  display: inline-block;
+  font-size: 18px;
+  color: #999;
+  padding: 0.3em; }
+  .list-item__selector.placeholder {
+    padding-left: 0;
+    padding-right: 0;
+    width: 1px; }
+
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
 search-audio search-box {

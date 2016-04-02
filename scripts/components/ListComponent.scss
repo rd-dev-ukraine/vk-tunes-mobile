@@ -26,4 +26,19 @@ list {
         flex-grow: 0;
         flex-shrink: 0;
     }
+    
+    
+}
+
+.list-item__selector {
+    display: inline-block;
+    font-size: $font-size-large;
+    color: $color-inactive;
+    padding: $space;
+    
+    &.placeholder {
+        padding-left: 0;
+        padding-right: 0;
+        width: 1px;
+    }
 }

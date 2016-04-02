@@ -72,6 +72,9 @@ export var Component: ng.IComponentOptions = {
             <div class="list-item__container"
                 ng-touchstart="$c.toggleSelection($item)"
                 ng-mousedown="$c.toggleSelection($item)">
+                <div class="list-item__selector placeholder">
+                    <span class="fa">&nbsp;</span>
+                </div>
                 <div class="list-item__selector"
                     ng-show="$c.selectionMode">
                     <span class="fa fa-check-square-o"
