@@ -10,6 +10,11 @@ list {
 
 .list-item {
     border-bottom: 1px solid $color-border;
+    position: relative;
+    
+    &__selection-overlay {
+        @include abs-fill-parent;
+    }
 }
 
 .list-item__container {

@@ -61,6 +61,9 @@ export var Component: ng.IComponentOptions = {
                           ng-show="!$c.isSelected($item)"></span>
                 </div>
                 <div ng-transclude></div>
+            </div>
+            <div class="list-item__selection-overlay"
+                  ng-show="$c.selectionMode">
             </div>            
         <li>
     </ul>`,

@@ -34,7 +34,8 @@ button {
     background: $background-blue-color;
     border-radius: 2px;
     color: white;
-    font-weight: bold;
+    font-size: $font-size;
+    font-weight: normal;
 }
 
 button:disabled {

@@ -218,7 +218,14 @@ list {
   overflow-y: auto; }
 
 .list-item {
-  border-bottom: 1px solid #DAE1E8; }
+  border-bottom: 1px solid #DAE1E8;
+  position: relative; }
+  .list-item__selection-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0; }
 
 .list-item__container {
   display: flex;
@@ -364,7 +371,8 @@ button {
   background: #597DA3;
   border-radius: 2px;
   color: white;
-  font-weight: bold; }
+  font-size: 12px;
+  font-weight: normal; }
 
 button:disabled {
   background: #999; }
