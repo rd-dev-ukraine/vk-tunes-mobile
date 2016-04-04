@@ -26,6 +26,20 @@ class VkService {
                    .enqueueFirst(() => this.vk.searchAudio(query),
                                  VkOperationPriority.SearchApiCall);
     }
+    
+    addAudio(audio: AudioInfo): Promise<AudioInfo> {
+        return this.queue
+                   .enqueueFirst(() => this.vk.addAudio(audio.remote.id, audio.remote.owner_id), 
+                                 VkOperationPriority.ApiCall)
+                   .then(() => audio);
+    }
+    
+    deleteAudio(audio: AudioInfo): Promise<AudioInfo> {
+        return this.queue
+                   .enqueueFirst(() => this.vk.deleteAudio(audio.remote.id, audio.remote.owner_id), 
+                                 VkOperationPriority.ApiCall)
+                   .then(() => audio);
+    }
 
     getAudioSize(audio: AudioInfo[], callback: (audio: AudioInfo, fileSize:number) => void) {
         this.queue.clear(VkOperationPriority.GetFileSize);

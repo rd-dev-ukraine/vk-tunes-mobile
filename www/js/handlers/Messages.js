@@ -58,4 +58,18 @@ define(["require", "exports"], function (require, exports) {
         return DownloadInfoNotification;
     }());
     exports.DownloadInfoNotification = DownloadInfoNotification;
+    var AddAudio = (function () {
+        function AddAudio(audio) {
+            this.audio = audio;
+        }
+        return AddAudio;
+    }());
+    exports.AddAudio = AddAudio;
+    var DeleteAudio = (function () {
+        function DeleteAudio(audio) {
+            this.audio = audio;
+        }
+        return DeleteAudio;
+    }());
+    exports.DeleteAudio = DeleteAudio;
 });

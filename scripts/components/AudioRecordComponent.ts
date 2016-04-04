@@ -34,6 +34,14 @@ class AudioRecordController {
         }
     }
     
+    addAudio() {
+        this.publish(new Messages.AddAudio(this.audio));
+    }
+    
+    deleteAudio() {
+        this.publish(new Messages.DeleteAudio(this.audio));
+    }
+    
     @PS.Handle(AudioRecordExpandedMessage)
     onExpand(message: AudioRecordExpandedMessage) {
         if (!message.audio || message.audio.remote.id !== this.audio.remote.id) {
@@ -124,11 +132,13 @@ export var Component: ng.IComponentOptions = {
 </div>
 <div class="audio-record__expand-area"
      ng-show="$c.isExpanded">
-    <button ng-disabled="$c.audio.isInMyAudio" 
+    <button ng-click="$c.addAudio()"
+            ng-disabled="$c.audio.isInMyAudio"             
             type="button">
         Add to my audio
     </button>
-    <button ng-disabled="!$c.audio.isInMyAudio" 
+    <button ng-click="$c.deleteAudio()"
+            ng-disabled="!$c.audio.isInMyAudio" 
             type="button">
         Remove from my audio
     </button>

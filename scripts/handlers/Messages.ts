@@ -31,3 +31,11 @@ export class DownloadInfoNotification {
                 public total: number ) {
     }
 }
+
+export class AddAudio {
+    constructor(public audio: AudioInfo) {}
+}
+
+export class DeleteAudio {
+    constructor(public audio: AudioInfo) {}
+}

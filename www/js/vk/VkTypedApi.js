@@ -38,6 +38,13 @@ define(["require", "exports", "./VkApi"], function (require, exports, VkApi) {
                 owner_id: ownerId
             });
         };
+        VkTypedApi.prototype.deleteAudio = function (audioId, ownerId) {
+            return this.api
+                .requestApi("audio.delete", {
+                audio_id: audioId,
+                owner_id: ownerId
+            });
+        };
         return VkTypedApi;
     }());
     return VkTypedApi;

@@ -20,6 +20,18 @@ define(["require", "exports", "./VkTypedApi", "../task-queue/PriorityQueue"], fu
             return this.queue
                 .enqueueFirst(function () { return _this.vk.searchAudio(query); }, 101 /* SearchApiCall */);
         };
+        VkService.prototype.addAudio = function (audio) {
+            var _this = this;
+            return this.queue
+                .enqueueFirst(function () { return _this.vk.addAudio(audio.remote.id, audio.remote.owner_id); }, 100 /* ApiCall */)
+                .then(function () { return audio; });
+        };
+        VkService.prototype.deleteAudio = function (audio) {
+            var _this = this;
+            return this.queue
+                .enqueueFirst(function () { return _this.vk.deleteAudio(audio.remote.id, audio.remote.owner_id); }, 100 /* ApiCall */)
+                .then(function () { return audio; });
+        };
         VkService.prototype.getAudioSize = function (audio, callback) {
             var _this = this;
             this.queue.clear(3 /* GetFileSize */);

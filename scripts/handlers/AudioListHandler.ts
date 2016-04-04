@@ -53,6 +53,24 @@ class AudioListHandler {
             });
     }
     
+    @PS.Handle(Messages.AddAudio)
+    addAudio(message: Messages.AddAudio) {
+        this.vk.addAudio(message.audio)
+            .then(audio => {
+                audio.isInMyAudio = true;
+                this.publish(new Messages.AudioInfoUpdated(audio));
+            });
+    }
+    
+    @PS.Handle(Messages.DeleteAudio)
+    deleteAudio(message: Messages.DeleteAudio) {
+        this.vk.deleteAudio(message.audio)
+            .then(audio => {
+                audio.isInMyAudio = false;
+                this.publish(new Messages.AudioInfoUpdated(audio));
+            });
+    }
+    
     public publish(message: any) { }
     
     private audio(remote: VkAudioRecord[], local: StoredAudioRecord[]): AudioInfo[] {

@@ -44,6 +44,22 @@ define(["require", "exports", "../vk/VkAudioService", "../vk/StoredAudioService"
                 });
             });
         };
+        AudioListHandler.prototype.addAudio = function (message) {
+            var _this = this;
+            this.vk.addAudio(message.audio)
+                .then(function (audio) {
+                audio.isInMyAudio = true;
+                _this.publish(new Messages.AudioInfoUpdated(audio));
+            });
+        };
+        AudioListHandler.prototype.deleteAudio = function (message) {
+            var _this = this;
+            this.vk.deleteAudio(message.audio)
+                .then(function (audio) {
+                audio.isInMyAudio = false;
+                _this.publish(new Messages.AudioInfoUpdated(audio));
+            });
+        };
         AudioListHandler.prototype.publish = function (message) { };
         AudioListHandler.prototype.audio = function (remote, local) {
             var _this = this;
@@ -64,6 +80,12 @@ define(["require", "exports", "../vk/VkAudioService", "../vk/StoredAudioService"
         __decorate([
             PS.Handle(Messages.SearchAudio)
         ], AudioListHandler.prototype, "searchAudio", null);
+        __decorate([
+            PS.Handle(Messages.AddAudio)
+        ], AudioListHandler.prototype, "addAudio", null);
+        __decorate([
+            PS.Handle(Messages.DeleteAudio)
+        ], AudioListHandler.prototype, "deleteAudio", null);
         AudioListHandler = __decorate([
             PS.Subscriber
         ], AudioListHandler);

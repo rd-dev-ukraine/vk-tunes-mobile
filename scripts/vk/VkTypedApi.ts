@@ -45,6 +45,16 @@ class VkTypedApi {
                                         owner_id: ownerId
                                     });
     }
+    
+    deleteAudio(audioId: number, ownerId: number): Promise<any> {
+        return this.api
+                   .requestApi<any>("audio.delete", {
+                                        audio_id: audioId,
+                                        owner_id: ownerId
+                                    });
+    }
+    
+    
 }
 
 interface UserAudioResponse {
