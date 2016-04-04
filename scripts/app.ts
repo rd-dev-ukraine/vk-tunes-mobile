@@ -1,5 +1,7 @@
 /// <references path="../typings/main.d.ts" />
 
+import LongClickDirective = require("./directives/LongClick");
+
 import FileSizeFilter = require("./filters/FileSize");
 import DurationFilter = require("./filters/Duration");
 
@@ -27,7 +29,8 @@ import DownloadAudioHandler = require("./handlers/DownloadAudioHandler");
 
 export function onDeviceReady() {
 
-    angular.module("vk-tunes", ["ngTouch"])
+    angular.module("vk-tunes", [])
+           .directive("ngLongTouch", LongClickDirective)
            .filter("filesize", FileSizeFilter)
            .filter("duration", DurationFilter)
            .service(Directory.ServiceName, Directory)

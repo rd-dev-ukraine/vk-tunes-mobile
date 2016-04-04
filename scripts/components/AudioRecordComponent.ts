@@ -13,7 +13,7 @@ class AudioRecordController {
     
     bitrate () {
         if (this.audio.fileSize && this.audio.remote && this.audio.remote.duration) {
-            const bitrate = (this.audio.fileSize / this.audio.remote.duration / 1024).toFixed(0);
+            const bitrate = (this.audio.fileSize / this.audio.remote.duration / 1024 * 8).toFixed(0);
             return `${bitrate}Kbps`;
         }
         

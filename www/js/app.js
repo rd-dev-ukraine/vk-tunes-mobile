@@ -1,8 +1,9 @@
 /// <references path="../typings/main.d.ts" />
-define(["require", "exports", "./filters/FileSize", "./filters/Duration", "./filesys/Directory", "./vk/VkAudioService", "./vk/StoredAudioService", "./components/ListComponent", "./components/TabComponent", "./components/ProgressBarComponent", "./components/SearchBoxComponent", "./components/AppComponent", "./components/HeaderComponent", "./components/MyAudioComponent", "./components/SearchAudioComponent", "./components/AudioRecordComponent", "./components/AudioListComponent", "./components/DownloadInfoComponent", "./handlers/AudioListHandler", "./handlers/DownloadAudioHandler"], function (require, exports, FileSizeFilter, DurationFilter, Directory, VkAudioService, StoredAudioService, List, Tabs, ProgressBar, SearchBox, App, Header, MyAudio, SearchAudio, AudioRecord, AudioList, DownloadInfo, AudioListHandler, DownloadAudioHandler) {
+define(["require", "exports", "./directives/LongClick", "./filters/FileSize", "./filters/Duration", "./filesys/Directory", "./vk/VkAudioService", "./vk/StoredAudioService", "./components/ListComponent", "./components/TabComponent", "./components/ProgressBarComponent", "./components/SearchBoxComponent", "./components/AppComponent", "./components/HeaderComponent", "./components/MyAudioComponent", "./components/SearchAudioComponent", "./components/AudioRecordComponent", "./components/AudioListComponent", "./components/DownloadInfoComponent", "./handlers/AudioListHandler", "./handlers/DownloadAudioHandler"], function (require, exports, LongClickDirective, FileSizeFilter, DurationFilter, Directory, VkAudioService, StoredAudioService, List, Tabs, ProgressBar, SearchBox, App, Header, MyAudio, SearchAudio, AudioRecord, AudioList, DownloadInfo, AudioListHandler, DownloadAudioHandler) {
     "use strict";
     function onDeviceReady() {
-        angular.module("vk-tunes", ["ngTouch"])
+        angular.module("vk-tunes", [])
+            .directive("ngLongTouch", LongClickDirective)
             .filter("filesize", FileSizeFilter)
             .filter("duration", DurationFilter)
             .service(Directory.ServiceName, Directory)

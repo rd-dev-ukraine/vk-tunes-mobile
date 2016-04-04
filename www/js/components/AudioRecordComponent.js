@@ -12,7 +12,7 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         }
         AudioRecordController.prototype.bitrate = function () {
             if (this.audio.fileSize && this.audio.remote && this.audio.remote.duration) {
-                var bitrate = (this.audio.fileSize / this.audio.remote.duration / 1024).toFixed(0);
+                var bitrate = (this.audio.fileSize / this.audio.remote.duration / 1024 * 8).toFixed(0);
                 return bitrate + "Kbps";
             }
             return "";

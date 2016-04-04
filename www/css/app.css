@@ -232,6 +232,7 @@ list {
   color: #999;
   padding: 0.3em; }
   .list-item__selector.placeholder {
+    color: white;
     padding-left: 0;
     padding-right: 0;
     width: 1px; }
@@ -312,7 +313,7 @@ audio-record {
   .audio-record-badge__text {
     text-transform: uppercase; }
   .audio-record-badge.my-audio {
-    background: #cfcfcf; }
+    background: #c0c0c0; }
   .audio-record-badge.on-device {
     background: #FF964A; }
   .audio-record-badge.file-size {

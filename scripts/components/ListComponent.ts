@@ -4,17 +4,14 @@ import PS = require("../pub-sub/Decorators");
 @PS.Subscriber
 class ListComponentController {
     static ControllerName = "ListComponentController";
-    static $inject = ["$scope", "$timeout"];
-
-    private selectionTogglePromise: ng.IPromise<any>;
+    static $inject = ["$scope"];
 
     items: any[] = [];
     selectedItems: any[] = [];
 
     selectionMode: boolean = false;
 
-    constructor(private $scope: ng.IScope,
-        private $timeout: ng.ITimeoutService) {
+    constructor(private $scope: ng.IScope) {
     }
 
     isSelected(item: any): boolean {
@@ -33,21 +30,8 @@ class ListComponentController {
             this.selectedItems.push(item);
     }
 
-    beginToggleSelection() {
-        if (this.selectionMode)
-            return;
-
-        this.selectionTogglePromise = this.$timeout(1000, true);
-
-        this.selectionTogglePromise
-            .then(() => {
-                this.selectionMode = true;
-            });
-    }
-
-    cancelToggleSelection() {
-        if (this.selectionTogglePromise)
-            this.$timeout.cancel(this.selectionTogglePromise);
+    switchToSelectionMode() {
+        this.selectionMode = true;
     }
 }
 
@@ -63,17 +47,11 @@ export var Component: ng.IComponentOptions = {
     <ul>
         <li class="list-item"
             ng-repeat="$item in $c.items"
-            ng-mousedown="$c.beginToggleSelection()" 
-            ng-mouseup="$c.cancelToggleSelection()" 
-            ng-mousemove="$c.cancelToggleSelection()"
-            ng-touchstart="$c.beginToggleSelection()" 
-            ng-touchend="$c.cancelToggleSelection()" 
-            ng-touchmove="$c.cancelToggleSelection()">            
-            <div class="list-item__container"
-                ng-touchstart="$c.toggleSelection($item)"
-                ng-mousedown="$c.toggleSelection($item)">
+            ng-long-touch="$c.switchToSelectionMode()"
+            ng-touch="$c.toggleSelection($item)">            
+            <div class="list-item__container">
                 <div class="list-item__selector placeholder">
-                    <span class="fa">&nbsp;</span>
+                    <span class="fa fa-check-square-o">&nbsp;</span>
                 </div>
                 <div class="list-item__selector"
                     ng-show="$c.selectionMode">

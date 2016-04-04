@@ -7,9 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define(["require", "exports", "../pub-sub/Decorators"], function (require, exports, PS) {
     "use strict";
     var ListComponentController = (function () {
-        function ListComponentController($scope, $timeout) {
+        function ListComponentController($scope) {
             this.$scope = $scope;
-            this.$timeout = $timeout;
             this.items = [];
             this.selectedItems = [];
             this.selectionMode = false;
@@ -26,22 +25,11 @@ define(["require", "exports", "../pub-sub/Decorators"], function (require, expor
             else
                 this.selectedItems.push(item);
         };
-        ListComponentController.prototype.beginToggleSelection = function () {
-            var _this = this;
-            if (this.selectionMode)
-                return;
-            this.selectionTogglePromise = this.$timeout(1000, true);
-            this.selectionTogglePromise
-                .then(function () {
-                _this.selectionMode = true;
-            });
-        };
-        ListComponentController.prototype.cancelToggleSelection = function () {
-            if (this.selectionTogglePromise)
-                this.$timeout.cancel(this.selectionTogglePromise);
+        ListComponentController.prototype.switchToSelectionMode = function () {
+            this.selectionMode = true;
         };
         ListComponentController.ControllerName = "ListComponentController";
-        ListComponentController.$inject = ["$scope", "$timeout"];
+        ListComponentController.$inject = ["$scope"];
         ListComponentController = __decorate([
             PS.Subscriber
         ], ListComponentController);
@@ -55,7 +43,7 @@ define(["require", "exports", "../pub-sub/Decorators"], function (require, expor
         },
         controller: ListComponentController,
         controllerAs: "$c",
-        template: "\n    <ul>\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $c.items\"\n            ng-mousedown=\"$c.beginToggleSelection()\" \n            ng-mouseup=\"$c.cancelToggleSelection()\" \n            ng-mousemove=\"$c.cancelToggleSelection()\"\n            ng-touchstart=\"$c.beginToggleSelection()\" \n            ng-touchend=\"$c.cancelToggleSelection()\" \n            ng-touchmove=\"$c.cancelToggleSelection()\">            \n            <div class=\"list-item__container\"\n                ng-touchstart=\"$c.toggleSelection($item)\"\n                ng-mousedown=\"$c.toggleSelection($item)\">\n                <div class=\"list-item__selector placeholder\">\n                    <span class=\"fa\">&nbsp;</span>\n                </div>\n                <div class=\"list-item__selector\"\n                    ng-show=\"$c.selectionMode\">\n                    <span class=\"fa fa-check-square-o\"\n                          ng-show=\"$c.isSelected($item)\"></span>\n                    <span class=\"fa fa-square-o\" \n                          ng-show=\"!$c.isSelected($item)\"></span>\n                </div>\n                <div ng-transclude></div>\n            </div>            \n        <li>\n    </ul>",
+        template: "\n    <ul>\n        <li class=\"list-item\"\n            ng-repeat=\"$item in $c.items\"\n            ng-long-touch=\"$c.switchToSelectionMode()\"\n            ng-touch=\"$c.toggleSelection($item)\">            \n            <div class=\"list-item__container\">\n                <div class=\"list-item__selector placeholder\">\n                    <span class=\"fa fa-check-square-o\">&nbsp;</span>\n                </div>\n                <div class=\"list-item__selector\"\n                    ng-show=\"$c.selectionMode\">\n                    <span class=\"fa fa-check-square-o\"\n                          ng-show=\"$c.isSelected($item)\"></span>\n                    <span class=\"fa fa-square-o\" \n                          ng-show=\"!$c.isSelected($item)\"></span>\n                </div>\n                <div ng-transclude></div>\n            </div>            \n        <li>\n    </ul>",
         transclude: true
     };
 });
