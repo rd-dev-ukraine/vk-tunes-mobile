@@ -57,6 +57,7 @@ define(["require", "exports", "../vk/VkAudioService", "../vk/StoredAudioService"
             this.vk.deleteAudio(message.audio)
                 .then(function (audio) {
                 audio.isInMyAudio = false;
+                _this.publish(new Messages.AudioDeleted(audio));
                 _this.publish(new Messages.AudioInfoUpdated(audio));
             });
         };

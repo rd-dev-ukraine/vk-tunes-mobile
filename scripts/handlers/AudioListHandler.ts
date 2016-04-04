@@ -65,8 +65,9 @@ class AudioListHandler {
     @PS.Handle(Messages.DeleteAudio)
     deleteAudio(message: Messages.DeleteAudio) {
         this.vk.deleteAudio(message.audio)
-            .then(audio => {
+            .then(audio => {                
                 audio.isInMyAudio = false;
+                this.publish(new Messages.AudioDeleted(audio));
                 this.publish(new Messages.AudioInfoUpdated(audio));
             });
     }

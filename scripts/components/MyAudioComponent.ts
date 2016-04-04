@@ -9,7 +9,7 @@ class MyAudioController {
 
     audio: AudioInfo[]
 
-    constructor(private $scope: ng.IScope) {        
+    constructor(private $scope: ng.IScope) {
     }
 
     $onInit() {
@@ -27,13 +27,21 @@ class MyAudioController {
         this.$scope.$$phase || this.$scope.$digest();
     }
 
-    publish(message: any) {}
+    @PS.Handle(Messages.AudioDeleted)
+    onAudioDeleted(message: Messages.AudioDeleted) {
+        if (message.audio) {
+            this.audio = this.audio.filter(a => a.remote.id !== message.audio.remote.id);
+            this.$scope.$$phase || this.$scope.$digest();
+        }
+    }
+
+    publish(message: any) { }
 }
 
 export var Component: ng.IComponentOptions = {
     controller: MyAudioController,
-    template: 
-`
+    template:
+    `
 <audio-list audio="$ctrl.audio">
 </audio-list>
 `

@@ -72,4 +72,11 @@ define(["require", "exports"], function (require, exports) {
         return DeleteAudio;
     }());
     exports.DeleteAudio = DeleteAudio;
+    var AudioDeleted = (function () {
+        function AudioDeleted(audio) {
+            this.audio = audio;
+        }
+        return AudioDeleted;
+    }());
+    exports.AudioDeleted = AudioDeleted;
 });

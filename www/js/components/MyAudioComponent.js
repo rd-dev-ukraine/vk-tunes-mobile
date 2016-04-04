@@ -22,11 +22,20 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages", "
             this.audio = message.audio;
             this.$scope.$$phase || this.$scope.$digest();
         };
+        MyAudioController.prototype.onAudioDeleted = function (message) {
+            if (message.audio) {
+                this.audio = this.audio.filter(function (a) { return a.remote.id !== message.audio.remote.id; });
+                this.$scope.$$phase || this.$scope.$digest();
+            }
+        };
         MyAudioController.prototype.publish = function (message) { };
         MyAudioController.$inject = ["$scope"];
         __decorate([
             PS.Handle(Messages.MyAudioLoaded)
         ], MyAudioController.prototype, "onAudioLoaded", null);
+        __decorate([
+            PS.Handle(Messages.AudioDeleted)
+        ], MyAudioController.prototype, "onAudioDeleted", null);
         MyAudioController = __decorate([
             PS.Subscriber
         ], MyAudioController);

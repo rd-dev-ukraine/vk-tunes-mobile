@@ -39,3 +39,7 @@ export class AddAudio {
 export class DeleteAudio {
     constructor(public audio: AudioInfo) {}
 }
+
+export class AudioDeleted {
+    constructor(public audio: AudioInfo) {}
+}
