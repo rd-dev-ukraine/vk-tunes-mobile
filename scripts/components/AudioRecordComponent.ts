@@ -2,6 +2,11 @@
 import PS = require("../pub-sub/Decorators");
 import Messages = require("../handlers/Messages");
 
+class AudioRecordExpandedMessage {
+    constructor(public audio: AudioInfo) {        
+    }
+}
+
 @PS.Subscriber
 class AudioRecordController {
     static $inject = ["$scope"];
@@ -24,6 +29,17 @@ class AudioRecordController {
     
     toggleExpand() {
         this.isExpanded = !this.isExpanded;
+        if (this.isExpanded) {
+            this.publish(new AudioRecordExpandedMessage(this.audio));
+        }
+    }
+    
+    @PS.Handle(AudioRecordExpandedMessage)
+    onExpand(message: AudioRecordExpandedMessage) {
+        if (!message.audio || message.audio.remote.id !== this.audio.remote.id) {
+            this.isExpanded = false;
+            this.$apply();
+        }        
     }
 
     @PS.Handle(Messages.AudioInfoUpdated)
@@ -41,6 +57,8 @@ class AudioRecordController {
             this.$apply();
         }
     }
+    
+    publish(message: any) {}
     
     private $apply() {
         this.$scope.$$phase || this.$scope.$digest();

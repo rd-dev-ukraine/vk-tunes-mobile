@@ -6,6 +6,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], function (require, exports, PS, Messages) {
     "use strict";
+    var AudioRecordExpandedMessage = (function () {
+        function AudioRecordExpandedMessage(audio) {
+            this.audio = audio;
+        }
+        return AudioRecordExpandedMessage;
+    }());
     var AudioRecordController = (function () {
         function AudioRecordController($scope) {
             this.$scope = $scope;
@@ -20,6 +26,15 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         };
         AudioRecordController.prototype.toggleExpand = function () {
             this.isExpanded = !this.isExpanded;
+            if (this.isExpanded) {
+                this.publish(new AudioRecordExpandedMessage(this.audio));
+            }
+        };
+        AudioRecordController.prototype.onExpand = function (message) {
+            if (!message.audio || message.audio.remote.id !== this.audio.remote.id) {
+                this.isExpanded = false;
+                this.$apply();
+            }
         };
         AudioRecordController.prototype.onAudioUpdated = function (message) {
             if (this.audio && this.audio.remote.id === message.audio.remote.id) {
@@ -33,10 +48,14 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
                 this.$apply();
             }
         };
+        AudioRecordController.prototype.publish = function (message) { };
         AudioRecordController.prototype.$apply = function () {
             this.$scope.$$phase || this.$scope.$digest();
         };
         AudioRecordController.$inject = ["$scope"];
+        __decorate([
+            PS.Handle(AudioRecordExpandedMessage)
+        ], AudioRecordController.prototype, "onExpand", null);
         __decorate([
             PS.Handle(Messages.AudioInfoUpdated)
         ], AudioRecordController.prototype, "onAudioUpdated", null);
