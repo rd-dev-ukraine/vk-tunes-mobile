@@ -39,6 +39,6 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
         },
         controller: AudioListController,
         controllerAs: "$c",
-        template: "<div class=\"audio-list__button-panel\" \n          ng-show=\"$c.selectionMode\">\n         <button ng-click=\"$c.selectAll()\">Select ALL</button>\n         <button ng-click=\"$c.downloadSelected()\">Download</button>\n         <button ng-click=\"$c.cancelSelection()\">Cancel selection</button>         \n     </div>\n     <list items=\"$c.audio\"\n           selected-items=\"$c.selectedAudio\"\n           selection-mode=\"$c.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
+        template: "<div class=\"audio-list__button-panel\" \n          ng-show=\"$c.selectionMode\">\n         <button ng-click=\"$c.selectAll()\">Select ALL</button>\n         <button ng-click=\"$c.downloadSelected()\">Download</button>\n         <button ng-click=\"$c.cancelSelection()\">Cancel selection</button>         \n     </div>\n     <list class=\"audio-list__list\" \n           items=\"$c.audio\"\n           selected-items=\"$c.selectedAudio\"\n           selection-mode=\"$c.selectionMode\">\n         <audio-record audio=\"$parent.$item\"></audio-record>\n     </list>"
     };
 });

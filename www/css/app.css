@@ -36,6 +36,9 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
+progress-bar {
+  display: block; }
+
 .progress-bar {
   overflow: hidden;
   position: relative;
@@ -201,10 +204,12 @@ audio-list {
     flex-shrink: 1; }
 
 .audio-list__button-panel {
-  padding: 0.3em;
-  border-bottom: 1px solid #DAE1E8; }
+  padding: 0.3em; }
   .audio-list__button-panel > button {
     margin-right: 0.3em; }
+
+.audio-list__list {
+  border-top: 1px solid #DAE1E8; }
 
 /* Contains variables for https://vk.com styles */
 /* Contains variables for https://vk.com styles */
@@ -323,6 +328,21 @@ audio-record {
 
 .audio-record-download-progress {
   font-size: 10px; }
+
+/* Contains variables for https://vk.com styles */
+/* Contains variables for https://vk.com styles */
+.download-info__content {
+  padding: 0 0.3em; }
+
+.download-info__title {
+  color: #999;
+  margin-bottom: 0.3em; }
+
+.download-info__current-progress {
+  margin-bottom: 0.3em; }
+
+.download-info__total-progress .progress-bar__progress-indicator {
+  background: #33cc33; }
 
 /* Contains variables for https://vk.com styles */
 html {

@@ -43,6 +43,6 @@ define(["require", "exports", "../pub-sub/Decorators", "../handlers/Messages"], 
     exports.Component = {
         controller: DownloadInfoController,
         controllerAs: "$c",
-        template: "\n    <div ng-show=\"$c.totalDownloads\">\n        <div>\n            [{{$c.currentDownloadNumber}}/{{$c.totalDownloads}}] {{$c.currentDownload.remote.artist}} - {{$c.currentDownload.remote.title}}\n        </div>\n        <progress-bar progress=\"$c.currentDownloadProgress.percent\"></progress-bar>\n        <progress-bar progress=\"$c.totalDownloadPercent()\"></progress-bar>\n    </div>\n"
+        template: "\n    <div class=\"download-info__content\" ng-show=\"$c.totalDownloads\">\n        <div class=\"download-info__title\">\n            [{{$c.currentDownloadNumber}}/{{$c.totalDownloads}}] {{$c.currentDownload.remote.artist}} - {{$c.currentDownload.remote.title}}\n        </div>\n        <progress-bar class=\"download-info__current-progress\" \n                      progress=\"$c.currentDownloadProgress.percent\"></progress-bar>\n        <progress-bar class=\"download-info__total-progress\" \n                      progress=\"$c.totalDownloadPercent()\"></progress-bar>\n    </div>\n"
     };
 });

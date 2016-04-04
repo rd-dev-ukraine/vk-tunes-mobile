@@ -52,6 +52,10 @@ define(["require", "exports", "../vk/VkAudioService", "../vk/StoredAudioService"
         };
         DownloadAudioHandler.prototype.onProgress = function (audio, progress) {
             if (progress === void 0) { progress = null; }
+            if (progress) {
+                audio.fileSize = progress.bytesTotal;
+                this.publish(new Messages.AudioInfoUpdated(audio));
+            }
             this.publish(new Messages.DownloadProgress(audio, progress));
             this.publish(new Messages.DownloadInfoNotification(this.totalDownloading - this.downloadQueue.length, this.totalDownloading));
         };

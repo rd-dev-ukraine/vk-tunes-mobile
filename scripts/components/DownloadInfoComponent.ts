@@ -47,12 +47,14 @@ export var Component: ng.IComponentOptions = {
     controllerAs: "$c",
     template:
     `
-    <div ng-show="$c.totalDownloads">
-        <div>
+    <div class="download-info__content" ng-show="$c.totalDownloads">
+        <div class="download-info__title">
             [{{$c.currentDownloadNumber}}/{{$c.totalDownloads}}] {{$c.currentDownload.remote.artist}} - {{$c.currentDownload.remote.title}}
         </div>
-        <progress-bar progress="$c.currentDownloadProgress.percent"></progress-bar>
-        <progress-bar progress="$c.totalDownloadPercent()"></progress-bar>
+        <progress-bar class="download-info__current-progress" 
+                      progress="$c.currentDownloadProgress.percent"></progress-bar>
+        <progress-bar class="download-info__total-progress" 
+                      progress="$c.totalDownloadPercent()"></progress-bar>
     </div>
 `
 };

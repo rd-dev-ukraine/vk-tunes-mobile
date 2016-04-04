@@ -1,0 +1,29 @@
+@import "../../styles/_vk-vars.scss";
+@import "../../styles/_mixins.scss";
+@import "../../styles/font-awesome/_variables.scss";
+@import "../../styles/font-awesome/_mixins.scss";
+
+.download-info {
+    
+    &__content {
+        padding: 0 $space;
+    }
+    
+    &__title {
+        color: $color-inactive;
+        margin-bottom: $space;
+    }
+    
+    &__current-progress {
+        margin-bottom: $space;
+    }
+    
+    &__total-progress {
+        
+        .progress-bar {
+            &__progress-indicator {
+                background: #33cc33;
+            }
+        }
+    }
+}

@@ -46,7 +46,8 @@ export var Component: ng.IComponentOptions = {
          <button ng-click="$c.downloadSelected()">Download</button>
          <button ng-click="$c.cancelSelection()">Cancel selection</button>         
      </div>
-     <list items="$c.audio"
+     <list class="audio-list__list" 
+           items="$c.audio"
            selected-items="$c.selectedAudio"
            selection-mode="$c.selectionMode">
          <audio-record audio="$parent.$item"></audio-record>
