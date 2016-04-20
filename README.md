@@ -1,8 +1,6 @@
 # vk-tunes-mobile
 Mobile application for managing and downloading audio recors from your vk.com account. Based on cordova framework. 
 
-See example screens at http://rd-dev.net/portfolio/#/portfolio?project=vk-tunes-mobile
-
 To run an application you will need a https://vk.com account
 
 You need to have node.js installed.
